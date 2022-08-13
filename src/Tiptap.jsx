@@ -1,15 +1,14 @@
+import "./Tiptap.css";
+
 import { useEditor, EditorContent, FloatingMenu } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import Document from "@tiptap/extension-document";
-import Paragraph from "@tiptap/extension-paragraph";
-import Text from "@tiptap/extension-text";
-import Heading from "@tiptap/extension-heading";
 import Image from "@tiptap/extension-image";
-import "./Tiptap.css";
+
+// import plainExtension from "./extension.ts";
+import ReactComponent from "./Extension.js";
 
 const Tiptap = () => {
   const editor = useEditor({
-    extensions: [StarterKit],
     extensions: [
       StarterKit.configure({
         heading: {
@@ -30,12 +29,33 @@ const Tiptap = () => {
           class: "editor-image",
         },
       }),
+      //   plainExtension,
+      ReactComponent,
     ],
-    content:
-      "<h1>New Pollen Page</h1><p>Read Me: This is the place you can enter extra info about your page.</p> <hr> <p></p>",
+    content: `
+    <h1>New Pollen Page</h1>
+    <p>Read Me: This is the place you can enter extra info about your page.</p>
+    <hr>
+    <p></p>
+    `,
     autofocus: "end",
     editable: true,
   });
+
+  const addImage = () => {
+    const url = window.prompt("URL");
+
+    if (!url) {
+      url = "";
+    }
+    editor
+      .chain()
+      .insertContent(`<img src="${url}"/>`)
+      .lift("image")
+      .insertContent("<p></p>")
+      .focus("end")
+      .run();
+  };
 
   return (
     <>
@@ -52,17 +72,7 @@ const Tiptap = () => {
             Heading
           </button>
           <button
-            onClick={() =>
-              editor
-                .chain()
-                .insertContent(
-                  '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png"/>'
-                )
-                .lift("image")
-                .insertContent("<p></p>")
-                .focus("end")
-                .run()
-            }
+            onClick={() => addImage()}
             // className={editor.isActive("image") ? "is-active" : ""}
           >
             Image

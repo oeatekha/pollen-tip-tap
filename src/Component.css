@@ -1,0 +1,30 @@
+.react-component {
+  position: relative;
+}
+
+.react-component .drag-handle {
+  position: absolute;
+  top: -1px;
+  left: -18px;
+  visibility: hidden;
+  letter-spacing: 0.5px;
+  font-weight: bold;
+  font-size: 24px;
+  width: 30px;
+}
+
+.cols {
+  display: flex;
+}
+
+.react-component:hover {
+  /* background-color: red; */
+  cursor: text;
+}
+.react-component:hover .drag-handle {
+  visibility: visible;
+}
+
+.drag-handle:hover {
+  cursor: pointer;
+}
