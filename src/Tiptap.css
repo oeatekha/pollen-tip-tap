@@ -50,3 +50,31 @@ button:focus {
   background-color: black;
   color: white;
 }
+
+/* Drag Handle*/
+
+.global-drag-handle {
+  position: absolute;
+}
+
+.global-drag-handle::after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1.25rem;
+    content: '⠿';
+    font-weight: 700;
+    cursor: grab;
+    background:#0D0D0D10;
+    color: #0D0D0D50;
+    border-radius: 0.25rem;
+}
+
+.mention {
+  border: 1px solid #000;
+  border-radius: 0.4rem;
+  padding: 0.1rem 0.3rem;
+  box-decoration-break: clone;
+}
+
