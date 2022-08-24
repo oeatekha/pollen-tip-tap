@@ -1,9 +1,11 @@
 import "./Tiptap.css";
 
-import { useEditor, EditorContent, FloatingMenu } from "@tiptap/react";
-import DragHandle from "./DragHandle";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+
+import DragHandle from "./DragHandle";
 import Image from "@tiptap/extension-image";
+
 import Commands from "./suggestion/commands";
 import suggestion from "./suggestion/suggestion";
 
