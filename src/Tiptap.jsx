@@ -1,27 +1,51 @@
 import "./Tiptap.css";
 
 import { useEditor, EditorContent } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import ReactComponent from "./Extension.js";
 
-import DragHandle from "./DragHandle";
+
+import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 
 import Commands from "./suggestion/commands";
 import suggestion from "./suggestion/suggestion";
 
+
+import { DBlock } from "./dBlock/dBlock.ts";
+import Document from "@tiptap/extension-document";
+
+
+
+const CustomDocument = Document.extend({
+  content: "dBlock+",
+});
+
 // import plainExtension from "./extension.ts";
-import ReactComponent from "./Extension.js";
 
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        document: false,
+        heading: {
+          HTMLAttributes: {
+            class: "editor-child",
+          },
+        },
+        paragraph: {
+          HTMLAttributes: {
+            class: "editor-child",
+          },
+        },
+      }),
       //DragHandle,
       //   plainExtension,
       ReactComponent,
       Commands.configure({
         suggestion,
       }),
+      CustomDocument,
+      DBlock,
     ],
     
     content: `
