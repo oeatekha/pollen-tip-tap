@@ -26,6 +26,7 @@ class CommandList extends Component {
 
     if (event.key === "Enter") {
       this.enterHandler();
+      console.log("enterhandler called");
       return true;
     }
 
@@ -41,12 +42,14 @@ class CommandList extends Component {
   }
 
   downHandler() {
+    console.log("i went down");
     this.setState({
       selectedIndex: (this.state.selectedIndex + 1) % this.props.items.length
     });
   }
 
   enterHandler() {
+    console.log("i heard an enter")
     this.selectItem(this.state.selectedIndex);
   }
 

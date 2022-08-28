@@ -11,6 +11,9 @@ export const DBlockNodeView = ({ editor }) => {
         className: "flex mt-0 pt-[0px]",
         "aria-label": "left-menu",
         contentEditable: "false",
+        suppresscontenteditablewarning: "true",
+
+        
       },
       React.createElement(
         "div",

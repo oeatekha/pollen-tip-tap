@@ -1,6 +1,8 @@
 import "./Tiptap.css";
 
 import { useEditor, EditorContent } from "@tiptap/react";
+import Placeholder from "@tiptap/extension-placeholder";
+
 import ReactComponent from "./Extension.js";
 
 
@@ -25,6 +27,7 @@ const CustomDocument = Document.extend({
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [
+      
       StarterKit.configure({
         document: false,
         heading: {
@@ -40,12 +43,23 @@ const Tiptap = () => {
       }),
       //DragHandle,
       //   plainExtension,
-      ReactComponent,
       Commands.configure({
         suggestion,
       }),
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          if (node.type.name === 'heading') {
+            return 'What’s the title?'
+          }
+
+          return 'Can you add some further context?'
+        },
+      }),
+      ReactComponent,
       CustomDocument,
       DBlock,
+      
+
     ],
     
     content: `

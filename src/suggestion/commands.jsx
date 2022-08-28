@@ -3,6 +3,7 @@ import Suggestion from '@tiptap/suggestion'
 
 export default Extension.create({
   name: 'commands',
+  priority: 1001,
 
   addOptions() {
     return {
