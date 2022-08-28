@@ -1,9 +1,14 @@
 import "./Tiptap.css";
 
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 
 import ReactComponent from "./Extension.js";
+import Heading from '@tiptap/extension-heading';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import History from '@tiptap/extension-history'
+
 
 
 import StarterKit from "@tiptap/starter-kit";
@@ -22,9 +27,46 @@ const CustomDocument = Document.extend({
   content: "dBlock+",
 });
 
-// import plainExtension from "./extension.ts";
+
+const ParagraphDocument = Document.extend({
+  content: "paragraph"
+});
+
+const HeaderDocument = Document.extend({
+  content: 'heading', // You can't use heading block* breaks it....
+});
+
+
+
+const titled = new Editor({
+  extensions: [HeaderDocument, Heading, Text, History, Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === 'heading') {
+        return 'Untitled'
+      }
+    },
+  })],
+  
+});
+
+const readMe = new Editor({
+  extensions: [ParagraphDocument, Paragraph, Text, History, Placeholder.configure({
+    placeholder: ({ node }) => {
+      if (node.type.name === 'paragraph') {
+        return 'ReadME file contains information about the other files in a directory or archive of software. Use Readme on Pollen to include a relevant description'
+      }
+    },
+  })],
+
+});
+
+
+
 
 const Tiptap = () => {
+
+  
+
   const editor = useEditor({
     extensions: [
       
@@ -48,13 +90,12 @@ const Tiptap = () => {
       }),
       Placeholder.configure({
         placeholder: ({ node }) => {
-          if (node.type.name === 'heading') {
-            return 'What’s the title?'
+          if (node.type.name === 'dBlock+') {
+            return 'enter "/" to use a command'
           }
-
-          return 'Can you add some further context?'
         },
       }),
+
       ReactComponent,
       CustomDocument,
       DBlock,
@@ -75,6 +116,10 @@ const Tiptap = () => {
   
   return (
     <>
+      <EditorContent editor={titled} />
+      {""}
+      <EditorContent editor={readMe} />
+      {""}
       <EditorContent editor={editor} />{" "}
     </>
   );
