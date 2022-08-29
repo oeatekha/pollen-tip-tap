@@ -87,7 +87,7 @@ const Tiptap = () => {
         suggestion,
       }),
       Placeholder.configure({
-        placeholder: "Type `/` for commands",
+        placeholder: "Type '/' to insert a block",
         includeChildren: true,
       }),
 
