@@ -87,11 +87,8 @@ const Tiptap = () => {
         suggestion,
       }),
       Placeholder.configure({
-        placeholder: ({ node }) => {
-          if (node.type.name === "paragraph") {
-            return 'enter "/" to use a command';
-          }
-        },
+        placeholder: "Type `/` for commands",
+        includeChildren: true,
       }),
 
       ReactComponent,
