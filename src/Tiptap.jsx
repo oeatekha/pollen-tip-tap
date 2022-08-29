@@ -58,7 +58,7 @@ const readMe = new Editor({
     Placeholder.configure({
       placeholder: ({ node }) => {
         if (node.type.name === "paragraph") {
-          return "Tell us about what you are...";
+          return "Tell us about what you are thinking about.";
         }
       },
     }),
