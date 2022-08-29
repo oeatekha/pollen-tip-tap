@@ -15,10 +15,10 @@ export default {
             .deleteRange(range)
             .setNode("heading", { level: 1 })
             .run();
-        }
+        },
       },
       {
-        title: "H2",
+        title: "Text",
         command: ({ editor, range }) => {
           editor
             .chain()
@@ -26,20 +26,20 @@ export default {
             .deleteRange(range)
             .setNode("heading", { level: 2 })
             .run();
-        }
+        },
       },
       {
         title: "bold",
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).setMark("bold").run();
-        }
+        },
       },
       {
         title: "italic",
         command: ({ editor, range }) => {
           editor.chain().focus().deleteRange(range).setMark("italic").run();
-        }
-      }
+        },
+      },
     ]
       .filter((item) =>
         item.title.toLowerCase().startsWith(query.toLowerCase())
@@ -58,7 +58,7 @@ export default {
           // parent: this,
           // propsData: props,
           props,
-          editor: props.editor
+          editor: props.editor,
         });
 
         if (!props.clientRect) {
@@ -72,7 +72,7 @@ export default {
           showOnCreate: true,
           interactive: true,
           trigger: "manual",
-          placement: "bottom-start"
+          placement: "bottom-start",
         });
       },
 
@@ -84,7 +84,7 @@ export default {
         }
 
         popup[0].setProps({
-          getReferenceClientRect: props.clientRect
+          getReferenceClientRect: props.clientRect,
         });
       },
 
@@ -101,7 +101,7 @@ export default {
       onExit() {
         popup[0].destroy();
         component.destroy();
-      }
+      },
     };
-  }
+  },
 };

@@ -27,9 +27,10 @@ h1 {
 
 hr {
   display: block;
-  width: 800px;
-  background-color: black;
+  width: 1000px;
+  background-color: gray;
   height: 2px;
+  margin: auto;
 }
 
 code {

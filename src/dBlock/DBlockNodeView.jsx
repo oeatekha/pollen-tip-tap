@@ -6,7 +6,10 @@ import { useState } from "react";
 export const DBlockNodeView = ({ editor }) => {
   return React.createElement(
     NodeViewWrapper,
-    { as: "div", className: "flex gap-2 items-center w-full my-4 drag-test" },
+    {
+      as: "div",
+      className: "flex gap-2 items-center w-full my-4 drag-test",
+    },
     React.createElement(
       "section",
       {

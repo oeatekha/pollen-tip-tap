@@ -41,9 +41,9 @@ const titled = new Editor({
         if (node.type.name === "heading") {
           return "Untitled";
         }
-        if (node.type.name === "paragraph") {
-          return "ReadME file contains information about the other files in a directory or archive of software. Use Readme on Pollen to include a relevant description";
-        }
+        // if (node.type.name === "paragraph") {
+        //   return "ReadME file contains information about the other files in a directory or archive of software. Use Readme on Pollen to include a relevant description";
+        // }
       },
     }),
   ],
@@ -57,8 +57,8 @@ const readMe = new Editor({
     History,
     Placeholder.configure({
       placeholder: ({ node }) => {
-        if (node.type.name === "heading") {
-          return "ReadME file contains information about the other files in a directory or archive of software. Use Readme on Pollen to include a relevant description";
+        if (node.type.name === "paragraph") {
+          return "And a little more about this...";
         }
       },
     }),
@@ -88,7 +88,7 @@ const Tiptap = () => {
       }),
       Placeholder.configure({
         placeholder: ({ node }) => {
-          if (node.type.name === "dBlock+") {
+          if (node.type.name === "paragraph") {
             return 'enter "/" to use a command';
           }
         },
@@ -100,10 +100,8 @@ const Tiptap = () => {
     ],
 
     content: `
-    <h1>New Pollen Page</h1>
-    <p>Read Me: This is the area you can enter extra info about your page.</p>
-    <hr>
-    <p></p>
+    
+    <p>Begin typing here</p>
     `,
     autofocus: "end",
     editable: true,
@@ -111,10 +109,11 @@ const Tiptap = () => {
 
   return (
     <>
-      {/* <EditorContent editor={titled} />
-      {""}
+      <EditorContent editor={titled} />
       <EditorContent editor={readMe} />
-      {""} */}
+      <br></br>
+      <hr></hr>
+      <br></br>
       <EditorContent editor={editor} />{" "}
     </>
   );
