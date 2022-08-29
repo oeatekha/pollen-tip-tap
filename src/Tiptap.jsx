@@ -58,7 +58,7 @@ const readMe = new Editor({
     Placeholder.configure({
       placeholder: ({ node }) => {
         if (node.type.name === "paragraph") {
-          return "And a little more about this...";
+          return "Tell us about what you are...";
         }
       },
     }),
@@ -96,10 +96,7 @@ const Tiptap = () => {
       DBlock,
     ],
 
-    content: `
-    
-    <p>Begin typing here</p>
-    `,
+   
     autofocus: "end",
     editable: true,
   });
