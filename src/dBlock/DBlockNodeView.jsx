@@ -1,10 +1,12 @@
 import "./dBlock.css";
 import React from "react";
 import { NodeViewWrapper, NodeViewContent } from "@tiptap/react";
+import { useState } from "react";
+
 export const DBlockNodeView = ({ editor }) => {
   return React.createElement(
     NodeViewWrapper,
-    { as: "div", className: "flex gap-2 items-center w-full my-4" },
+    { as: "div", className: "flex gap-2 items-center w-full my-4 drag-test" },
     React.createElement(
       "section",
       {
@@ -12,8 +14,6 @@ export const DBlockNodeView = ({ editor }) => {
         "aria-label": "left-menu",
         contentEditable: "false",
         suppresscontenteditablewarning: "true",
-
-        
       },
       React.createElement(
         "div",
@@ -23,7 +23,7 @@ export const DBlockNodeView = ({ editor }) => {
           draggable: true,
           "data-drag-handle": true,
         },
-        React.createElement("div", { className: "handle" }, "::")
+        React.createElement("a", { className: "handle" }, "::")
       )
     ),
     React.createElement(NodeViewContent, { className: "node-view-content" })

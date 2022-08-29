@@ -1,10 +1,10 @@
-.handle {
-  color: lightgray;
+.drag-test a {
+  visibility: hidden;
+  color: gray;
   font-weight: 800;
-  visibility: visible;
 }
 
-.handle:hover {
+.drag-test:hover a {
+  visibility: visible;
   cursor: grab;
-  color: black;
 }

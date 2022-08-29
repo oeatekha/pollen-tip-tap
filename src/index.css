@@ -5,7 +5,7 @@
 @import url("https://rsms.me/inter/inter.css");
 html {
   font-family: "Inter", sans-serif;
-  font-size: 18px;
+  font-size: 1.5rem;
 }
 @supports (font-variation-settings: normal) {
   html {
@@ -21,13 +21,13 @@ body {
 }
 
 h1 {
-  font-size: xx-large;
+  font-size: 1.8rem;
   font-weight: 700;
 }
 
 hr {
   display: block;
-  width: 700px;
+  width: 800px;
   background-color: black;
   height: 2px;
 }
