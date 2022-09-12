@@ -1,12 +1,11 @@
 import logo from "./logo.svg";
 import "./App.css";
 import Tiptap from "./Tiptap";
-import HeaderMenu from "./HeaderMenu";
+// import HeaderMenu from "./HeaderMenu";
 
 function App() {
   return (
     <div className="App">
-      <HeaderMenu />
       <Tiptap />
     </div>
   );

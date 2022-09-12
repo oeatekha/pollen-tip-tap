@@ -6,7 +6,7 @@
 
   margin: auto;
   margin-top: 32px;
-  width: 1000px;
+  max-width: 1000px;
 
   text-align: left;
 

@@ -33,6 +33,12 @@ hr {
   margin: auto;
 }
 
+iframe {
+  width: 1000px;
+  margin: auto;
+  height: 560px;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
