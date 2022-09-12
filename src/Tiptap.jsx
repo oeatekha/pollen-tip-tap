@@ -1,16 +1,79 @@
 import "./Tiptap.css";
 
-import { useEditor, EditorContent, FloatingMenu } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import Placeholder from "@tiptap/extension-placeholder";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+import ReactComponent from "./Extension.js";
+import Heading from "@tiptap/extension-heading";
+import Paragraph from "@tiptap/extension-paragraph";
+import Text from "@tiptap/extension-text";
+import History from "@tiptap/extension-history";
+
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 
-// import plainExtension from "./extension.ts";
-import ReactComponent from "./Extension.js";
+import Commands from "./suggestion/commands";
+import suggestion from "./suggestion/suggestion";
+
+import { DBlock } from "./dBlock/dBlock.ts";
+import Document from "@tiptap/extension-document";
+import MenuContent from "./MenuContent.js";
+import Iframe from "./iframe.ts";
+
+const CustomDocument = Document.extend({
+  content: "dBlock+",
+});
+
+const ParagraphDocument = Document.extend({
+  content: "paragraph",
+});
+
+const HeaderDocument = Document.extend({
+  content: "heading", // You can't use heading block* breaks it....
+});
+
+const titled = new Editor({
+  extensions: [
+    HeaderDocument,
+    Heading,
+    Text,
+    History,
+    Placeholder.configure({
+      placeholder: ({ node }) => {
+        if (node.type.name === "heading") {
+          return "Untitled Page";
+        }
+        // if (node.type.name === "paragraph") {
+        //   return "ReadME file contains information about the other files in a directory or archive of software. Use Readme on Pollen to include a relevant description";
+        // }
+      },
+    }),
+  ],
+});
+
+const readMe = new Editor({
+  extensions: [
+    ParagraphDocument,
+    Paragraph,
+    Text,
+    History,
+    Placeholder.configure({
+      placeholder: ({ node }) => {
+        if (node.type.name === "paragraph") {
+          return "And a little more about this...";
+        }
+      },
+    }),
+  ],
+});
 
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
+        document: false,
         heading: {
           HTMLAttributes: {
             class: "editor-child",
@@ -22,64 +85,62 @@ const Tiptap = () => {
           },
         },
       }),
-      FloatingMenu,
-      Image.configure({
-        inline: true,
-        HTMLAttributes: {
-          class: "editor-image",
+
+      Commands.configure({
+        suggestion,
+      }),
+      Placeholder.configure({
+        placeholder: ({ node }) => {
+          if (node.type.name === "paragraph") {
+            return 'enter "/" to use a command';
+          }
         },
       }),
-      //   plainExtension,
+
       ReactComponent,
+      CustomDocument,
+      DBlock,
+      Iframe,
     ],
+
     content: `
-    <h1>New Pollen Page</h1>
-    <p>Read Me: This is the place you can enter extra info about your page.</p>
-    <hr>
-    <p></p>
+    
+    <p>Begin typing here</p>
     `,
     autofocus: "end",
     editable: true,
   });
 
-  const addImage = () => {
-    const url = window.prompt("URL");
-
-    if (!url) {
-      url = "";
-    }
-    editor
-      .chain()
-      .insertContent(`<img src="${url}"/>`)
-      .lift("image")
-      .insertContent("<p></p>")
-      .focus("end")
-      .run();
-  };
+  const [menuClicked, setMenuClicked] = useState(false);
 
   return (
     <>
-      {editor && (
-        <FloatingMenu editor={editor} tippyOptions={{ duration: 100 }}>
-          <button
-            onClick={() =>
-              editor.chain().focus().toggleHeading({ level: 1 }).run()
-            }
-            // className={
-            //   editor.isActive("heading", { level: 1 }) ? "is-active" : ""
-            // }
-          >
-            Heading
-          </button>
-          <button
-            onClick={() => addImage()}
-            // className={editor.isActive("image") ? "is-active" : ""}
-          >
-            Image
-          </button>
-        </FloatingMenu>
-      )}{" "}
-      <EditorContent editor={editor} />{" "}
+      <div className="flex w-screen overflow-hidden h-screen">
+        {/* EDITOR SECTION */}
+        <div className="w-full overflow-auto">
+          <div className="p-8 menu sticky top-0 flex justify-between">
+            <Link href="/">Pollen</Link>
+            <div
+              className="hover:cursor-pointer hover:decoration-solid"
+              onClick={() => setMenuClicked(!menuClicked)}
+            >
+              menu
+            </div>
+          </div>
+          <div className="flex-1">
+            <EditorContent editor={titled} />
+            <EditorContent editor={readMe} />
+            <br></br>
+            <hr></hr>
+            <br></br>
+            <EditorContent editor={editor} />
+            {""}
+          </div>
+        </div>
+
+        {/* MENU SECTION */}
+        {menuClicked && <MenuContent editor={editor} />}
+      </div>
     </>
   );
 };

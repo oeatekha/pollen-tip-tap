@@ -1,0 +1,14 @@
+.drag-test {
+  transform: translateX(-32px);
+}
+
+.drag-test a {
+  visibility: hidden;
+  color: gray;
+  font-weight: 800;
+}
+
+.drag-test:hover a {
+  visibility: visible;
+  cursor: grab;
+}
