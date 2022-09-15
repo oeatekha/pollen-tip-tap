@@ -71,22 +71,23 @@ const readMe = new Editor({
     Text,
     History,
 
- 
+    // Color.configure({
+    //   color
+    // }),
 
     Placeholder.configure({
       placeholder: ({ node }) => {
         if (node.type.name === "paragraph") {
-          return "Description: Tell us more....";
+          return "Description, tell us more....";
         }
       },
     }),
 
     //set color correctly for the description portion....
-    Color.configure({
-      color: "F5F5F5",
-    }),
   ],
 });
+
+
 
 const Tiptap = () => {
   const editor = useEditor({
@@ -133,13 +134,13 @@ const Tiptap = () => {
       }),
     ],
 
-
+    
     autofocus: "end",
     editable: true,
   });
 
 
-
+  
   const [menuClicked, setMenuClicked] = useState(false);
 
   return (
