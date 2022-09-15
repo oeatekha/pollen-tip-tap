@@ -7,6 +7,17 @@ export default {
   items: ({ query }) => {
     return [
       {
+        title: "Text",
+        command: ({ editor, range }) => {
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .setNode("paragraph")
+            .run();
+        },
+      },
+      {
         title: "H1",
         command: ({ editor, range }) => {
           editor
@@ -14,17 +25,6 @@ export default {
             .focus()
             .deleteRange(range)
             .setNode("heading", { level: 1 })
-            .run();
-        },
-      },
-      {
-        title: "Text",
-        command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setNode("heading", { level: 2 })
             .run();
         },
       },

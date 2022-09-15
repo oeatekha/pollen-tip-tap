@@ -5,6 +5,7 @@
 
 import { Node, mergeAttributes, Content } from "@tiptap/core";
 import { ReactNodeViewRenderer } from "@tiptap/react";
+import commands from "../suggestion/commands";
 
 import { DBlockNodeView } from "./DBlockNodeView";
 
@@ -59,6 +60,7 @@ export const DBlock = Node.create<DBlockOptions>({
   addCommands() {
     return {
       setDBlock:
+
         () =>
         ({ chain, state, commands }) => {
           const {
@@ -117,49 +119,49 @@ export const DBlock = Node.create<DBlockOptions>({
     return ReactNodeViewRenderer(DBlockNodeView);
   },
 
-   addKeyboardShortcuts() {
+  addKeyboardShortcuts () {
     return {
-      "Mod-Alt-0": () => this.editor.commands.setDBlock(),
+      'Mod-Alt-0': () => this.editor.commands.setDBlock(),
       Enter: ({ editor }) => {
-        console.log("i heard enter");
+        const { selection: { $head, from, to }, doc } = editor.state
 
-        const {
-          selection: { $head, from, to },
-          doc,
-        } = editor.state;
+        const parent = $head.node($head.depth - 1)
 
-        const parent = $head.node($head.depth - 1);
+        if (parent.type.name !== 'dBlock') return false
 
-        if (parent.type.name !== "dBlock") return false;
-
-        let currentActiveNodeTo = -1;
+        let currentActiveNodeTo = -1
 
         doc.descendants((node, pos) => {
-          if (currentActiveNodeTo !== -1) return false;
-          // eslint-disable-next-line consistent-return
-          if (node.type.name === this.name) return;
+          if (currentActiveNodeTo !== -1) return false
+          if (node.type.name === this.name) return
 
-          const [nodeFrom, nodeTo] = [pos, pos + node.nodeSize];
+          const [ nodeFrom, nodeTo ] = [ pos, pos + node.nodeSize ]
 
-          if (nodeFrom <= from && to <= nodeTo) currentActiveNodeTo = nodeTo;
+          if (nodeFrom <= from && to <= nodeTo) currentActiveNodeTo = nodeTo
 
-          return false;
-        });
+          return false
+        })
 
-        const content = doc.slice(from, currentActiveNodeTo)?.toJSON().content;
+        const content = doc.slice(from, currentActiveNodeTo)?.toJSON().content
 
-        return editor
-          .chain()
+        if (content[0]?.type) {
+          delete content[0].attrs
+          content[0].type = 'paragraph'
+        }
+
+        return editor.chain()
           .insertContentAt(
             { from, to: currentActiveNodeTo },
             {
               type: this.name,
-              content,
+              content
             }
           )
           .focus(from + 4)
-          .run();
+          .run()
       },
-    };
+    }
   },
+
+
 });

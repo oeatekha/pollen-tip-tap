@@ -18,3 +18,7 @@
  .data-drag-handle {
   color: "skyblue";
 }
+
+.gap-2{
+  gap: 1rem;
+}

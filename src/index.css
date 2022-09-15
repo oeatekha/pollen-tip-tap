@@ -5,7 +5,7 @@
 @import url("https://rsms.me/inter/inter.css");
 html {
   font-family: "Inter", sans-serif;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 @supports (font-variation-settings: normal) {
   html {
@@ -25,16 +25,16 @@ h1 {
   font-weight: 700;
 }
 
+
 hr {
   display: block;
-  width: 1000px;
-  background-color: gray;
+  width: 720px;
   height: 2px;
   margin: auto;
 }
 
 iframe {
-  width: 1000px;
+  width: 720px;
   margin: auto;
   height: 560px;
 }
@@ -43,3 +43,4 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+

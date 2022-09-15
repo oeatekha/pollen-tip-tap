@@ -15,6 +15,8 @@ import History from "@tiptap/extension-history";
 
 import * as Y from 'yjs';
 import Collaboration from "@tiptap/extension-collaboration";
+import { Color } from '@tiptap/extension-color'
+
 
 
 import StarterKit from "@tiptap/starter-kit";
@@ -68,12 +70,20 @@ const readMe = new Editor({
     Paragraph,
     Text,
     History,
+
+ 
+
     Placeholder.configure({
       placeholder: ({ node }) => {
         if (node.type.name === "paragraph") {
-          return "And a little more about this...";
+          return "Description: Tell us more....";
         }
       },
+    }),
+
+    //set color correctly for the description portion....
+    Color.configure({
+      color: "F5F5F5",
     }),
   ],
 });
@@ -83,6 +93,7 @@ const Tiptap = () => {
     extensions: [
       StarterKit.configure({
         document: false,
+        dropcursor: false,
         heading: {
           HTMLAttributes: {
             class: "editor-child",
@@ -103,12 +114,11 @@ const Tiptap = () => {
         suggestion,
       }),
       Placeholder.configure({
-        placeholder: ({ node }) => {
-          if (node.type.name === "paragraph") {
-            return 'enter "/" to use a command';
-          }
-        },
+        placeholder: "Type `/` for commands",
+        includeChildren: true,
       }),
+
+
 
       ReactComponent,
       Collaboration.configure({
@@ -118,7 +128,7 @@ const Tiptap = () => {
       DBlock,
       Iframe,
       Dropcursor.configure({
-        width: 10,
+        width: 3,
         color: 'skyblue',
       }),
     ],
@@ -151,10 +161,8 @@ const Tiptap = () => {
             <EditorContent editor={readMe} />
             <br></br>
             <hr></hr>
-            <br></br>
+            
             <EditorContent editor={editor} />
-
-            {""}
           </div>
         </div>
 
