@@ -26,6 +26,7 @@ export const DBlockNodeView = ({ editor }) => {
           draggable: true,
           "data-drag-handle": true,
         },
+        
         React.createElement("a", { className: "handle" }, "::")
       )
     ),

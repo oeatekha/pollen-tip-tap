@@ -14,7 +14,7 @@ export class PlainNodeView implements NodeView {
   dom: HTMLElement;
   constructor() {
     this.dom = document.createElement("div");
-    this.dom.style.padding = "10px";
+    this.dom.style.padding = "100px";
     this.dom.style.border = "";
     const handle = document.createElement("div");
     handle.innerHTML = "Plain";

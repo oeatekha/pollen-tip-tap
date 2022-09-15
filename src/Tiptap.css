@@ -1,12 +1,13 @@
 /* ⭐️ PROSE MIRROR CONTAINER */
 @import url("https://rsms.me/inter/inter.css");
+
 .ProseMirror {
   font-family: "Inter", sans-serif;
   /* background-color: rgb(227, 227, 227); */
 
   margin: auto;
   margin-top: 32px;
-  max-width: 1000px;
+  width: 1000px;
 
   text-align: left;
 
@@ -61,23 +62,6 @@ button:focus {
 
 /* Drag Handle*/
 
-.global-drag-handle {
-  position: absolute;
-}
-
-.global-drag-handle::after {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 1rem;
-  height: 1.25rem;
-  content: "⠿";
-  font-weight: 700;
-  cursor: grab;
-  background: #0d0d0d10;
-  color: #0d0d0d50;
-  border-radius: 0.25rem;
-}
 
 .mention {
   border: 1px solid #000;
@@ -109,3 +93,8 @@ button:focus {
 .item.is-selected {
   border-color: #000;
 }
+
+.iframe-wrapper.ProseMirror-selectednode {
+  outline: 3px solid #68cef8;
+}
+

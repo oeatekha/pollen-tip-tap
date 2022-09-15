@@ -3,6 +3,8 @@ import "./Tiptap.css";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "next/link";
+import Dropcursor from '@tiptap/extension-dropcursor'
+
 import { useEffect, useState } from "react";
 
 import ReactComponent from "./Extension.js";
@@ -10,6 +12,10 @@ import Heading from "@tiptap/extension-heading";
 import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import History from "@tiptap/extension-history";
+
+import * as Y from 'yjs';
+import Collaboration from "@tiptap/extension-collaboration";
+
 
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -22,8 +28,11 @@ import Document from "@tiptap/extension-document";
 import MenuContent from "./MenuContent.js";
 import Iframe from "./iframe.ts";
 
+const ydoc = new Y.Doc();
+
 const CustomDocument = Document.extend({
   content: "dBlock+",
+  
 });
 
 const ParagraphDocument = Document.extend({
@@ -78,6 +87,10 @@ const Tiptap = () => {
           HTMLAttributes: {
             class: "editor-child",
           },
+          Dropcursor: {
+            width: 10,
+            color: 'skyblue',
+          }
         },
         paragraph: {
           HTMLAttributes: {
@@ -98,18 +111,24 @@ const Tiptap = () => {
       }),
 
       ReactComponent,
+      Collaboration.configure({
+        document: ydoc,
+      }),
       CustomDocument,
       DBlock,
       Iframe,
+      Dropcursor.configure({
+        width: 10,
+        color: 'skyblue',
+      }),
     ],
 
-    content: `
-    
-    <p>Begin typing here</p>
-    `,
+
     autofocus: "end",
     editable: true,
   });
+
+
 
   const [menuClicked, setMenuClicked] = useState(false);
 
@@ -134,6 +153,7 @@ const Tiptap = () => {
             <hr></hr>
             <br></br>
             <EditorContent editor={editor} />
+
             {""}
           </div>
         </div>

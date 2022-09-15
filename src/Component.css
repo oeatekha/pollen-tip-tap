@@ -10,11 +10,13 @@
   letter-spacing: 0.5px;
   font-weight: bold;
   font-size: 24px;
+
   width: 30px;
 }
 
 .cols {
   display: flex;
+  
 }
 
 .react-component:hover {
@@ -28,3 +30,4 @@
 .drag-handle:hover {
   cursor: pointer;
 }
+
