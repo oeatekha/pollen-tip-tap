@@ -8,7 +8,7 @@ export const UserContents = (props) => {
       `<iframe src="https://www.are.na/${user}/${channel.slug}/embed"></iframe>`
     );
     props.editor.commands.insertContent(
-      `<iframe src="https://www.are.na/${user}/${channel.slug}/embed"></iframe>`
+      `<iframe src="https://www.are.na/${user}/${channel.slug}/embed"></iframe><p></p>`
     );
   };
 

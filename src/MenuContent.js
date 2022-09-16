@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import ChannelContents from "./ChannelContent";
 import UserContents from "./UserContents";
 
 const Arena = require("are.na");
@@ -13,6 +14,9 @@ const embedStr =
 export const HeaderMenu = (props) => {
   const [menuClicked, setMenuClicked] = useState(false);
   const [username, setUsername] = useState("");
+  const [channel, setChannel] = useState("");
+  const [chanMeta, setChanMeta] = useState({});
+  const [type, setType] = useState("PROFILE");
 
   const [userData, setUserData] = useState({});
   const [channelData, setChannelData] = useState({});
@@ -31,40 +35,72 @@ export const HeaderMenu = (props) => {
         arena
           .user(username)
           .channels({ page: 1, per: 100 })
-          .then((channelData) => {
+          .then((userData) => {
             // filter for public channel
-            channelData = channelData.filter(
+            userData = userData.filter(
               (channel) => channel.status !== "private"
             );
-            setChannelData(channelData);
+            setUserData(userData);
             setLoading(false);
             setLoaded(true);
-            console.log(channelData);
+            setType("PROFILE");
+            console.log(userData);
           });
       })
       .catch((err) => setLoading(false));
   };
 
-  const onSubmit = (e) => {
+  const buildReqParams = (channelObj) => {
+    let page = 0;
+    let paramList = [];
+    while (page * 100 < channelObj.length) {
+      page += 1;
+      paramList.push({ page: page, per: 100 });
+    }
+    return paramList;
+  };
+
+  const getRestOfChannel = async (chanObj) => {
+    let paramList = buildReqParams(chanObj);
+    Promise.all(
+      paramList.map((param) => arena.channel(channel).get(param))
+    ).then((responses) => {
+      console.log("😀", responses);
+
+      let contentList = [];
+      for (let response of responses) {
+        contentList = [...contentList, ...response.contents];
+      }
+      console.log(contentList);
+
+      setChannelData(contentList);
+      setType("CHANNEL");
+      setLoading(false);
+      setLoaded(true);
+    });
+  };
+
+  const getChannel = (channel) => {
+    arena
+      .channel(channel)
+      .get({ page: 1, per: 100 })
+      .then((chan) => {
+        setChanMeta(chan);
+        getRestOfChannel(chan);
+      })
+      .catch((err) => setLoaded(false));
+  };
+
+  const onUsernameSubmit = (e) => {
     e.preventDefault();
-    console.log("refresh prevented");
-    console.log(username);
-
+    setLoading(true);
     getUser(username);
+  };
 
-    // props.editor.commands.insertContent(embedStr);
-    // props.editor.commands.insertContent({
-    //   type: "heading",
-    //   attrs: {
-    //     level: 1,
-    //   },
-    //   content: [
-    //     {
-    //       type: "text",
-    //       text: "Example Text",
-    //     },
-    //   ],
-    // });
+  const onChannelSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    getChannel(channel);
   };
 
   return (
@@ -72,7 +108,7 @@ export const HeaderMenu = (props) => {
       {!isLoading && !isLoaded ? (
         <div className="p-8">
           <h1>Enter Username</h1>
-          <form onSubmit={onSubmit}>
+          <form onSubmit={onUsernameSubmit}>
             <input
               type="text"
               className="border-hidden focus:outline-none bg-slate-200 m-4 p-2"
@@ -81,7 +117,20 @@ export const HeaderMenu = (props) => {
             <input
               className="hover:cursor-pointer"
               type="submit"
-              value="Pull Are.na Contents"
+              value="Pull Are.na Profile"
+            />
+          </form>
+          <h1>Enter Channel Slug</h1>
+          <form onSubmit={onChannelSubmit}>
+            <input
+              type="text"
+              className="border-hidden focus:outline-none bg-slate-200 m-4 p-2"
+              onChange={(event) => setChannel(event.target.value)}
+            />
+            <input
+              className="hover:cursor-pointer"
+              type="submit"
+              value="Pull Are.na Channel"
             />
           </form>
         </div>
@@ -89,11 +138,19 @@ export const HeaderMenu = (props) => {
         <div>
           {isLoaded ? (
             <div>
-              <UserContents
-                editor={props.editor}
-                username={username}
-                publicChannels={channelData}
-              />{" "}
+              {type === "PROFILE" ? (
+                <UserContents
+                  editor={props.editor}
+                  username={username}
+                  publicChannels={userData}
+                />
+              ) : (
+                <ChannelContents
+                  editor={props.editor}
+                  channelObj={chanMeta}
+                  contents={channelData}
+                />
+              )}
             </div>
           ) : (
             <div className="p-8">Loading... </div>

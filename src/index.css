@@ -25,7 +25,6 @@ h1 {
   font-weight: 700;
 }
 
-
 hr {
   display: block;
   width: 720px;
@@ -36,11 +35,10 @@ hr {
 iframe {
   width: 720px;
   margin: auto;
-  height: 560px;
+  height: 500px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
-

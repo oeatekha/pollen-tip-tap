@@ -53,23 +53,9 @@ export const Block = (props) => {
       {/* ⭐️ OVERLAY */}
       {hovered && (
         <div>
-          <div className="absolute top-0 left-0 w-full flex justify-between p-2 z-10">
-            <div
-              // onClick={() => upvoteClicked(block.id)}
-              className="hover: cursor-pointer"
-            >
-              ⬆
-            </div>
-            <div
-              onClick={() => props.selectedClicked(block.id)}
-              className="hover: cursor-pointer"
-            >
-              📌
-            </div>
+          <div className="absolute flex items-center justify-center top-0 left-0 w-full h-full bg-white cursor-pointer bg-opacity-50">
+            <div className="text-white text-4xl font-extrabold">+</div>
           </div>
-          <div className="absolute bottom-0 left-0 w-full flex justify-between p-2">
-            <div className="bg-white p-1 px-2 rounded-xl ">{props.upvotes}</div>
-          </div>{" "}
         </div>
       )}
     </div>

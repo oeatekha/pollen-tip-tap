@@ -3,7 +3,7 @@ import "./Tiptap.css";
 import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "next/link";
-import Dropcursor from '@tiptap/extension-dropcursor'
+import Dropcursor from "@tiptap/extension-dropcursor";
 
 import { useEffect, useState } from "react";
 
@@ -13,11 +13,9 @@ import Paragraph from "@tiptap/extension-paragraph";
 import Text from "@tiptap/extension-text";
 import History from "@tiptap/extension-history";
 
-import * as Y from 'yjs';
+import * as Y from "yjs";
 import Collaboration from "@tiptap/extension-collaboration";
-import { Color } from '@tiptap/extension-color'
-
-
+import { Color } from "@tiptap/extension-color";
 
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
@@ -34,7 +32,6 @@ const ydoc = new Y.Doc();
 
 const CustomDocument = Document.extend({
   content: "dBlock+",
-  
 });
 
 const ParagraphDocument = Document.extend({
@@ -87,8 +84,6 @@ const readMe = new Editor({
   ],
 });
 
-
-
 const Tiptap = () => {
   const editor = useEditor({
     extensions: [
@@ -101,8 +96,8 @@ const Tiptap = () => {
           },
           Dropcursor: {
             width: 10,
-            color: 'skyblue',
-          }
+            color: "skyblue",
+          },
         },
         paragraph: {
           HTMLAttributes: {
@@ -119,8 +114,6 @@ const Tiptap = () => {
         includeChildren: true,
       }),
 
-
-
       ReactComponent,
       Collaboration.configure({
         document: ydoc,
@@ -130,17 +123,14 @@ const Tiptap = () => {
       Iframe,
       Dropcursor.configure({
         width: 3,
-        color: 'skyblue',
+        color: "skyblue",
       }),
     ],
 
-    
     autofocus: "end",
     editable: true,
   });
 
-
-  
   const [menuClicked, setMenuClicked] = useState(false);
 
   return (
@@ -157,12 +147,12 @@ const Tiptap = () => {
               menu
             </div>
           </div>
-          <div className="flex-1">
+          <div className="flex-1 mb-96">
             <EditorContent editor={titled} />
             <EditorContent editor={readMe} />
             <br></br>
             <hr></hr>
-            
+
             <EditorContent editor={editor} />
           </div>
         </div>
