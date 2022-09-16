@@ -27,7 +27,7 @@ export const DBlockNodeView = ({ editor }) => {
           "data-drag-handle": true,
         },
         
-        React.createElement("a", { className: "handle" }, "::")
+        React.createElement("a", { className: "handle" }, <svg xmlns="http://www.w3.org/2000/svg" width="11" height="17" fill="none" viewBox="0 0 11 17" > <ellipse cx="2.79" cy="2.146" fill="#BFBFBF" rx="1.818" ry="1.742" ></ellipse> <ellipse cx="2.79" cy="8.245" fill="#BFBFBF" rx="1.818" ry="1.742" ></ellipse> <ellipse cx="2.79" cy="14.343" fill="#BFBFBF" rx="1.818" ry="1.742" ></ellipse> <ellipse cx="9.154" cy="2.146" fill="#BFBFBF" rx="1.818" ry="1.742" ></ellipse> <ellipse cx="9.154" cy="8.245" fill="#BFBFBF" rx="1.818" ry="1.742" ></ellipse> <ellipse cx="9.154" cy="14.343" fill="#BFBFBF" rx="1.818" ry="1.742" ></ellipse> </svg>)
       )
     ),
     React.createElement(NodeViewContent, { className: "node-view-content" })

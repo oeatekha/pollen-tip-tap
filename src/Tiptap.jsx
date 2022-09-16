@@ -78,7 +78,7 @@ const readMe = new Editor({
     Placeholder.configure({
       placeholder: ({ node }) => {
         if (node.type.name === "paragraph") {
-          return "Description, tell us more....";
+          return "Tell us more....";
         }
       },
     }),
