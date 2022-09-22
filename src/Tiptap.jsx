@@ -144,14 +144,15 @@ const Tiptap = () => {
       <div className="flex w-screen overflow-hidden h-screen">
         {/* EDITOR SECTION */}
         <div className="w-full overflow-auto">
-          <div className="p-4 menu sticky top-0 flex justify-between">
+          <div className="p-4 menu sticky top-0 flex justify-between" style={{marginBottom: "6rem"}}> 
             
             <Link href="/">Pollen</Link>
             <div
-              className="hover:cursor-pointer hover:decoration-solid"
+              className="hover:cursor-pointer hover:decoration-solid" style={{ fontSize: "14px"}}
+             
               onClick={() => setMenuClicked(!menuClicked)}
             >
-              menu
+              Toolbar
             </div>
           </div>
           <div className="flex-1 mb-96">

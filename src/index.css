@@ -49,12 +49,13 @@ code {
 }
 
 .p-4 {
-  padding: 1rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  padding-top: .75rem;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
 
 }
 
-.a {
+a {
   font-size: 14px;
+  color: #2E2E2E;
 }
