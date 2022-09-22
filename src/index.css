@@ -21,8 +21,13 @@ body {
 }
 
 h1 {
-  font-size: 1.8rem;
+  font-size: 2.25rem;
   font-weight: 700;
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight:700;
 }
 
 hr {
@@ -41,4 +46,15 @@ iframe {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.p-4 {
+  padding: 1rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+
+}
+
+.a {
+  font-size: 14px;
 }

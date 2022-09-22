@@ -1,6 +1,6 @@
 import "./Tiptap.css";
 
-import { useEditor, EditorContent, Editor } from "@tiptap/react";
+import { useEditor, EditorContent, Editor, getMarkType } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "next/link";
 import Dropcursor from "@tiptap/extension-dropcursor";
@@ -43,10 +43,12 @@ const HeaderDocument = Document.extend({
 });
 
 const titled = new Editor({
+  
+  className: "titled",
   extensions: [
     HeaderDocument,
     Heading,
-    Text,
+    Text,   
     History,
     Placeholder.configure({
       placeholder: ({ node }) => {
@@ -64,7 +66,11 @@ const titled = new Editor({
 const readMe = new Editor({
   extensions: [
     ParagraphDocument,
-    Paragraph,
+    Paragraph.configure({
+      HTMLAttributes: {
+        class: 'my-custom-paragraph',
+      },
+    }),
     Text,
     History,
 
@@ -138,7 +144,8 @@ const Tiptap = () => {
       <div className="flex w-screen overflow-hidden h-screen">
         {/* EDITOR SECTION */}
         <div className="w-full overflow-auto">
-          <div className="p-8 menu sticky top-0 flex justify-between">
+          <div className="p-4 menu sticky top-0 flex justify-between">
+            
             <Link href="/">Pollen</Link>
             <div
               className="hover:cursor-pointer hover:decoration-solid"
@@ -149,7 +156,7 @@ const Tiptap = () => {
           </div>
           <div className="flex-1 mb-96">
             <EditorContent editor={titled} />
-            <EditorContent editor={readMe} />
+            <EditorContent editor={readMe}/>
             <br></br>
             <hr></hr>
 

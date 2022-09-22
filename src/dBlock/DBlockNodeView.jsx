@@ -8,12 +8,16 @@ export const DBlockNodeView = ({ editor }) => {
     NodeViewWrapper,
     {
       as: "div",
-      className: "flex items-center gap-2 w-full my-4 drag-test",
+      className: "flex gap-2 w-full my-4 drag-test",
+      // add conditional classes for header....
     },
     React.createElement(
       "section",
       {
-        className: "flex mt-0 pt-[0px]",
+        // if (NodeViewContent:contains(<h1></h1>)){
+        // },
+
+        className: "flex mt-0 pt-[0px] relative top-2", 
         "aria-label": "left-menu",
         contentEditable: "false",
         suppresscontenteditablewarning: "true",

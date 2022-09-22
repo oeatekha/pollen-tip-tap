@@ -18,13 +18,13 @@ export default {
         },
       },
       {
-        title: "H1",
+        title: "H2",
         command: ({ editor, range }) => {
           editor
             .chain()
             .focus()
             .deleteRange(range)
-            .setNode("heading", { level: 1 })
+            .setNode("heading", { level: 2 })
             .run();
         },
       },

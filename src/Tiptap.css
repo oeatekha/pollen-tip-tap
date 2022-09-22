@@ -8,7 +8,7 @@
   margin: auto;
   margin-top: 32px;
   width: 720px;
-
+  color: #2E2E2E;
   text-align: left;
 
   /* padding: 16px 16px; */
@@ -18,13 +18,17 @@
 .ProseMirror .is-empty::before {
   content: attr(data-placeholder);
   float: left;
-  color: #ced4da;
+  color: #BFBFBF;
   pointer-events: none;
   height: 0;
 }
 
 .ProseMirror:focus {
   outline-style: none;
+}
+
+.my-custom-paragraph{
+ color: #BFBFBF; 
 }
 
 /* ⭐️ CHILDREN */
