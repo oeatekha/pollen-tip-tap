@@ -19,6 +19,7 @@ import { Color } from "@tiptap/extension-color";
 
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
+import React, { useCallback } from 'react'
 
 import Commands from "./suggestion/commands";
 import suggestion from "./suggestion/suggestion";
@@ -39,14 +40,36 @@ const ParagraphDocument = Document.extend({
 });
 
 const HeaderDocument = Document.extend({
-  content: "heading", // You can't use heading block* breaks it....
+  content: ("heading"),
+  //content: "image", // You can't use heading block* breaks it....
 });
+
+// Create Document that can only contain image content
+// Then Create an editor that extends to this custom document and only extends to teh image extention using tiptap
+const Thumbnail = Document.extend({
+  content: "image",
+});
+
+const thumbnailImage = new Editor({
+
+  extensions: [Text, Thumbnail, Image.configure({
+    HTMLAttributes: {
+      class: "thumbnail-image",
+    },
+  })],
+});
+
+
+
+
+
 
 const titled = new Editor({
   
   className: "titled",
   extensions: [
     HeaderDocument,
+    Image,
     Heading,
     Text,   
     History,
@@ -127,17 +150,33 @@ const Tiptap = () => {
       CustomDocument,
       DBlock,
       Iframe,
+      Image,
       Dropcursor.configure({
         width: 3,
         color: "skyblue",
       }),
     ],
+  //   content: `
+  //   <img src="https://d2w9rnfcy7mm78.cloudfront.net/14322969/original_abba8876ad86fe087b7260a49e88b9ce.jpg?1639239206?bc=0" />
+  // `,
 
     autofocus: "end",
     editable: true,
   });
 
   const [menuClicked, setMenuClicked] = useState(false);
+
+  const addImage = useCallback(() => {
+    const url = window.prompt('URL')
+  
+    if (url) {
+      thumbnailImage.chain().focus().setImage({ src: url }).run()
+    }
+  }, [thumbnailImage])
+  
+  if (!thumbnailImage) {
+    return null
+  }
 
   return (
     <>
@@ -155,7 +194,11 @@ const Tiptap = () => {
               Toolbar
             </div>
           </div>
+          <button onClick={addImage}>setImage</button>
+
           <div className="flex-1 mb-96">
+            
+            <EditorContent editor={thumbnailImage} />
             <EditorContent editor={titled} />
             <EditorContent editor={readMe}/>
             <br></br>

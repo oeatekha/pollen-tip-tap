@@ -102,3 +102,9 @@ button:focus {
   outline: 3px solid #68cef8;
 }
 
+.thumbnail-image {
+  border-radius: 5px;
+  max-height: 350px;
+  width: 720px;
+  object-fit: cover;
+}
