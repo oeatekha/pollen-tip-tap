@@ -108,3 +108,17 @@ button:focus {
   width: 720px;
   object-fit: cover;
 }
+
+.thumbnail {
+  border-color: #fff;
+  color: #2E2E2E;
+  
+}
+
+.thumbnail:focus{
+  background: white;
+}
+
+.thumbnail:hover{
+  background: lightgrey;
+}

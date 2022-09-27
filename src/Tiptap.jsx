@@ -29,6 +29,8 @@ import Document from "@tiptap/extension-document";
 import MenuContent from "./MenuContent.js";
 import Iframe from "./iframe.ts";
 
+import thumb from "./icons/thumbnail.svg"
+
 const ydoc = new Y.Doc();
 
 const CustomDocument = Document.extend({
@@ -194,7 +196,7 @@ const Tiptap = () => {
               Toolbar
             </div>
           </div>
-          <button onClick={addImage}>setImage</button>
+          < button class="thumbnail" onClick={addImage}>< img src={thumb} /></button >
 
           <div className="flex-1 mb-96">
             
