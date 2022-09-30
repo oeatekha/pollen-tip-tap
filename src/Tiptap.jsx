@@ -28,8 +28,14 @@ import { DBlock } from "./dBlock/dBlock.ts";
 import Document from "@tiptap/extension-document";
 import MenuContent from "./MenuContent.js";
 import Iframe from "./iframe.ts";
+import thumb from "./icons/thumbnail.svg";
 
-import thumb from "./icons/thumbnail.svg"
+import { Popover } from '@headlessui/react';
+//import { usePopper } from 'react-popper';
+
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
+//import MyPopover from "./headlessui/embedPopups";
+
 
 const ydoc = new Y.Doc();
 
@@ -116,6 +122,8 @@ const readMe = new Editor({
 });
 
 const Tiptap = () => {
+
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -166,11 +174,21 @@ const Tiptap = () => {
     editable: true,
   });
 
+
+
+
   const [menuClicked, setMenuClicked] = useState(false);
+  const [thumbnailUrl, setThumbnail] = useState('https://d2w9rnfcy7mm78.cloudfront.net/2574542/original_ccac026c65e509ce6c1e77b5af835a8c.jpg?1534712867?bc=1');
+
+
 
   const addImage = useCallback(() => {
-    const url = window.prompt('URL')
-  
+    
+    const url = thumbnailUrl
+    //const url = window.prompt('URL')
+    console.log("hey")
+    console.log(thumbnailUrl)
+
     if (url) {
       thumbnailImage.chain().focus().setImage({ src: url }).run()
     }
@@ -182,6 +200,7 @@ const Tiptap = () => {
 
   return (
     <>
+    
       <div className="flex w-screen overflow-hidden h-screen">
         {/* EDITOR SECTION */}
         <div className="w-full overflow-auto">
@@ -196,9 +215,40 @@ const Tiptap = () => {
               Toolbar
             </div>
           </div>
-          < button class="thumbnail" onClick={addImage}>< img src={thumb} /></button >
 
+          {/* < button class="thumbnail" onClick={click}>< img src={thumb} /></button > */}
+          
+          
+        
           <div className="flex-1 mb-96">
+
+            <div className="embedThumb">
+              <Popover >
+                {({ open }) => (
+                  /* Use the `open` state to conditionally change the direction of the chevron icon. */
+                  <> <Popover.Button  className="thumbnail">
+                    <div><img src={thumb}/></div>     
+                    </Popover.Button>
+                    <Popover.Panel className="absolute left-1/2 z-10 mt-2 w-screen max-w-sm -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-3xl"> 
+                      <div class="bg-white shadow-xl sm:rounded-md p-4 max-w-xs mx-auto">
+                        <p className= "py-1 text-sm	text-stone-800 text-left font-semibold">Embed Link</p>
+                        <div class=" py-1 relative left-0">
+                          <input value={thumbnailUrl} 
+                            onChange={e => setThumbnail(e.target.value)} 
+                            className= "bg-gray-100 block p-2  w-full left-0 sm:rounded-md focus:border-blue-400 placeholder-gray-400 border border-gray-200 focus:outline-none focus:bg-white text-left text-sm" 
+                            type="text" 
+                            placeholder ="Paste Image Url">
+                          </input>
+                        </div>
+                        <button onClick={addImage}  className="mt-2 font-medium text-stone-800 text-sm w-full bg-gray-200 border-white rounded focus:text-stone-800 focus:bg-gray-200  hover:bg-gray-300">Embed Link</button>
+                        <p className= "py-1 mt-1 text-sm	text-gray-500 text-center text-xs">Works with Image URLs and Addresses</p>
+                      </div> 
+                    </Popover.Panel>
+                  </>
+                )}
+              </Popover>
+            </div>
+
             
             <EditorContent editor={thumbnailImage} />
             <EditorContent editor={titled} />
