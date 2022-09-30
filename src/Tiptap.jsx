@@ -229,9 +229,9 @@ const Tiptap = () => {
                   <> <Popover.Button  className="thumbnail">
                     <div><img src={thumb}/></div>     
                     </Popover.Button>
-                    <Popover.Panel className="absolute left-1/2 z-10 mt-2 w-screen max-w-sm -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-3xl"> 
+                    <Popover.Panel className="absolute left-1/2 z-10 mt-2 w-screen max-w-xs -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-sm"> 
                       <div class="bg-white shadow-xl sm:rounded-md p-4 max-w-xs mx-auto">
-                        <p className= "py-1 text-sm	text-stone-800 text-left font-semibold">Embed Link</p>
+                        <p className= "py-1 text-sm	text-stone-800 text-left font-semibold">Embed Image</p>
                         <div class=" py-1 relative left-0">
                           <input value={thumbnailUrl} 
                             onChange={e => setThumbnail(e.target.value)} 
@@ -240,8 +240,8 @@ const Tiptap = () => {
                             placeholder ="Paste Image Url">
                           </input>
                         </div>
-                        <button onClick={addImage}  className="mt-2 font-medium text-stone-800 text-sm w-full bg-gray-200 border-white rounded focus:text-stone-800 focus:bg-gray-200  hover:bg-gray-300">Embed Link</button>
-                        <p className= "py-1 mt-1 text-sm	text-gray-500 text-center text-xs">Works with Image URLs and Addresses</p>
+                        <button onClick={addImage}  className="mt-2 font-medium text-stone-800 text-sm w-full bg-gray-200 border-white rounded focus:text-stone-800 focus:bg-gray-200  hover:bg-gray-300">Embed Image</button>
+                        <p className= "py-1 mt-1 text-sm	text-gray-500 text-center text-xs">Works with image urls and addresses</p>
                       </div> 
                     </Popover.Panel>
                   </>
