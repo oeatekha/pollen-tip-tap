@@ -1,7 +1,18 @@
+import { useAriaHidden } from "@chakra-ui/react";
 import { ReactRenderer } from "@tiptap/react";
 import tippy from "tippy.js";
 
 import CommandsList from "./CommandsList.jsx";
+
+function noScroll(){
+  window.scrollTo(0,0);
+  console.log("pause scorlling");
+}
+
+function startScroll(){
+  window.scroll();
+}
+
 
 export default {
   items: ({ query }) => {
@@ -18,7 +29,7 @@ export default {
         },
       },
       {
-        title: "H2",
+        title: "Heading",
         command: ({ editor, range }) => {
           editor
             .chain()
@@ -28,16 +39,42 @@ export default {
             .run();
         },
       },
+      // {
+      //   title: "Bold",
+      //   command: ({ editor, range }) => {
+      //     editor.chain().focus().deleteRange(range).setMark("bold").run();
+      //   },
+      // },
+      // {
+      //   title: "Italic",
+      //   command: ({ editor, range }) => {
+      //     editor.chain().focus().deleteRange(range).setMark("italic").run();
+      //   },
+      // },
       {
-        title: "bold",
+        title: "Image",
         command: ({ editor, range }) => {
-          editor.chain().focus().deleteRange(range).setMark("bold").run();
+          editor.chain().focus().deleteRange(range).setMark("italic").run();
         },
       },
       {
-        title: "italic",
+        title: "Arena",
         command: ({ editor, range }) => {
-          editor.chain().focus().deleteRange(range).setMark("italic").run();
+        },
+      },
+      {
+        title: "Video",
+        command: ({ editor, range }) => {
+        },
+      },
+      {
+        title: "Music",
+        command: ({ editor, range }) => {
+        },
+      },
+      {
+        title: "URL",
+        command: ({ editor, range }) => {
         },
       },
     ]
@@ -48,23 +85,23 @@ export default {
   },
 
   render: () => {
-    let component;
-    let popup;
+    let component
+    let popup
 
     return {
-      onStart: (props) => {
+      onStart: props => {
         component = new ReactRenderer(CommandsList, {
           // using vue 2:
           // parent: this,
           // propsData: props,
           props,
           editor: props.editor,
-        });
+        })
 
         if (!props.clientRect) {
-          return;
+          return
         }
-
+        //noScroll();
         popup = tippy("body", {
           getReferenceClientRect: props.clientRect,
           appendTo: () => document.body,
@@ -72,36 +109,39 @@ export default {
           showOnCreate: true,
           interactive: true,
           trigger: "manual",
-          placement: "bottom-start",
+          placement: "bottom-start"
         });
+
+        //document.body.style.overflow = "auto";
+
       },
 
       onUpdate(props) {
-        component.updateProps(props);
+        component.updateProps(props)
 
         if (!props.clientRect) {
-          return;
+          return
         }
 
         popup[0].setProps({
           getReferenceClientRect: props.clientRect,
-        });
+        })
       },
 
       onKeyDown(props) {
-        if (props.event.key === "Escape") {
-          popup[0].hide();
+        if (props.event.key === 'Escape') {
+          popup[0].hide()
 
-          return true;
+          return true
         }
 
-        return component.ref?.onKeyDown(props);
+        return component.ref?.onKeyDown(props)
       },
 
       onExit() {
-        popup[0].destroy();
-        component.destroy();
+        popup[0].destroy()
+        component.destroy()
       },
-    };
+    }
   },
-};
+}

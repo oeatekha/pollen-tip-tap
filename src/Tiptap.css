@@ -72,30 +72,45 @@ button:focus {
   border-radius: 0.4rem;
   padding: 0.1rem 0.3rem;
   box-decoration-break: clone;
+  
 }
 
 .items {
   padding: 0.2rem;
   position: relative;
   border-radius: 0.5rem;
-  background: #fff;
-  color: rgba(0, 0, 0, 0.8);
+  background: #fffffff9;
+  color: #2E2E2E;
   overflow: hidden;
   font-size: 0.9rem;
+  font-weight: 600;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0px 10px 20px rgba(0, 0, 0, 0.1);
 }
+
+
 .item {
   display: block;
   margin: 0;
-  width: 100%;
+  width: 200px;
   text-align: left;
+  font-size: small;
   background: transparent;
   border-radius: 0.4rem;
   border: 1px solid transparent;
-  padding: 0.2rem 0.4rem;
+  padding: 0.3rem 0.4rem;
 }
+
+.item:hover {
+
+  color: #2E2E2E;
+  border-color: #fafafa;
+  background-color: #fafafa;
+}
+
+
 .item.is-selected {
-  border-color: #000;
+  border-color: #eaeaea;
+  background-color: #eaeaea;
 }
 
 .iframe-wrapper.ProseMirror-selectednode {
