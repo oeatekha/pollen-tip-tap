@@ -77,9 +77,9 @@ button:focus {
 
 .items {
   padding: 0.2rem;
-  position: absolute;
+  position: relative;
   border-radius: 0.5rem;
-  background: #fffffff8;
+  background: #fffffff9;
   color: #2E2E2E;
   overflow: hidden;
   font-size: 0.9rem;
@@ -103,7 +103,7 @@ button:focus {
 .item:hover {
 
   color: #2E2E2E;
-  border-color: #f8f8f8;
+  border-color: #fafafa;
   background-color: #fafafa;
 }
 

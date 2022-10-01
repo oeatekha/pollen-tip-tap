@@ -1,3 +1,4 @@
+import { useAriaHidden } from "@chakra-ui/react";
 import { ReactRenderer } from "@tiptap/react";
 import tippy from "tippy.js";
 
@@ -111,7 +112,7 @@ export default {
           placement: "bottom-start"
         });
 
-        document.body.style.overflow = "auto";
+        //document.body.style.overflow = "auto";
 
       },
 
