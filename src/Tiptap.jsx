@@ -29,9 +29,10 @@ import Document from "@tiptap/extension-document";
 import MenuContent from "./MenuContent.js";
 import Iframe from "./iframe.ts";
 import thumb from "./icons/thumbnail.svg";
+import tippy from "tippy.js";
 
 import { Popover } from '@headlessui/react';
-//import { usePopper } from 'react-popper';
+import { usePopper } from 'react-popper';
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 //import MyPopover from "./headlessui/embedPopups";
@@ -149,7 +150,7 @@ const Tiptap = () => {
         suggestion,
       }),
       Placeholder.configure({
-        placeholder: "Type `/` for commands",
+        placeholder: "Type `/` for command",
         includeChildren: true,
       }),
 
@@ -179,7 +180,19 @@ const Tiptap = () => {
 
   const [menuClicked, setMenuClicked] = useState(false);
   const [thumbnailUrl, setThumbnail] = useState('https://d2w9rnfcy7mm78.cloudfront.net/2574542/original_ccac026c65e509ce6c1e77b5af835a8c.jpg?1534712867?bc=1');
-
+  let [referenceElement, setReferenceElement] = useState();
+  let [popperElement, setPopperElement] = useState();
+  const { styles, attributes } = usePopper(referenceElement, popperElement,{
+    placement: "bottom-end",
+    modifiers: [
+      {name: "offset",
+        options: {
+          offset: [30, 0]
+        }
+      }
+    ]
+    
+  });
 
 
   const addImage = useCallback(() => {
@@ -198,6 +211,10 @@ const Tiptap = () => {
     return null
   }
 
+
+
+
+  
   return (
     <>
     
@@ -226,11 +243,17 @@ const Tiptap = () => {
               <Popover >
                 {({ open }) => (
                   /* Use the `open` state to conditionally change the direction of the chevron icon. */
-                  <> <Popover.Button  className="thumbnail">
+                  <> <Popover.Button ref={setReferenceElement} className="thumbnail">
                     <div><img src={thumb}/></div>     
                     </Popover.Button>
-                    <Popover.Panel className="absolute left-1/2 z-10 mt-2 w-screen max-w-xs -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-sm"> 
-                      <div class="bg-white shadow-xl sm:rounded-md p-4 max-w-xs mx-auto">
+                    
+                    <Popover.Panel 
+                    ref={setPopperElement}
+                    style={styles.popper}
+                    {...attributes.popper}
+
+                    className="absolute left-1/2 z-10 mt-2 w-screen max-w-xs -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-sm"> 
+                      <div class="bg-white shadow-xl sm:rounded-md p-4 max-w-xs mx-auto" >
                         <p className= "py-1 text-sm	text-stone-800 text-left font-semibold">Embed Image</p>
                         <div class=" py-1 relative left-0">
                           <input value={thumbnailUrl} 

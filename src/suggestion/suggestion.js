@@ -58,7 +58,7 @@ export default {
         },
       },
       {
-        title: "Arena Block",
+        title: "Arena",
         command: ({ editor, range }) => {
         },
       },
@@ -73,7 +73,7 @@ export default {
         },
       },
       {
-        title: "Embed URL",
+        title: "URL",
         command: ({ editor, range }) => {
         },
       },
