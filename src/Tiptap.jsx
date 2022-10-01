@@ -87,6 +87,7 @@ const titled = new Editor({
         if (node.type.name === "heading") {
           return "Untitled Page";
         }
+        console.log("un")
         // if (node.type.name === "paragraph") {
         //   return "ReadME file contains information about the other files in a directory or archive of software. Use Readme on Pollen to include a relevant description";
         // }
