@@ -162,7 +162,11 @@ const Tiptap = () => {
       CustomDocument,
       DBlock,
       Iframe,
-      Image,
+      Image.configure({
+        HTMLAttributes: {
+          class: "editor-img",
+        },
+      }),
       Dropcursor.configure({
         width: 3,
         color: "skyblue",

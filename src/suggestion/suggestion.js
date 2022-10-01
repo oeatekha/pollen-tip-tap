@@ -1,6 +1,8 @@
 import { useAriaHidden } from "@chakra-ui/react";
 import { ReactRenderer } from "@tiptap/react";
 import tippy from "tippy.js";
+import Image from "@tiptap/extension-image";
+
 
 import CommandsList from "./CommandsList.jsx";
 
@@ -14,12 +16,19 @@ function startScroll(){
 }
 
 
+
+
+
 export default {
   items: ({ query }) => {
     return [
       {
         title: "Text",
-        command: ({ editor, range }) => {
+        
+        command: 
+        
+        ({ editor, range }) => {
+          
           editor
             .chain()
             .focus()
@@ -54,13 +63,20 @@ export default {
       {
         title: "Image",
         command: ({ editor, range }) => {
-          editor.chain().focus().deleteRange(range).setMark("italic").run();
+          const url = window.prompt('URL')
+          editor.chain().focus().deleteRange(range).setImage({ src: url }).run()
+          //editor.chain().focus().deleteRange(range).setMark("italic").run();
         },
       },
       {
         title: "Arena",
         command: ({ editor, range }) => {
+          console.log("het");
+          //basically need to open a popup here
+          editor.chain().focus().deleteRange(range).run();
         },
+        
+        
       },
       {
         title: "Video",

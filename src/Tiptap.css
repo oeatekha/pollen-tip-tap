@@ -118,10 +118,21 @@ button:focus {
 }
 
 .thumbnail-image {
-  border-radius: 5px;
+  border-radius: 3px;
   max-height: 350px;
   width: 720px;
   object-fit: cover;
+}
+
+.editor-img {
+
+  width: 720px;
+  max-height: 400px;
+  object-fit: cover;
+  background: #d3d3d31a;
+  border-radius: 3px;
+  left:10px;
+
 }
 
 .thumbnail {
