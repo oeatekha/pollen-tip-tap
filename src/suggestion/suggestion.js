@@ -18,7 +18,7 @@ export default {
         },
       },
       {
-        title: "H2",
+        title: "Heading",
         command: ({ editor, range }) => {
           editor
             .chain()
@@ -28,16 +28,32 @@ export default {
             .run();
         },
       },
+      // {
+      //   title: "Bold",
+      //   command: ({ editor, range }) => {
+      //     editor.chain().focus().deleteRange(range).setMark("bold").run();
+      //   },
+      // },
+      // {
+      //   title: "Italic",
+      //   command: ({ editor, range }) => {
+      //     editor.chain().focus().deleteRange(range).setMark("italic").run();
+      //   },
+      // },
       {
-        title: "bold",
+        title: "Image",
         command: ({ editor, range }) => {
-          editor.chain().focus().deleteRange(range).setMark("bold").run();
+          editor.chain().focus().deleteRange(range).setMark("italic").run();
         },
       },
       {
-        title: "italic",
+        title: "YouTube",
         command: ({ editor, range }) => {
-          editor.chain().focus().deleteRange(range).setMark("italic").run();
+        },
+      },
+      {
+        title: "Arena Block",
+        command: ({ editor, range }) => {
         },
       },
     ]
@@ -48,21 +64,21 @@ export default {
   },
 
   render: () => {
-    let component;
-    let popup;
+    let component
+    let popup
 
     return {
-      onStart: (props) => {
+      onStart: props => {
         component = new ReactRenderer(CommandsList, {
           // using vue 2:
           // parent: this,
           // propsData: props,
           props,
           editor: props.editor,
-        });
+        })
 
         if (!props.clientRect) {
-          return;
+          return
         }
 
         popup = tippy("body", {
@@ -72,36 +88,36 @@ export default {
           showOnCreate: true,
           interactive: true,
           trigger: "manual",
-          placement: "bottom-start",
+          placement: "bottom-start"
         });
       },
 
       onUpdate(props) {
-        component.updateProps(props);
+        component.updateProps(props)
 
         if (!props.clientRect) {
-          return;
+          return
         }
 
         popup[0].setProps({
           getReferenceClientRect: props.clientRect,
-        });
+        })
       },
 
       onKeyDown(props) {
-        if (props.event.key === "Escape") {
-          popup[0].hide();
+        if (props.event.key === 'Escape') {
+          popup[0].hide()
 
-          return true;
+          return true
         }
 
-        return component.ref?.onKeyDown(props);
+        return component.ref?.onKeyDown(props)
       },
 
       onExit() {
-        popup[0].destroy();
-        component.destroy();
+        popup[0].destroy()
+        component.destroy()
       },
-    };
+    }
   },
-};
+}
