@@ -3,6 +3,16 @@ import tippy from "tippy.js";
 
 import CommandsList from "./CommandsList.jsx";
 
+function noScroll(){
+  window.scrollTo(0,0);
+  console.log("pause scorlling");
+}
+
+function startScroll(){
+  window.scroll();
+}
+
+
 export default {
   items: ({ query }) => {
     return [
@@ -47,12 +57,22 @@ export default {
         },
       },
       {
-        title: "YouTube",
+        title: "Arena Block",
         command: ({ editor, range }) => {
         },
       },
       {
-        title: "Arena Block",
+        title: "Video",
+        command: ({ editor, range }) => {
+        },
+      },
+      {
+        title: "Music",
+        command: ({ editor, range }) => {
+        },
+      },
+      {
+        title: "Embed URL",
         command: ({ editor, range }) => {
         },
       },
@@ -80,7 +100,7 @@ export default {
         if (!props.clientRect) {
           return
         }
-
+        //noScroll();
         popup = tippy("body", {
           getReferenceClientRect: props.clientRect,
           appendTo: () => document.body,
@@ -90,6 +110,9 @@ export default {
           trigger: "manual",
           placement: "bottom-start"
         });
+
+        document.body.style.overflow = "auto";
+
       },
 
       onUpdate(props) {
