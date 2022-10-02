@@ -2,9 +2,11 @@ import { useAriaHidden } from "@chakra-ui/react";
 import { ReactRenderer } from "@tiptap/react";
 import tippy from "tippy.js";
 import Image from "@tiptap/extension-image";
+import myModal from "./embeder.js";
 
 
 import CommandsList from "./CommandsList.jsx";
+import MyModal from "./embeder.js";
 
 function noScroll(){
   window.scrollTo(0,0);
@@ -24,11 +26,9 @@ export default {
     return [
       {
         title: "Text",
-        
         command: 
         
         ({ editor, range }) => {
-          
           editor
             .chain()
             .focus()
@@ -64,16 +64,24 @@ export default {
         title: "Image",
         command: ({ editor, range }) => {
           const url = window.prompt('URL')
-          editor.chain().focus().deleteRange(range).setImage({ src: url }).run()
-          //editor.chain().focus().deleteRange(range).setMark("italic").run();
+          //you need to call the general embedder here...and get a value from it... if no value cancel everything
+          editor.chain().focus().setImage({ src: url }).run()
+          editor.chain().focus().deleteRange(range).run();
         },
       },
       {
         title: "Arena",
         command: ({ editor, range }) => {
           console.log("het");
+          MyModal();
+
+          //MyModal(this.MyModal.setIsOpen);
+          //const [vari, renderModal] = MyModal();
+          
+          //Why can't i open the modal here?
           //basically need to open a popup here
           editor.chain().focus().deleteRange(range).run();
+          
         },
         
         

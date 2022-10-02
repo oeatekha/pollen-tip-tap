@@ -30,7 +30,7 @@ import MenuContent from "./MenuContent.js";
 import Iframe from "./iframe.ts";
 import thumb from "./icons/thumbnail.svg";
 import tippy from "tippy.js";
-
+import MyModal from "./suggestion/embeder"
 import { Popover } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 
@@ -245,36 +245,7 @@ const Tiptap = () => {
           <div className="flex-1 mb-96">
 
             <div className="embedThumb">
-              <Popover >
-                {({ open }) => (
-                  /* Use the `open` state to conditionally change the direction of the chevron icon. */
-                  <> <Popover.Button ref={setReferenceElement} className="thumbnail">
-                    <div><img src={thumb}/></div>     
-                    </Popover.Button>
-                    
-                    <Popover.Panel 
-                    ref={setPopperElement}
-                    style={styles.popper}
-                    {...attributes.popper}
-
-                    className="absolute left-1/2 z-10 mt-2 w-screen max-w-xs -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-sm"> 
-                      <div class="bg-white shadow-xl sm:rounded-md p-4 max-w-xs mx-auto" >
-                        <p className= "py-1 text-sm	text-stone-800 text-left font-semibold">Embed Image</p>
-                        <div class=" py-1 relative left-0">
-                          <input value={thumbnailUrl} 
-                            onChange={e => setThumbnail(e.target.value)} 
-                            className= "bg-gray-100 block p-2  w-full left-0 sm:rounded-md focus:border-blue-400 placeholder-gray-400 border border-gray-200 focus:outline-none focus:bg-white text-left text-sm" 
-                            type="text" 
-                            placeholder ="Paste Image Url">
-                          </input>
-                        </div>
-                        <button onClick={addImage}  className="mt-2 font-medium text-stone-800 text-sm w-full bg-gray-200 border-white rounded focus:text-stone-800 focus:bg-gray-200  hover:bg-gray-300">Embed Image</button>
-                        <p className= "py-1 mt-1 text-sm	text-gray-500 text-center text-xs">Works with image urls and addresses</p>
-                      </div> 
-                    </Popover.Panel>
-                  </>
-                )}
-              </Popover>
+            <MyModal></MyModal>
             </div>
 
             
