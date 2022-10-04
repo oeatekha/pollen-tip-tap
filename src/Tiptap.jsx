@@ -19,7 +19,7 @@ import { Color } from "@tiptap/extension-color";
 
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
-import React, { useCallback } from 'react'
+import React, { useCallback } from "react";
 
 import Commands from "./suggestion/commands";
 import suggestion from "./suggestion/suggestion";
@@ -31,15 +31,14 @@ import Iframe from "./iframe.ts";
 import thumb from "./icons/thumbnail.svg";
 import tippy from "tippy.js";
 
-import {MyModal} from "./suggestion/MyModal"
+import { MyModal } from "./suggestion/MyModal";
 
-import { Popover } from '@headlessui/react';
-import { usePopper } from 'react-popper';
+import { Popover } from "@headlessui/react";
+import { usePopper } from "react-popper";
 
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import TrelloExtension from "./trello/TrelloExtension";
 //import MyPopover from "./headlessui/embedPopups";
-
 
 const ydoc = new Y.Doc();
 
@@ -52,7 +51,7 @@ const ParagraphDocument = Document.extend({
 });
 
 const HeaderDocument = Document.extend({
-  content: ("heading"),
+  content: "heading",
   //content: "image", // You can't use heading block* breaks it....
 });
 
@@ -63,34 +62,31 @@ const Thumbnail = Document.extend({
 });
 
 const thumbnailImage = new Editor({
-
-  extensions: [Text, Thumbnail, Image.configure({
-    HTMLAttributes: {
-      class: "thumbnail-image",
-    },
-  })],
+  extensions: [
+    Text,
+    Thumbnail,
+    Image.configure({
+      HTMLAttributes: {
+        class: "thumbnail-image",
+      },
+    }),
+  ],
 });
 
-
-
-
-
-
 const titled = new Editor({
-  
   className: "titled",
   extensions: [
     HeaderDocument,
     Image,
     Heading,
-    Text,   
+    Text,
     History,
     Placeholder.configure({
       placeholder: ({ node }) => {
         if (node.type.name === "heading") {
           return "Untitled Page";
         }
-        console.log("un")
+        console.log("un");
         // if (node.type.name === "paragraph") {
         //   return "ReadME file contains information about the other files in a directory or archive of software. Use Readme on Pollen to include a relevant description";
         // }
@@ -104,7 +100,7 @@ const readMe = new Editor({
     ParagraphDocument,
     Paragraph.configure({
       HTMLAttributes: {
-        class: 'my-custom-paragraph',
+        class: "my-custom-paragraph",
       },
     }),
     Text,
@@ -127,9 +123,8 @@ const readMe = new Editor({
 });
 
 const Tiptap = () => {
-
-
   const editor = useEditor({
+    content: `<p></p><p></p>`,
     extensions: [
       StarterKit.configure({
         document: false,
@@ -177,66 +172,57 @@ const Tiptap = () => {
         color: "skyblue",
       }),
     ],
-  //   content: `
-  //   <img src="https://d2w9rnfcy7mm78.cloudfront.net/14322969/original_abba8876ad86fe087b7260a49e88b9ce.jpg?1639239206?bc=0" />
-  // `,
 
-    autofocus: "end",
+    autofocus: "start",
     editable: true,
   });
 
-
-
-
   const [menuClicked, setMenuClicked] = useState(false);
-  const [thumbnailUrl, setThumbnail] = useState('https://d2w9rnfcy7mm78.cloudfront.net/2574542/original_ccac026c65e509ce6c1e77b5af835a8c.jpg?1534712867?bc=1');
+  const [thumbnailUrl, setThumbnail] = useState(
+    "https://d2w9rnfcy7mm78.cloudfront.net/2574542/original_ccac026c65e509ce6c1e77b5af835a8c.jpg?1534712867?bc=1"
+  );
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
-  const { styles, attributes } = usePopper(referenceElement, popperElement,{
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: "bottom-end",
     modifiers: [
-      {name: "offset",
+      {
+        name: "offset",
         options: {
-          offset: [30, 0]
-        }
-      }
-    ]
-    
+          offset: [30, 0],
+        },
+      },
+    ],
   });
 
-
   const addImage = useCallback(() => {
-    
-    const url = thumbnailUrl
+    const url = thumbnailUrl;
     //const url = window.prompt('URL')
-    console.log("hey")
-    console.log(thumbnailUrl)
+    console.log("hey");
+    console.log(thumbnailUrl);
 
     if (url) {
-      thumbnailImage.chain().focus().setImage({ src: url }).run()
+      thumbnailImage.chain().focus().setImage({ src: url }).run();
     }
-  }, [thumbnailImage])
-  
+  }, [thumbnailImage]);
+
   if (!thumbnailImage) {
-    return null
+    return null;
   }
 
-
-
-
-  
   return (
     <>
-    
       <div className="flex w-screen overflow-hidden h-screen">
         {/* EDITOR SECTION */}
         <div className="w-full overflow-auto">
-          <div className="p-4 menu sticky top-0 flex justify-between" style={{marginBottom: "6rem"}}> 
-            
+          <div
+            className="p-4 menu sticky top-0 flex justify-between"
+            style={{ marginBottom: "6rem" }}
+          >
             <Link href="/">Pollen</Link>
             <div
-              className="hover:cursor-pointer hover:decoration-solid" style={{ fontSize: "14px"}}
-             
+              className="hover:cursor-pointer hover:decoration-solid"
+              style={{ fontSize: "14px" }}
               onClick={() => setMenuClicked(!menuClicked)}
             >
               Toolbar
@@ -244,49 +230,61 @@ const Tiptap = () => {
           </div>
 
           {/* < button class="thumbnail" onClick={click}>< img src={thumb} /></button > */}
-          
-          
-        
-          <div className="flex-1 mb-96">
 
+          <div className="flex-1 mb-96">
             <div className="embedThumb">
-              <Popover >
+              <Popover>
                 {({ open }) => (
                   /* Use the `open` state to conditionally change the direction of the chevron icon. */
-                  <> <Popover.Button ref={setReferenceElement} className="thumbnail">
-                    <div><img src={thumb}/></div>     
+                  <>
+                    {" "}
+                    <Popover.Button
+                      ref={setReferenceElement}
+                      className="thumbnail"
+                    >
+                      <div>
+                        <img src={thumb} />
+                      </div>
                     </Popover.Button>
-                    
-                    <Popover.Panel 
-                    ref={setPopperElement}
-                    style={styles.popper}
-                    {...attributes.popper}
-
-                    className="absolute left-1/2 z-10 mt-2 w-screen max-w-xs -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-sm"> 
-                      <div class="bg-white shadow-xl sm:rounded-md p-4 max-w-xs mx-auto" >
-                        <p className= "py-1 text-sm	text-stone-800 text-left font-semibold">Embed Image</p>
+                    <Popover.Panel
+                      ref={setPopperElement}
+                      style={styles.popper}
+                      {...attributes.popper}
+                      className="absolute left-1/2 z-10 mt-2 w-screen max-w-xs -translate-x-1/2 transform px-1 sm:px-0 lg:max-w-sm"
+                    >
+                      <div class="bg-white shadow-xl sm:rounded-md p-4 max-w-xs mx-auto">
+                        <p className="py-1 text-sm	text-stone-800 text-left font-semibold">
+                          Embed Image
+                        </p>
                         <div class=" py-1 relative left-0">
-                          <input value={thumbnailUrl} 
-                            onChange={e => setThumbnail(e.target.value)} 
-                            className= "bg-gray-100 block p-2  w-full left-0 sm:rounded-md focus:border-blue-400 placeholder-gray-400 border border-gray-200 focus:outline-none focus:bg-white text-left text-sm" 
-                            type="text" 
-                            placeholder ="Paste Image Url">
-                          </input>
+                          <input
+                            value={thumbnailUrl}
+                            onChange={(e) => setThumbnail(e.target.value)}
+                            className="bg-gray-100 block p-2  w-full left-0 sm:rounded-md focus:border-blue-400 placeholder-gray-400 border border-gray-200 focus:outline-none focus:bg-white text-left text-sm"
+                            type="text"
+                            placeholder="Paste Image Url"
+                          ></input>
                         </div>
-                        <button onClick={addImage}  className="mt-2 font-medium text-stone-800 text-sm w-full bg-gray-200 border-white rounded focus:text-stone-800 focus:bg-gray-200  hover:bg-gray-300">Embed Image</button>
-                        <p className= "py-1 mt-1 text-sm	text-gray-500 text-center text-xs">Works with image urls and addresses</p>
-                      </div> 
+                        <button
+                          onClick={addImage}
+                          className="mt-2 font-medium text-stone-800 text-sm w-full bg-gray-200 border-white rounded focus:text-stone-800 focus:bg-gray-200  hover:bg-gray-300"
+                        >
+                          Embed Image
+                        </button>
+                        <p className="py-1 mt-1 text-sm	text-gray-500 text-center text-xs">
+                          Works with image urls and addresses
+                        </p>
+                      </div>
                     </Popover.Panel>
                   </>
                 )}
               </Popover>
-              <MyModal></MyModal>
+              {/* <MyModal></MyModal> */}
             </div>
-            
-            
+
             <EditorContent editor={thumbnailImage} />
             <EditorContent editor={titled} />
-            <EditorContent editor={readMe}/>
+            <EditorContent editor={readMe} />
             <br></br>
             <hr></hr>
 

@@ -1,39 +1,45 @@
-import { mergeAttributes, Node } from '@tiptap/core'
-import { ReactNodeViewRenderer } from '@tiptap/react'
-import TrelloComponent from './TrelloComponent'
+import { mergeAttributes, Node } from "@tiptap/core";
+import { ReactNodeViewRenderer } from "@tiptap/react";
+import TrelloComponent from "./TrelloComponent";
 
 const TrelloExtension = Node.create({
-  name: 'trello-component',
+  name: "trello-component",
 
-  group: 'block',
+  group: "block",
 
   atom: true,
 
   parseHTML() {
     return [
       {
-        tag: 'trello-component',
+        tag: "trello-component",
       },
-    ]
+    ];
   },
 
   addCommands() {
     return {
-      showTrello: (range, options) => ({ chain, commands }) => {
-        return chain().insertContent({
-          type: this.name,
-        }).createParagraphNear().run()
-      },
-    }
+      showTrello:
+        (range, options) =>
+        ({ chain, commands }) => {
+          console.log(this.name);
+          return chain()
+            .insertContent({
+              type: this.name,
+            })
+            .createParagraphNear()
+            .run();
+        },
+    };
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['trello-component', mergeAttributes(HTMLAttributes)]
+    return ["trello-component", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(TrelloComponent)
+    return ReactNodeViewRenderer(TrelloComponent);
   },
-})
+});
 
-export default TrelloExtension
+export default TrelloExtension;
