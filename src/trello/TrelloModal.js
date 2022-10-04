@@ -12,8 +12,6 @@ export const TrelloModal = (props) => {
   let [isOpen, setIsOpen] = useState(true);
   let [urlIs, seturlIs] = useState("");
 
-  let [showTrello, setTrelloModal] = useState(true);
-  let [showTrelloModal, setshowTrelloModal] = useState(true);
 
   function closeModal() {
     setIsOpen(false);
@@ -23,20 +21,25 @@ export const TrelloModal = (props) => {
     setIsOpen(true);
   }
 
+ 
   function embedLink() {
     console.log(urlIs);
     props.updateUrl(urlIs);
     setIsOpen(false);
+    props.setmodalCreated(true);
+
     // props.editor.commands.insertContentAt("<p>Hello world</p>");
     props.editor.commands.createParagraphNear();
     props.editor.commands.focus("end");
-    props.editor.commands.insertContentAt("<p>Hello world</p>");
+    console.log("embedding link");
+    props.editor.commands.insertContentAt(`<p>Hello world</p>`);
   }
 
   return (
     //maybe return a render and a string....
 
-    <Transition appear show={isOpen} as={Fragment}>
+<Transition appear show={isOpen} as={Fragment}>
+      
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
