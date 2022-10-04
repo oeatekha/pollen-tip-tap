@@ -30,11 +30,9 @@ import MenuContent from "./MenuContent.js";
 import Iframe from "./iframe.ts";
 import thumb from "./icons/thumbnail.svg";
 import tippy from "tippy.js";
-<<<<<<< Updated upstream
 
-=======
 import {MyModal} from "./suggestion/MyModal"
->>>>>>> Stashed changes
+
 import { Popover } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 
@@ -167,16 +165,13 @@ const Tiptap = () => {
       CustomDocument,
       DBlock,
       Iframe,
-<<<<<<< Updated upstream
       Image,
-=======
       TrelloExtension,
       Image.configure({
         HTMLAttributes: {
           class: "editor-img",
         },
       }),
->>>>>>> Stashed changes
       Dropcursor.configure({
         width: 3,
         color: "skyblue",
@@ -255,7 +250,6 @@ const Tiptap = () => {
           <div className="flex-1 mb-96">
 
             <div className="embedThumb">
-<<<<<<< Updated upstream
               <Popover >
                 {({ open }) => (
                   /* Use the `open` state to conditionally change the direction of the chevron icon. */
@@ -286,9 +280,7 @@ const Tiptap = () => {
                   </>
                 )}
               </Popover>
-=======
-            {MyModal()}
->>>>>>> Stashed changes
+              <MyModal></MyModal>
             </div>
             
             

@@ -12,7 +12,8 @@ const [showTrelloModal, setShowTrelloModal] = useState(true)
     <NodeViewWrapper className="trello-component">
       <div>
           <div className="flex z-50">
-              {MyModal}
+              
+              <TrelloModal></TrelloModal>
               {/*{showTrelloModal? <TrelloModal showModal={showTrelloModal} toggleModal={showTrello} onClick={onClick}/> : null}*/}
           </div>
           <div>

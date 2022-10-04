@@ -3,14 +3,11 @@ import { ReactRenderer } from "@tiptap/react";
 import { useEffect, useState, Fragment } from "react";
 
 import tippy from "tippy.js";
-<<<<<<< Updated upstream
 
 import CommandsList from "./CommandsList.jsx";
-=======
 import Image from "@tiptap/extension-image";
 import MyModal from "./MyModal"
 
-import CommandsList from "./CommandsList.jsx";
 import { Popover, Tab, Dialog, Transition } from '@headlessui/react';
 import { usePopper } from 'react-popper';
 import Script from "next/script";
@@ -147,7 +144,6 @@ function ModalMy() {
     )
   }
   
->>>>>>> Stashed changes
 
 function noScroll(){
   window.scrollTo(0,0);
@@ -159,27 +155,20 @@ function startScroll(){
 }
 
 
-<<<<<<< Updated upstream
-=======
 
 
 
 
 
->>>>>>> Stashed changes
 export default {
   items: ({ query }) => {
     return [
       {
         title: "Text",
-<<<<<<< Updated upstream
-        command: ({ editor, range }) => {
-=======
         command: 
         
         ({ editor, range }) => {
         
->>>>>>> Stashed changes
           editor
             .chain()
             .focus()
@@ -222,13 +211,9 @@ export default {
         subtitle: "Create or embed card",
         isIntegration: true,
         command: ({ editor, range }) => {
-<<<<<<< Updated upstream
-        },
-=======
           editor.chain().focus().deleteRange(range).clearNodes().unsetAllMarks().run()
           editor.commands.showTrello(range);
         }
->>>>>>> Stashed changes
       },
   
       {

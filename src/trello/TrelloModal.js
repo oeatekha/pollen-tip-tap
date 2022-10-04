@@ -7,8 +7,12 @@ import { usePopper } from 'react-popper';
 
 
 
-export function  MyModal() {
+export function  TrelloModal() {
     let [isOpen, setIsOpen] = useState(true)
+
+    let [showTrello, setTrelloModal] = useState(true)
+    let [showTrelloModal, setshowTrelloModal] = useState(true)
+
   
     function closeModal() {
       setIsOpen(false)
