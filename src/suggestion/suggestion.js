@@ -1,8 +1,153 @@
 import { useAriaHidden } from "@chakra-ui/react";
 import { ReactRenderer } from "@tiptap/react";
+import { useEffect, useState, Fragment } from "react";
+
 import tippy from "tippy.js";
+<<<<<<< Updated upstream
 
 import CommandsList from "./CommandsList.jsx";
+=======
+import Image from "@tiptap/extension-image";
+import MyModal from "./MyModal"
+
+import CommandsList from "./CommandsList.jsx";
+import { Popover, Tab, Dialog, Transition } from '@headlessui/react';
+import { usePopper } from 'react-popper';
+import Script from "next/script";
+import {TrelloExtension} from "../trello/TrelloExtension";
+
+
+export const MyDialog = () => {
+
+  return (
+    <Dialog open={true} onClose={() => false}>
+      <Dialog.Panel>
+        <Dialog.Title>Deactivate account</Dialog.Title>
+        <Dialog.Description>
+          This will permanently deactivate your account
+        </Dialog.Description>
+
+        <p>
+          Are you sure you want to deactivate your account? All of your data
+          will be permanently removed. This action cannot be undone.
+        </p>
+
+        <button onClick={() => (false)}>Deactivate</button>
+        <button onClick={() => (false)}>Cancel</button>
+      </Dialog.Panel>
+    </Dialog>
+  )
+}
+
+function MyTabs ({toggleModal}) {
+  
+  console.log("set true")
+
+  return (
+    toggleModal = true
+  )
+}
+
+function ModalMy() {
+    // let [isOpen, setIsOpen] = 
+  
+    // function closeModal() {
+    //   setIsOpen(false)
+    // }
+  
+    // function openModal() {
+    //   setIsOpen(true)
+    // }
+  
+    
+    return (
+        window.prompt("fuduge"),
+      <>
+        {/*
+        <div className="fixed inset-0 flex items-center justify-center">
+          <button
+            type="button"
+            onClick={openModal}
+            className="rounded-sm bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          >
+            Open dialog
+          </button>
+        </div>
+        */}
+        
+          <Transition appear show={true} as={Fragment}>
+          <Dialog as="div" className="relative z-10" onClose={console.log("here 1")} >
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-neutral-600 bg-opacity-25" />
+            </Transition.Child>
+  
+            <div className="fixed inset-0 overflow-y-auto">
+              <div className="flex min-h-full items-center justify-center p-2 text-center">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 scale-95"
+                  enterTo="opacity-100 scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 scale-100"
+                  leaveTo="opacity-0 scale-95"
+                >
+                  <Dialog.Panel className="w-full max-w-xs transform overflow-hidden text-center rounded-md bg-white p-2 pl-4 pr-4 text-left align-middle shadow-xl transition-all">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-sm font-medium leading-6 text-gray-900"
+                    >
+                      Embed Link
+                    </Dialog.Title>
+                    <div className="mt-2">
+                    <input 
+
+                                    className= "bg-neutral-100  block p-1 pl-2 pr-2 w-full left-0 sm:rounded-md focus:border-blue-400 placeholder-neutral-400 border border-neutral-200 focus:outline-none focus:bg-white text-left text-sm" 
+                                    type="text" 
+                                    placeholder ="Paste URL">
+                                </input>
+                      <p className="mt-2 text-xs text-center text-neutral-500">
+                        Embed a link using a URL.
+                      </p>
+                    </div>
+  
+                    <div className="mt-6">
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-neutral-600 w-full px-2 py-1 text-xs font-medium text-white hover:bg-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={console.log("here 2")}
+                      >
+                        Embed Link
+                      </button>
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-white w-full px-2 py-1 text-xs font-medium text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                        onClick={console.log("here 3")}
+                      >
+                        Cancel
+                      </button>
+                      
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition>
+        
+      </>
+    )
+  }
+  
+>>>>>>> Stashed changes
 
 function noScroll(){
   window.scrollTo(0,0);
@@ -14,12 +159,27 @@ function startScroll(){
 }
 
 
+<<<<<<< Updated upstream
+=======
+
+
+
+
+
+>>>>>>> Stashed changes
 export default {
   items: ({ query }) => {
     return [
       {
         title: "Text",
+<<<<<<< Updated upstream
         command: ({ editor, range }) => {
+=======
+        command: 
+        
+        ({ editor, range }) => {
+        
+>>>>>>> Stashed changes
           editor
             .chain()
             .focus()
@@ -58,10 +218,19 @@ export default {
         },
       },
       {
-        title: "Arena",
+        title: "Trello",
+        subtitle: "Create or embed card",
+        isIntegration: true,
         command: ({ editor, range }) => {
+<<<<<<< Updated upstream
         },
+=======
+          editor.chain().focus().deleteRange(range).clearNodes().unsetAllMarks().run()
+          editor.commands.showTrello(range);
+        }
+>>>>>>> Stashed changes
       },
+  
       {
         title: "Video",
         command: ({ editor, range }) => {
@@ -90,6 +259,7 @@ export default {
 
     return {
       onStart: props => {
+        
         component = new ReactRenderer(CommandsList, {
           // using vue 2:
           // parent: this,
@@ -105,7 +275,7 @@ export default {
         popup = tippy("body", {
           getReferenceClientRect: props.clientRect,
           appendTo: () => document.body,
-          content: component.element,
+          content: (component.element ),
           showOnCreate: true,
           interactive: true,
           trigger: "manual",
@@ -142,6 +312,8 @@ export default {
         popup[0].destroy()
         component.destroy()
       },
+      
+
     }
   },
 }
