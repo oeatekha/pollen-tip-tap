@@ -8,7 +8,6 @@ import myModal from "./embeder.js";
 
 
 import CommandsList from "./CommandsList.jsx";
-import Image from "@tiptap/extension-image";
 import MyModal from "./MyModal"
 
 import { Popover, Tab, Dialog, Transition } from '@headlessui/react';
