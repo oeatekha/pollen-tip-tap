@@ -1,14 +1,16 @@
 import { useAriaHidden } from "@chakra-ui/react";
-import { ReactRenderer } from "@tiptap/react";
+import { Editor, EditorContent, ReactRenderer } from "@tiptap/react";
 import { useEffect, useState, Fragment } from "react";
 import { Popover, Dialog, Transition } from '@headlessui/react';
+import Image from "@tiptap/extension-image";
 import tippy from "tippy.js";
 import { usePopper } from 'react-popper';
 
+// I think we have to do it in here... onclick
 
-
-export function  TrelloModal() {
+export const TrelloModal = (props) => {
     let [isOpen, setIsOpen] = useState(true)
+    let [urlIs, seturlIs] = useState('')
 
     let [showTrello, setTrelloModal] = useState(true)
     let [showTrelloModal, setshowTrelloModal] = useState(true)
@@ -24,20 +26,8 @@ export function  TrelloModal() {
   
     
     return (
-        
-      <>
-        {/*
-        <div className="fixed inset-0 flex items-center justify-center">
-          <button
-            type="button"
-            onClick={openModal}
-            className="rounded-sm bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-          >
-            Open dialog
-          </button>
-        </div>
-        */}
-  
+      //maybe return a render and a string....
+
         <Transition appear show={isOpen} as={Fragment}>
           <Dialog as="div" className="relative z-10" onClose={closeModal}>
             <Transition.Child
@@ -72,7 +62,8 @@ export function  TrelloModal() {
                     </Dialog.Title>
                     <div className="mt-2">
                     <input 
-
+                                    value = {urlIs}
+                                    onChange={e => seturlIs(e.target.value)}
                                     className= "bg-neutral-100  block p-1 pl-2 pr-2 w-full left-0 sm:rounded-md focus:border-blue-400 placeholder-neutral-400 border border-neutral-200 focus:outline-none focus:bg-white text-left text-sm" 
                                     type="text" 
                                     placeholder ="Paste URL">
@@ -93,7 +84,9 @@ export function  TrelloModal() {
                       <button
                         type="button"
                         className="inline-flex justify-center rounded-md border border-transparent bg-white w-full px-2 py-1 text-xs font-medium text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        onClick={closeModal}
+                        onClick={console.log(urlIs)}
+                        //On Click I want to insert the content... having some problems can you take a look
+                        //onClick={props.editor.commands.insertContent(<h2>yerr</h2>)}
                       >
                         Cancel
                       </button>
@@ -105,6 +98,5 @@ export function  TrelloModal() {
             </div>
           </Dialog>
         </Transition>
-      </>
     )
   }

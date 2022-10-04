@@ -203,7 +203,8 @@ export default {
       {
         title: "Image",
         command: ({ editor, range }) => {
-          editor.chain().focus().deleteRange(range).setMark("italic").run();
+          const url =  window.prompt('');
+          editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
         },
       },
       {
@@ -211,8 +212,10 @@ export default {
         subtitle: "Create or embed card",
         isIntegration: true,
         command: ({ editor, range }) => {
+
           editor.chain().focus().deleteRange(range).clearNodes().unsetAllMarks().run()
-          editor.commands.showTrello(range);
+          editor.commands.showTrello(editor, range); //here i think we can extract something if the functionr return a value
+        
         }
       },
   
