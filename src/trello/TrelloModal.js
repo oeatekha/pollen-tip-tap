@@ -9,30 +9,41 @@ import { usePopper } from "react-popper";
 // I think we have to do it in here... onclick
 
 export const TrelloModal = (props) => {
-  let [isOpen, setIsOpen] = useState(true);
-  let [urlIs, seturlIs] = useState("");
 
+  let [urlIs, seturlIs] = useState("");
+  let [isEmbeded, setIsEmbeded] = useState(false);
+  let [isOpen, setIsOpen] = useState(true)
 
   function closeModal() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
 
   function openModal() {
-    setIsOpen(true);
+    setIsOpen(true)
   }
+
+
 
  
   function embedLink() {
-    console.log(urlIs);
-    props.updateUrl(urlIs);
-    setIsOpen(false);
-    props.setmodalCreated(true);
+    
+    
+    //setIsEmbeded(true);
+    closeModal();
 
+    console.log("url is ", urlIs);
+    console.log("embed is ", isEmbeded);
+    console.log("modal is ", isOpen);
+
+    props.updateUrl(urlIs);
+    props.setEmbed(isEmbeded);
+    props.showModal(isOpen);
+    
+    
     // props.editor.commands.insertContentAt("<p>Hello world</p>");
-    props.editor.commands.createParagraphNear();
-    props.editor.commands.focus("end");
-    console.log("embedding link");
-    props.editor.commands.insertContentAt(`<p>Hello world</p>`);
+    //props.editor.commands.createParagraphNear();
+    //props.editor.commands.focus("end");
+    //props.editor.commands.insertContentAt(`<p>Hello world</p>`);
   }
 
   return (
@@ -88,7 +99,7 @@ export const TrelloModal = (props) => {
                   <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-transparent bg-neutral-600 w-full px-2 py-1 text-xs font-medium text-white hover:bg-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={embedLink}
+                    onClick={() => {setIsEmbeded(true); embedLink();}}
                   >
                     Embed Link
                   </button>

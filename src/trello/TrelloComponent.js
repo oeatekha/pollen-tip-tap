@@ -25,6 +25,7 @@ const TrelloComponent = ({
   that represents the url and straight up place the url below....
   But at first I have been running into a bug that prevents me from having multiple state returns
 
+  Check if the content has been created?
 
   */
 
@@ -32,7 +33,7 @@ const TrelloComponent = ({
     <NodeViewWrapper className="trello-component">
       <div>
         <div className="flex z-50">
-          {showTrelloModal? <TrelloModal setIsOpen={showTrelloModal} editor={editor} updateUrl={setUrl} setmodalCreated={settoggelContent}/> :  null}
+          {(showTrelloModal && !toggleContent)? <TrelloModal showModal={setShowTrelloModal} editor={editor} updateUrl={setUrl} setEmbed={settoggelContent}/> :  null}
           {/*{showTrelloModal? <TrelloModal showModal={showTrelloModal} toggleModal={showTrello} onClick={onClick}/> : null}*/}
         </div>
 
@@ -41,10 +42,13 @@ const TrelloComponent = ({
           src={"https://pbs.twimg.com/media/FeLQ_XuXEB8r0CF?format=jpg&name=large"}
           contenteditable="false"
           draggable="true"
-        ></img> : null}
+        ></img> : <button full-w>AddElementToggle</button>}
 
+        {/*console.log("showTrelloModal is ", showTrello)}
         {console.log("toggleModal is ", toggleContent)}
-    
+        {console.log("url is ", url)*/}
+
+        
       </div>
     </NodeViewWrapper>
 
