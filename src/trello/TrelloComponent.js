@@ -42,7 +42,7 @@ const TrelloComponent = ({
           src={"https://pbs.twimg.com/media/FeLQ_XuXEB8r0CF?format=jpg&name=large"}
           contenteditable="false"
           draggable="true"
-        ></img> : <button full-w>AddElementToggle</button>}
+        ></img> : <button className= "insertImg">Add Image Component</button>}
 
         {/*console.log("showTrelloModal is ", showTrello)}
         {console.log("toggleModal is ", toggleContent)}
