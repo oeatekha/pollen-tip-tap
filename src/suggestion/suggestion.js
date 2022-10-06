@@ -192,8 +192,6 @@ export default {
             .focus()
             .deleteRange(range)
             .setImage({ src: url })
-            .insertContent(
-              `<iframe src="https://open.spotify.com/embed/track/0YeUVm23SAkUruwEx9LWnt?utm_source=generator"></iframe><p></p>`)
             .run();
         },
       },
@@ -208,9 +206,13 @@ export default {
             .chain()
             .focus()
             .deleteRange(range)
-            .insertContent(
-              `<iframe src="https://open.spotify.com/embed/track/0YeUVm23SAkUruwEx9LWnt?utm_source=generator"></iframe><p></p>`)
+            .clearNodes()
+            .unsetAllMarks()
             .run();
+
+          editor.commands.insertContent(
+              `<iframe src="${url}"></iframe><p></p>`
+            );
           
         },
       },
@@ -229,7 +231,7 @@ export default {
           .clearNodes()
           .unsetAllMarks()
           .run()
-          editor.commands.showTrello(editor, range); //here i think we can extract something if the functionr return a value
+          //editor.commands.showTrello(editor, range); //here i think we can extract something if the functionr return a value
         },
       },
     ]

@@ -30,19 +30,16 @@ const TrelloComponent = ({
 
   */
 
-
   return (
-    <NodeViewWrapper className="EmbedContent">
+    <NodeViewWrapper className="trello-component">
         <div className="flex z-50">
           {(url === "")? <TrelloModal showModal={setShowTrelloModal} editor={editor} updateUrl={setUrl} setEmbed={settoggelContent}/> :  null}
           {/*{showTrelloModal? <TrelloModal showModal={showTrelloModal} toggleModal={showTrello} onClick={onClick}/> : null}*/}
         </div>
 
-        {(url === "")? <Button className="insertImg" contenteditable="false"
-        draggable="true">Insert Embed Here</Button> : <img
+        {(url === "")? <Button className="">Button Goes Here</Button> : <img
         class="thumbnail-image ProseMirror-selectednode"
         src={url}
-        
         contenteditable="false"
         draggable="true"
       ></img>}

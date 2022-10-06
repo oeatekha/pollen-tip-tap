@@ -4,8 +4,9 @@ import TrelloComponent from "./TrelloComponent";
 
 const TrelloExtension = Node.create({
   name: "iframe",
+
   group: "block",
-  priority: 5,
+  priority: 20,
 
   atom: true,
 
