@@ -70,7 +70,7 @@ export const DBlock = Node.create<DBlockOptions>({
 
           const parent = $head.node($head.depth - 1);
 
-          if (parent.type.name !== "dBlock") return false;
+          if (parent.type.name !== "dBlock" || "trello-component" || "react-renderer node-iframe" ) return false;
 
           let currentActiveNodeTo = -1;
 

@@ -3,7 +3,7 @@ import { ReactNodeViewRenderer } from "@tiptap/react";
 import TrelloComponent from "./TrelloComponent";
 
 const TrelloExtension = Node.create({
-  name: "trello-component",
+  name: "iframe",
 
   group: "block",
 
@@ -12,9 +12,18 @@ const TrelloExtension = Node.create({
   parseHTML() {
     return [
       {
-        tag: "trello-component",
+        tag: "iframe",
       },
     ];
+  },
+
+
+  addAttributes(){
+    return {
+      src: {
+        default: null,
+      },
+    };
   },
 
   addCommands() {
@@ -33,9 +42,10 @@ const TrelloExtension = Node.create({
     };
   },
 
+  
+
   renderHTML({ HTMLAttributes }) {
-    return ["trello-component", mergeAttributes(HTMLAttributes)];
-  },
+    return ["div", this.options.HTMLAttributes, ["iframe", HTMLAttributes]];  },
 
   addNodeView() {
     return ReactNodeViewRenderer(TrelloComponent);

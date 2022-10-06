@@ -31,7 +31,6 @@ const TrelloComponent = ({
 
   return (
     <NodeViewWrapper className="trello-component">
-      <div>
         <div className="flex z-50">
           {(showTrelloModal && !toggleContent)? <TrelloModal showModal={setShowTrelloModal} editor={editor} updateUrl={setUrl} setEmbed={settoggelContent}/> :  null}
           {/*{showTrelloModal? <TrelloModal showModal={showTrelloModal} toggleModal={showTrello} onClick={onClick}/> : null}*/}
@@ -42,14 +41,16 @@ const TrelloComponent = ({
           src={"https://pbs.twimg.com/media/FeLQ_XuXEB8r0CF?format=jpg&name=large"}
           contenteditable="false"
           draggable="true"
-        ></img> : <button className= "insertImg">Add Image Component</button>}
+        ></img> : <img
+        class="thumbnail-image ProseMirror-selectednode"
+        src={"https://pbs.twimg.com/media/FeLQ_XuXEB8r0CF?format=jpg&name=large"}
+        contenteditable="false"
+        draggable="true"
+      ></img>}
 
         {/*console.log("showTrelloModal is ", showTrello)}
         {console.log("toggleModal is ", toggleContent)}
         {console.log("url is ", url)*/}
-
-        
-      </div>
     </NodeViewWrapper>
 
     //maybe its annoying but this could work??
