@@ -27,7 +27,6 @@ import suggestion from "./suggestion/suggestion";
 import { DBlock } from "./dBlock/dBlock.ts";
 import Document from "@tiptap/extension-document";
 import MenuContent from "./MenuContent.js";
-import Iframe from "./iframe.ts";
 import thumb from "./icons/thumbnail.svg";
 import tippy from "tippy.js";
 
@@ -35,7 +34,7 @@ import { MyModal } from "./suggestion/MyModal";
 
 import { Popover } from "@headlessui/react";
 import { usePopper } from "react-popper";
-
+import Iframe from "./iframe";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import TrelloExtension from "./trello/TrelloExtension";
 //import MyPopover from "./headlessui/embedPopups";

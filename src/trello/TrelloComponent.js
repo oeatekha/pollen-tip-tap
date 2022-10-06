@@ -3,6 +3,7 @@ import { NodeViewWrapper } from "@tiptap/react";
 import { TrelloModal } from "./TrelloModal";
 import Image from "@tiptap/extension-image";
 import Tiptap from "../Tiptap";
+import { Button } from "@chakra-ui/react";
 
 const TrelloComponent = ({
   node,
@@ -29,21 +30,19 @@ const TrelloComponent = ({
 
   */
 
+
   return (
-    <NodeViewWrapper className="trello-component">
+    <NodeViewWrapper className="EmbedContent">
         <div className="flex z-50">
-          {(showTrelloModal && !toggleContent)? <TrelloModal showModal={setShowTrelloModal} editor={editor} updateUrl={setUrl} setEmbed={settoggelContent}/> :  null}
+          {(url === "")? <TrelloModal showModal={setShowTrelloModal} editor={editor} updateUrl={setUrl} setEmbed={settoggelContent}/> :  null}
           {/*{showTrelloModal? <TrelloModal showModal={showTrelloModal} toggleModal={showTrello} onClick={onClick}/> : null}*/}
         </div>
 
-        {toggleContent? <img
-          class="thumbnail-image ProseMirror-selectednode"
-          src={"https://pbs.twimg.com/media/FeLQ_XuXEB8r0CF?format=jpg&name=large"}
-          contenteditable="false"
-          draggable="true"
-        ></img> : <img
+        {(url === "")? <Button className="insertImg" contenteditable="false"
+        draggable="true">Insert Embed Here</Button> : <img
         class="thumbnail-image ProseMirror-selectednode"
-        src={"https://pbs.twimg.com/media/FeLQ_XuXEB8r0CF?format=jpg&name=large"}
+        src={url}
+        
         contenteditable="false"
         draggable="true"
       ></img>}

@@ -192,22 +192,26 @@ export default {
             .focus()
             .deleteRange(range)
             .setImage({ src: url })
+            .insertContent(
+              `<iframe src="https://open.spotify.com/embed/track/0YeUVm23SAkUruwEx9LWnt?utm_source=generator"></iframe><p></p>`)
             .run();
         },
       },
       {
-        title: "Trello",
+        title: "Spotify",
         subtitle: "Create or embed card",
         isIntegration: true,
+        
         command: ({ editor, range }) => {
+          const url = window.prompt("");
           editor
             .chain()
             .focus()
             .deleteRange(range)
-            .clearNodes()
-            .unsetAllMarks()
+            .insertContent(
+              `<iframe src="https://open.spotify.com/embed/track/0YeUVm23SAkUruwEx9LWnt?utm_source=generator"></iframe><p></p>`)
             .run();
-          editor.commands.showTrello(editor, range); //here i think we can extract something if the functionr return a value
+          
         },
       },
 
@@ -216,12 +220,17 @@ export default {
         command: ({ editor, range }) => {},
       },
       {
-        title: "Music",
-        command: ({ editor, range }) => {},
-      },
-      {
         title: "URL",
-        command: ({ editor, range }) => {},
+        command: ({ editor, range }) => {
+          editor
+          .chain()
+          .focus()
+          .deleteRange(range)
+          .clearNodes()
+          .unsetAllMarks()
+          .run()
+          editor.commands.showTrello(editor, range); //here i think we can extract something if the functionr return a value
+        },
       },
     ]
       .filter((item) =>
