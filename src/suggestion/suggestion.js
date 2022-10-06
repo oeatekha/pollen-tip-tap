@@ -13,143 +13,26 @@ import { Popover, Tab, Dialog, Transition } from "@headlessui/react";
 import { usePopper } from "react-popper";
 import Script from "next/script";
 import { TrelloExtension } from "../trello/TrelloExtension";
+import { SpotifyEmbed } from "spotify-embed";
 
-export const MyDialog = () => {
-  return (
-    <Dialog open={true} onClose={() => false}>
-      <Dialog.Panel>
-        <Dialog.Title>Deactivate account</Dialog.Title>
-        <Dialog.Description>
-          This will permanently deactivate your account
-        </Dialog.Description>
 
-        <p>
-          Are you sure you want to deactivate your account? All of your data
-          will be permanently removed. This action cannot be undone.
-        </p>
+export const getSpotifyIFrameSrc = (urlString) => {
+  const { pathname } = new URL(urlString);
+  const type = pathname.split('/')[1].toLowerCase();
 
-        <button onClick={() => false}>Deactivate</button>
-        <button onClick={() => false}>Cancel</button>
-      </Dialog.Panel>
-    </Dialog>
-  );
+  const podcastTypes = ['episode', 'show'];
+  if (podcastTypes.includes(type)) {
+    return urlString.replace(type, `embed-podcast/${type}`);
+  }
+
+  return urlString.replace(type, `embed/${type}`);
 };
 
-function MyTabs({ toggleModal }) {
-  console.log("set true");
 
-  return (toggleModal = true);
-}
 
-function ModalMy() {
-  // let [isOpen, setIsOpen] =
 
-  // function closeModal() {
-  //   setIsOpen(false)
-  // }
 
-  // function openModal() {
-  //   setIsOpen(true)
-  // }
 
-  return (
-    window.prompt("fuduge"),
-    (
-      <>
-        {/*
-        <div className="fixed inset-0 flex items-center justify-center">
-          <button
-            type="button"
-            onClick={openModal}
-            className="rounded-sm bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-          >
-            Open dialog
-          </button>
-        </div>
-        */}
-
-        <Transition appear show={true} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-10"
-            onClose={console.log("here 1")}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-neutral-600 bg-opacity-25" />
-            </Transition.Child>
-
-            <div className="fixed inset-0 overflow-y-auto">
-              <div className="flex min-h-full items-center justify-center p-2 text-center">
-                <Transition.Child
-                  as={Fragment}
-                  enter="ease-out duration-300"
-                  enterFrom="opacity-0 scale-95"
-                  enterTo="opacity-100 scale-100"
-                  leave="ease-in duration-200"
-                  leaveFrom="opacity-100 scale-100"
-                  leaveTo="opacity-0 scale-95"
-                >
-                  <Dialog.Panel className="w-full max-w-xs transform overflow-hidden text-center rounded-md bg-white p-2 pl-4 pr-4 text-left align-middle shadow-xl transition-all">
-                    <Dialog.Title
-                      as="h3"
-                      className="text-sm font-medium leading-6 text-gray-900"
-                    >
-                      Embed Link
-                    </Dialog.Title>
-                    <div className="mt-2">
-                      <input
-                        className="bg-neutral-100  block p-1 pl-2 pr-2 w-full left-0 sm:rounded-md focus:border-blue-400 placeholder-neutral-400 border border-neutral-200 focus:outline-none focus:bg-white text-left text-sm"
-                        type="text"
-                        placeholder="Paste URL"
-                      ></input>
-                      <p className="mt-2 text-xs text-center text-neutral-500">
-                        Embed a link using a URL. init
-                      </p>
-                    </div>
-
-                    <div className="mt-6">
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-neutral-600 w-full px-2 py-1 text-xs font-medium text-white hover:bg-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        onClick={console.log("here 2")}
-                      >
-                        Embed Link
-                      </button>
-                      <button
-                        type="button"
-                        className="inline-flex justify-center rounded-md border border-transparent bg-white w-full px-2 py-1 text-xs font-medium text-neutral-900 hover:bg-neutral-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                        onClick={console.log("here 3")}
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </Dialog.Panel>
-                </Transition.Child>
-              </div>
-            </div>
-          </Dialog>
-        </Transition>
-      </>
-    )
-  );
-}
-
-function noScroll() {
-  window.scrollTo(0, 0);
-  console.log("pause scorlling");
-}
-
-function startScroll() {
-  window.scroll();
-}
 
 export default {
   items: ({ query }) => {
@@ -186,19 +69,44 @@ export default {
       {
         title: "Image",
         command: ({ editor, range }) => {
-          const url = window.prompt("");
+          const url = window.prompt("Please Paste in a URL of an Image.");
+          if (url == ""){
+            editor.chain().focus().run();
+          }
+          else{
           editor
             .chain()
             .focus()
             .deleteRange(range)
             .setImage({ src: url })
             .run();
+          }
         },
       },
       {
-        title: "Trello",
-        subtitle: "Create or embed card",
-        isIntegration: true,
+        title: "Spotify",
+        
+        command: ({ editor, range }) => {
+          const url =  getSpotifyIFrameSrc(window.prompt(""));
+          
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .clearNodes()
+            .unsetAllMarks()
+            .insertContent(`<iframe class="spotify" style="border-radius:12px" src="${url}" width="100%" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>`)
+            .run();
+          
+      },
+    },
+
+      {
+        title: "Video",
+        command: ({ editor, range }) => {},
+      },
+      {
+        title: "Twitter",
         command: ({ editor, range }) => {
           editor
             .chain()
@@ -206,22 +114,23 @@ export default {
             .deleteRange(range)
             .clearNodes()
             .unsetAllMarks()
+            .insertContent(`<iframe border=0 frameborder=0 height=250 width=550 align=center
+            src="https://twitframe.com/show?url=https://twitter.com/HipCityReg/status/1577784692773986307"></iframe>`)
             .run();
-          editor.commands.showTrello(editor, range); //here i think we can extract something if the functionr return a value
         },
-      },
-
-      {
-        title: "Video",
-        command: ({ editor, range }) => {},
-      },
-      {
-        title: "Music",
-        command: ({ editor, range }) => {},
       },
       {
         title: "URL",
-        command: ({ editor, range }) => {},
+        command: ({ editor, range }) => {
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .clearNodes()
+            .unsetAllMarks()
+            .insertContent('<div class="iframely-embed"><div class="iframely-responsive" style="padding-bottom: 71.9424%; padding-top: 120px;"><a href="https://on.substack.com/p/grow-series-19-category-pirates" data-iframely-url="//cdn.iframe.ly/api/iframe?url=https%3A%2F%2Fsubstack.com%2Finbox%2Fpost%2F76471687&key=2190685cae7654feb31dfcaed23397d2"></a></div></div><script async src="//cdn.iframe.ly/embed.js" charset="utf-8"></script>')
+            .run();
+        },
       },
     ]
       .filter((item) =>

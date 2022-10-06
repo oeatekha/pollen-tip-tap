@@ -6,7 +6,7 @@ const TrelloExtension = Node.create({
   name: "trello-component",
 
   group: "block",
-
+  priority: 10,
   atom: true,
 
   parseHTML() {

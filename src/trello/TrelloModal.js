@@ -77,7 +77,7 @@ export const TrelloModal = (props) => {
                     placeholder="Paste URL"
                   ></input>
                   <p className="mt-2 text-xs text-center text-neutral-500">
-                    Embed a link using a URL. poop
+                    Embed a link using a URL.
                   </p>
                 </div>
 

@@ -144,7 +144,7 @@ const Tiptap = () => {
           },
         },
       }),
-
+      
       Commands.configure({
         suggestion,
       }),
@@ -159,7 +159,9 @@ const Tiptap = () => {
       }),
       CustomDocument,
       DBlock,
-      Iframe,
+      Iframe.configure({
+        
+      }),
       Image,
       TrelloExtension,
       Image.configure({
@@ -227,12 +229,15 @@ const Tiptap = () => {
             >
               Toolbar
             </div>
+            
           </div>
 
           {/* < button class="thumbnail" onClick={click}>< img src={thumb} /></button > */}
 
           <div className="flex-1 mb-96">
+            
             <div className="embedThumb">
+
               <Popover>
                 {({ open }) => (
                   /* Use the `open` state to conditionally change the direction of the chevron icon. */
@@ -281,7 +286,8 @@ const Tiptap = () => {
               </Popover>
               {/* <MyModal></MyModal> */}
             </div>
-
+            
+              
             <EditorContent editor={thumbnailImage} />
             <EditorContent editor={titled} />
             <EditorContent editor={readMe} />

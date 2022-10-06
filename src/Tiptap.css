@@ -126,10 +126,15 @@ button:focus {
 
 .editor-img {
 
-  width: 720px;
-  max-height: 400px;
+  height: 400px;
+  width:720px; 
+  max-width: 720px;
   object-fit: cover;
-  background: #d3d3d31a;
+  vertical-align: middle;
+  text-align: cover;
+  align-items: center;
+  align-content: center;
+  background: #f2f2f2;
   border-radius: 3px;
   left:10px;
 
@@ -159,4 +164,16 @@ button:focus {
   width:300px;
   box-shadow: 0 0 0 .5px rgba(0, 0, 0, 0.05), 0px 10px 20px rgba(0, 0, 0, 0.1);
 
+}
+
+.spotify {
+  height: 232px;
+}
+
+#twitter-widget-0 {
+  margin-left: 100px;
+}
+
+.twitter-tweet-rendered {
+  margin-left: 100px;
 }

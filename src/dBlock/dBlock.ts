@@ -27,7 +27,7 @@ declare module "@tiptap/core" {
 export const DBlock = Node.create<DBlockOptions>({
   name: "dBlock",
 
-  priority: 1000,
+  priority: 900,
 
   group: "dBlock",
 
@@ -70,7 +70,7 @@ export const DBlock = Node.create<DBlockOptions>({
 
           const parent = $head.node($head.depth - 1);
 
-          if (parent.type.name !== "dBlock") return false;
+          if (parent.type.name !== "dBlock" || "trello-component") return false;
 
           let currentActiveNodeTo = -1;
 
