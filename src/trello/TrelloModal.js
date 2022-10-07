@@ -9,25 +9,19 @@ import { usePopper } from "react-popper";
 // I think we have to do it in here... onclick
 
 export const TrelloModal = (props) => {
-
   let [urlIs, seturlIs] = useState("");
   let [isEmbeded, setIsEmbeded] = useState(false);
-  let [isOpen, setIsOpen] = useState(true)
+  let [isOpen, setIsOpen] = useState(true);
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   function openModal() {
-    setIsOpen(true)
+    setIsOpen(true);
   }
 
-
-
- 
   function embedLink() {
-    
-    
     //setIsEmbeded(true);
     closeModal();
 
@@ -38,8 +32,7 @@ export const TrelloModal = (props) => {
     props.updateUrl(urlIs);
     props.setEmbed(isEmbeded);
     props.showModal(isOpen);
-    
-    
+
     // props.editor.commands.insertContentAt("<p>Hello world</p>");
     //props.editor.commands.createParagraphNear();
     //props.editor.commands.focus("end");
@@ -49,8 +42,7 @@ export const TrelloModal = (props) => {
   return (
     //maybe return a render and a string....
 
-<Transition appear show={isOpen} as={Fragment}>
-      
+    <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
         <Transition.Child
           as={Fragment}
@@ -99,7 +91,10 @@ export const TrelloModal = (props) => {
                   <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-transparent bg-neutral-600 w-full px-2 py-1 text-xs font-medium text-white hover:bg-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => {setIsEmbeded(true); embedLink();}}
+                    onClick={() => {
+                      setIsEmbeded(true);
+                      embedLink();
+                    }}
                   >
                     Embed Link
                   </button>

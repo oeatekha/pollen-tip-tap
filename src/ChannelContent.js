@@ -55,6 +55,7 @@ export const ChannelContents = (props) => {
         {props.contents.map((block) => (
           <div key={block.id.toString()}>
             <Block
+              editor={props.editor}
               block={block}
               chanId={props.channelObj.id}
               blockHeight={165}
