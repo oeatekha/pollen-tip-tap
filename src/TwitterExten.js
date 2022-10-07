@@ -1,9 +1,9 @@
 import { mergeAttributes, Node } from "@tiptap/core";
 import { ReactNodeViewRenderer, NodeViewWrapper } from "@tiptap/react";
-import TrelloComponent from "./TrelloComponent";
+import TrelloComponent from "./trello/TweetComponent";
 
-const TrelloExtension = Node.create({
-  name: "trello-component",
+const TwitterExtension = Node.create({
+  name: "twitter-component",
 
   group: "block",
   priority: 10,
@@ -12,14 +12,14 @@ const TrelloExtension = Node.create({
   parseHTML() {
     return [
       {
-        tag: "trello-component",
+        tag: "twitter-component",
       },
     ];
   },
 
   addCommands() {
     return {
-      showTrello:
+      showTweet:
         (range, options) =>
         ({ chain, commands }) => {
           console.log(this.name);
@@ -34,7 +34,7 @@ const TrelloExtension = Node.create({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ["trello-component", mergeAttributes(HTMLAttributes)];
+    return ["twitter-component", mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
@@ -42,4 +42,4 @@ const TrelloExtension = Node.create({
   },
 });
 
-export default TrelloExtension;
+export default TwitterExtension;

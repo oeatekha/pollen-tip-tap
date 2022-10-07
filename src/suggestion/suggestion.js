@@ -13,7 +13,9 @@ import { Popover, Tab, Dialog, Transition } from "@headlessui/react";
 import { usePopper } from "react-popper";
 import Script from "next/script";
 import { TrelloExtension } from "../trello/TrelloExtension";
+import TwitterExten from "../TwitterExten.js";
 import { SpotifyEmbed } from "spotify-embed";
+import { Tweet } from "react-twitter-widgets";
 
 
 export const getSpotifyIFrameSrc = (urlString) => {
@@ -114,22 +116,21 @@ export default {
             .deleteRange(range)
             .clearNodes()
             .unsetAllMarks()
-            .insertContent(`<iframe border=0 frameborder=0 height=250 width=550 align=center
-            src="https://twitframe.com/show?url=https://twitter.com/HipCityReg/status/1577784692773986307"></iframe>`)
+            .insertContent(`<blockquote class="twitter-tweet" data-dnt="true" align="center"><p lang="en" dir="ltr">My cofounder had the gall to be sick today so I took him behind the Salesforce WeWork and broke his kneecaps</p>— Aman (@_amankishore) <a href="https://twitter.com/_amankishore/status/1578110872341209089?ref_src=twsrc%5Etfw">October 6, 2022</a></blockquote>
+            <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>`)
             .run();
         },
       },
       {
         title: "URL",
         command: ({ editor, range }) => {
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .clearNodes()
-            .unsetAllMarks()
-            .insertContent('<div class="iframely-embed"><div class="iframely-responsive" style="padding-bottom: 71.9424%; padding-top: 120px;"><a href="https://on.substack.com/p/grow-series-19-category-pirates" data-iframely-url="//cdn.iframe.ly/api/iframe?url=https%3A%2F%2Fsubstack.com%2Finbox%2Fpost%2F76471687&key=2190685cae7654feb31dfcaed23397d2"></a></div></div><script async src="//cdn.iframe.ly/embed.js" charset="utf-8"></script>')
-            .run();
+          console.log("url clicked")
+        
+          editor.chain().focus().deleteRange(range).clearNodes().unsetAllMarks().run();
+          editor.commands.showTweet(range)
+
+            
+
         },
       },
     ]

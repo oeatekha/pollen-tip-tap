@@ -30,14 +30,21 @@ import MenuContent from "./MenuContent.js";
 import Iframe from "./iframe.ts";
 import thumb from "./icons/thumbnail.svg";
 import tippy from "tippy.js";
+import { Tweet } from 'react-twitter-widgets'
+
 
 import { MyModal } from "./suggestion/MyModal";
 
 import { Popover } from "@headlessui/react";
 import { usePopper } from "react-popper";
+import Blockquote from '@tiptap/extension-blockquote';
+
+
+
 
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import TrelloExtension from "./trello/TrelloExtension";
+import TwitterExten from "./TwitterExten";
 //import MyPopover from "./headlessui/embedPopups";
 
 const ydoc = new Y.Doc();
@@ -163,6 +170,8 @@ const Tiptap = () => {
         
       }),
       Image,
+      Blockquote,
+      TwitterExten,
       TrelloExtension,
       Image.configure({
         HTMLAttributes: {
@@ -174,7 +183,9 @@ const Tiptap = () => {
         color: "skyblue",
       }),
     ],
-
+    content: `<p>
+    This is still the text editor you’re used to, but enriched with node views.
+  </p><twitter-component></twitter-component>`,
     autofocus: "start",
     editable: true,
   });
@@ -235,8 +246,8 @@ const Tiptap = () => {
           {/* < button class="thumbnail" onClick={click}>< img src={thumb} /></button > */}
 
           <div className="flex-1 mb-96">
-            
             <div className="embedThumb">
+            
 
               <Popover>
                 {({ open }) => (
@@ -286,15 +297,16 @@ const Tiptap = () => {
               </Popover>
               {/* <MyModal></MyModal> */}
             </div>
+
             
-              
             <EditorContent editor={thumbnailImage} />
             <EditorContent editor={titled} />
-            <EditorContent editor={readMe} />
+            <EditorContent editor={readMe}/>
             <br></br>
             <hr></hr>
 
-            <EditorContent editor={editor} />
+            <EditorContent editor={editor}/>
+            
           </div>
         </div>
 

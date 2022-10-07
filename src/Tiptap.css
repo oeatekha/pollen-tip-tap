@@ -170,10 +170,8 @@ button:focus {
   height: 232px;
 }
 
-#twitter-widget-0 {
-  margin-left: 100px;
-}
 
-.twitter-tweet-rendered {
-  margin-left: 100px;
+
+.twitter-tweet {
+  margin-left: 400px;
 }
