@@ -24,12 +24,20 @@ export const Block = (props) => {
     }
   }
 
+  const blockClicked = () => {
+    console.log(block.image.square.url);
+
+    props.editor.commands.insertContent(`<img src=${block.image.square.url} >`);
+    props.editor.commands.insertContentAt(`<p > </p>`);
+  };
+
   return (
     <div
       className="overflow-scroll m-px border-2 relative z-0"
       style={{ height: props.blockHeight, width: props.blockHeight }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onClick={() => blockClicked()}
     >
       {hasImage ? (
         // ⭐️ IMAGE
