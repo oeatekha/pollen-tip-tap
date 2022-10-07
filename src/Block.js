@@ -26,6 +26,13 @@ export const Block = (props) => {
 
   const blockClicked = () => {
     console.log(block.image.square.url);
+    //const endPos = props.getPos()
+    props.editor.commands.insertContentAt(1, '<p></p>', {
+        updateSelection: true,
+        parseOptions: {
+          preserveWhitespace: 'full',
+      }
+    });
 
     props.editor.commands.insertContent(`<img src=${block.image.square.url} >`);
     props.editor.commands.insertContentAt(`<p > </p>`);

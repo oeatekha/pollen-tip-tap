@@ -288,7 +288,7 @@ const Tiptap = () => {
             <br></br>
             <hr></hr>
 
-            <EditorContent editor={editor} />
+            <EditorContent editor={editor}/>
           </div>
         </div>
 
@@ -300,3 +300,6 @@ const Tiptap = () => {
 };
 
 export default Tiptap;
+
+//pass in the the node pos and a few other props to menucontent....
+// <menu content editor={} node={node}>
