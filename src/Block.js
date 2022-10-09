@@ -9,6 +9,7 @@ import {
 
 export const Block = (props) => {
   const block = props.block;
+  
   const hasImage = block.image !== undefined && block.image !== null;
   const [hovered, setHovered] = useState(false);
 
@@ -27,15 +28,30 @@ export const Block = (props) => {
   const blockClicked = () => {
     console.log(block.image.square.url);
     //const endPos = props.getPos()
-    props.editor.commands.insertContentAt(1, '<p></p>', {
-        updateSelection: true,
-        parseOptions: {
-          preserveWhitespace: 'full',
-      }
-    });
+    
+    // props.editor.commands.insertContentAt(1, '<p></p>', {
+    //     updateSelection: true,
+    //     parseOptions: {
+    //       preserveWhitespace: 'full',
+    //   }
+    // });
 
-    props.editor.commands.insertContent(`<img src=${block.image.square.url} >`);
-    props.editor.commands.insertContentAt(`<p > </p>`);
+    //props.editor.commands.insertContent(`<p></p> <img src=${block.image.square.url} >`);
+    //props.editor.commands.insertContent(`\n`);
+    //props.editor.commands.clearNodes();
+    
+    
+    props.editor.commands.insertContent(`\u00A0<img src=${block.image.square.url}>\u00A0`);
+    props.editor.commands.selectNodeBackward();
+    props.editor.commands.deleteSelection();
+    props.editor.commands.createParagraphNear();
+    
+    
+
+    
+
+    
+    //props.editor.commands.insertContentAt(`<p > </p>`);
   };
 
   return (
@@ -49,7 +65,7 @@ export const Block = (props) => {
       {hasImage ? (
         // ⭐️ IMAGE
         <div className="h-full bg-black">
-          <img className="w-full h-full " src={block.image.square.url} />{" "}
+          <img className="w-full h-full " src={block.image.square.url} />
         </div>
       ) : (
         // ⭐️ TEXT

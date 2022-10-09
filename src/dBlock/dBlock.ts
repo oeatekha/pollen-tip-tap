@@ -59,6 +59,39 @@ export const DBlock = Node.create<DBlockOptions>({
 
   addCommands() {
     return {
+      returnPose:
+      () =>({ chain, state, commands }) => {
+        const {
+          selection: { $head, from, to },
+          doc,
+        } = state;
+        
+        const parent = $head.node($head.depth - 1);
+
+        if (parent.type.name !== "dBlock") return false;
+
+        let currentActiveNodeTo = -1;
+
+        doc.descendants((node, pos) => {
+          if (currentActiveNodeTo !== -1) return false;
+
+          const [nodeFrom, nodeTo] = [pos, pos + node.nodeSize];
+
+          if (nodeFrom <= from && to <= nodeTo) currentActiveNodeTo = nodeTo;
+
+          return false;
+        });
+
+        return chain()
+            .focus("start")
+            .insertContentAt(currentActiveNodeTo)
+            .focus(from + 3)
+            .run();
+      
+
+      },
+
+
       setDBlock:
 
         () =>

@@ -176,11 +176,17 @@ const Tiptap = () => {
     autofocus: "start",
     editable: true,
   });
+  //console.log("get pos is ", getPos());
 
   const [menuClicked, setMenuClicked] = useState(false);
   const [thumbnailUrl, setThumbnail] = useState(
     "https://d2w9rnfcy7mm78.cloudfront.net/2574542/original_ccac026c65e509ce6c1e77b5af835a8c.jpg?1534712867?bc=1"
   );
+
+  
+
+  //DBlockNodeView.getPos()
+
   let [referenceElement, setReferenceElement] = useState();
   let [popperElement, setPopperElement] = useState();
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
@@ -194,6 +200,7 @@ const Tiptap = () => {
       },
     ],
   });
+  
 
   const addImage = useCallback(() => {
     const url = thumbnailUrl;

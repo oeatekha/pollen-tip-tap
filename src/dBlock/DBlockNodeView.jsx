@@ -1,9 +1,13 @@
 import "./dBlock.css";
 import React from "react";
-import { NodeViewWrapper, NodeViewContent } from "@tiptap/react";
+import { NodeViewWrapper, NodeViewContent, NodeViewProps } from "@tiptap/react";
 import { useState } from "react";
 
-export const DBlockNodeView = ({ editor }) => {
+
+export const DBlockNodeView = ({  node, getPos, editor, }) => {
+  //const pos = getPos() + node.nodeSize;
+  const pos = getPos() + node.nodeSize;
+  console.log("get pos is ", pos);
   return React.createElement(
     NodeViewWrapper,
     {
@@ -11,6 +15,7 @@ export const DBlockNodeView = ({ editor }) => {
       className: "flex gap-2 w-full my-4 drag-test",
       // add conditional classes for header....
     },
+
     React.createElement(
       "section",
       {
