@@ -38,6 +38,7 @@ import { usePopper } from "react-popper";
 
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import TrelloExtension from "./trello/TrelloExtension";
+import ChannelComponent from "./channel/ChannelComponent";
 //import MyPopover from "./headlessui/embedPopups";
 
 const ydoc = new Y.Doc();
@@ -288,7 +289,7 @@ const Tiptap = () => {
               </Popover>
               {/* <MyModal></MyModal> */}
             </div>
-
+            
             <EditorContent editor={thumbnailImage} />
             <EditorContent editor={titled} />
             <EditorContent editor={readMe} />
@@ -296,6 +297,7 @@ const Tiptap = () => {
             <hr></hr>
 
             <EditorContent editor={editor}/>
+            <ChannelComponent></ChannelComponent>
           </div>
         </div>
 

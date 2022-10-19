@@ -169,3 +169,9 @@ button:focus {
   font-size: small;
   font-weight: 600;
 }
+
+.BlockContainer {
+  width: 320px;
+  height: 320px;
+  background-color: #68cef8;
+}
