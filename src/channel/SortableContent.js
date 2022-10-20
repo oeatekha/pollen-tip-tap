@@ -118,12 +118,13 @@ const SortableContent = (props) => {
             cursor: "pointer",
             //padding: "7px",
             position: "relative",
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            
+            backgroundColor: "rgba(255, 255, 255, 0.4)",
             border: "1px solid transparent",
             //borderRadius: "1px",
             height: "35px",
             width: "25px",
-            borderBottomRightRadius: "5px"
+            
           }}
           zIndex="10"
           {...listeners}

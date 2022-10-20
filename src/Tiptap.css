@@ -173,5 +173,33 @@ button:focus {
 .BlockContainer {
   width: 320px;
   height: 320px;
-  background-color: #68cef8;
+  background-color: #f7f7f7;
+  border-radius: 3px;
 }
+
+.ChannelDragHandle{
+  left: -140px;
+  top: 3px;
+}
+
+.BlockInput{
+  background-color: #ffffff;
+  font-size: small;
+  padding: 10px;
+  border-radius: 3px;
+  height: 80%;
+  resize: none;
+}
+
+.BlockInput:focus{
+  background-color: #ffffff;
+  outline-color: #7ec7e6;
+}
+
+.ChannelContainer{
+  padding-left: 15px;
+  padding-top: 15px;
+  background-color: transparent;
+
+}
+

@@ -29,7 +29,47 @@ const img4 =
 
 const urlList = [img1, img2, img3, img4];
 
+
+
+
+
+
+function isValidUrl(str) {
+  if(!str.includes(" ") && str.includes(".")) {
+    var urlPattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+    return !!urlPattern.test(str);
+  }
+    // chnge ot return the paragraph, or a string indicatign the type it has...
+    // add a checker to see what we do witit 
+    return false
+}
+
+function contentParse(str){
+  const parentType = isValidUrl(str);
+  // if parent type p then this if contians spotify it is that, youtube it is that, etc. 
+}
+
 const ChannelComponent = () => {
+
+
+
+  function resetAndrender(){
+    renderContent();
+    setisInput("");
+  }
+  
+  function renderContent(){
+    const urltemp = "https://www.regextester.com/93652";
+    console.log("Hi there");
+    console.log(isValidUrl(urltemp));
+  }
+
+  let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   const [items, setItems] = useState(["0", "1", "2", "3"]);
   const [urls, setUrls] = useState(urlList);
@@ -67,40 +107,45 @@ const ChannelComponent = () => {
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
     >
-      <Box
+      <Box className="ChannelContainer"
         flex={true}
         wrap={true}
-        background="#fafafa"
-        border="10px black"
+        
+        
         direction="row"
         style={{
           maxWidth: "720px",
           borderRadius: "5px",
-          padding: "10px",
-          paddingLeft: "15px"
+          
         }}
       >
         <Box>
           {" "}
           {/* To do the Arena thing with the divs...*/}
-          <div
+          <div className="AdditionBlock"
             style={{
               width: "320px",
               height: "320px",
               //padding:"10px",
               borderRadius: "5px",
-              backgroundColor: "#ededed",
-              margin: "10px"
+              backgroundColor: "#f7f7f7",
+              margin: "10px",
+              padding: "0px",
             }}
           >
-            <p style={{ margin: "15px", textAlign: "center" }}> Add Block </p>
-            <input style={{ width: "90%", margin: "13px" }} />
+            
+
+            <textarea value={isInput} onChange={(e) => setisInput(e.target.value)} className="BlockInput" id="message" style={{ width: "90%", margin: "10px" }} ></textarea>
+            
             <p></p>
-            <Button style={{ left: "50px", textAlign: "center" }}>
-              Add to Collection
+            <Button style={{ fontWeight:"500", left: "50px",  textAlign: "center", fontSize: "14px" }}>
+              +Add Block
             </Button>
+            
+            
           </div>
         </Box>
+        {console.log(isValidUrl("youtub.com"))}
 
         <SortableContext items={items} strategy={rectSortingStrategy}>
           {items.map((id) => (
