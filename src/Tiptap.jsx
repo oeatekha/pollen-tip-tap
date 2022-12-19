@@ -4,6 +4,8 @@ import { useEditor, EditorContent, Editor, getMarkType } from "@tiptap/react";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "next/link";
 import Dropcursor from "@tiptap/extension-dropcursor";
+import filterDrop from "./channel/components/filterDrop";
+
 
 import { useEffect, useState } from "react";
 
@@ -238,7 +240,6 @@ const Tiptap = () => {
           </div>
 
           {/* < button class="thumbnail" onClick={click}>< img src={thumb} /></button > */}
-
           <div className="flex-1 mb-96">
             <div className="embedThumb">
               <Popover>
