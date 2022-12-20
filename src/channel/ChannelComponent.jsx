@@ -93,6 +93,7 @@ const ChannelComponent = () => {
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
       onDragStart={handleDragStart}
+      className="container content-center mx-auto"
     >
       
       <Box className="ChannelContainer"
@@ -105,7 +106,7 @@ const ChannelComponent = () => {
         <div class="content-left container items-center flex flex-wrap items-center justify-between w-[665px] mx-2 py-1">
           
         
-            <div class="flex space-x-2 pt-2 mx-2">
+            <div class="flex space-x-4 pt-2 mx-2">
               <p class="font-semibold text-gray-300">
                 {channel_data.title}
               </p>
@@ -113,7 +114,7 @@ const ChannelComponent = () => {
                 <label class="inline-flex relative items-center cursor-pointer">
                     <input type="checkbox" value="" class="sr-only peer"/>
                     <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-100 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span class="ml-2 text-xs font-medium text-gray-900 dark:text-gray-300">Inertia</span>
+                    <span class="ml-2 text-xs font-medium text-gray-900 italic font-serif dark:text-gray-300">Inertia</span>
                   </label>
               </div>
             </div>  
@@ -122,14 +123,14 @@ const ChannelComponent = () => {
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                     <svg aria-hidden="true" class="w-5 h-4 text-gray-500 focus:outline-none dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                 </div>
-                <input type="search" autocomplete="off" id="simple-search" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full pl-10 p-1  dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 " placeholder="Search" required/>
+                <input type="search" autocomplete="off" id="simple-search" className= "channelSearch" class="bg-gray-50 text-gray-900 text-sm rounded-lg block w-full pl-10 p-1  dark:bg-gray-100 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-600 " placeholder="Search" required/>
             </div>
             
             {/*Search Input*/}
 
         </div>
         <hr class="py-1 mx-4 w-[660px]"></hr>  
-        <div class="content-left container flex flex-wrap items-center justify-between w-[665px] mx-2 py-1">
+        <div class="content-left container flex flex-wrap items-center justify-between w-[665px] mx-2 pb-2">
             <div className="FilterBlock">
               {Example("test", ["test", "test2", "test3"])}
               {Filter("test", ["test", "test2", "test3"])}

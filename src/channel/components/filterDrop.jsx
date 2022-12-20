@@ -24,7 +24,7 @@ export default function Filter() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex w-md justify-center rounded-md border border-transparent bg-white px-2 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:text-gray-800 focus:bg-gray-50">
+        <Menu.Button className="inline-flex w-md justify-center rounded-md border border-transparent bg-white px-2 py-2 text-sm font-medium text-gray-400 hover:bg-gray-200 focus:outline-none focus:text-gray-800 focus:bg-gray-50">
           + Add Filter   
         </Menu.Button>
       </div>
