@@ -27,7 +27,7 @@ export default function InertiaDrop() {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex italic font-serif w-md justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-style:italic font-medium text-gray-400 shadow-sm hover:bg-gray-200 focus:outline-none focus:text-gray-800 focus:bg-gray-50">
-          Inertia
+          I(x)
         </Menu.Button>
         {/* Add input feild to update the cutoff for inertia... */}
       </div>
@@ -44,7 +44,7 @@ export default function InertiaDrop() {
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-xl bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="px-4 py-2">
             <div class="flex content-center space-x-12">
-                <p className="text-sm">Inertia Contracts</p>
+                <p className="text-sm">Inertia Function</p>
                 <InputNumber  min={0} max={100} defaultValue={""} />
             </div>
             
