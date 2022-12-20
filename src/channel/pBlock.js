@@ -167,6 +167,7 @@ export class pBlock {
       this.parent_id = parent_id;
       this.unique_id = unique_id;
       this.inertia_equation = inertia_equation;
+      this.title = "Untitled Channel";
     }
 
     created_at = Math.floor(Date.now() / 1000);
@@ -176,7 +177,7 @@ export class pBlock {
     content = collect([]); 
     blockCount = this.content.items.length;
     description = ""; 
-    title = "unitled";
+    
 
     // Inertia Parameters
     
