@@ -24,93 +24,55 @@ let f = [ ["t", "Music"], ["d", "1212529"], ["author", "omo"]] //list of filters
 
 
 
-function filterValue(filter, filterList){
-    // check if filter is in list
-    for (let i = 0; i < filterList.length; i++) {
-        if (filterList[i][0] === filter[0]) {
-            return filterList[i][1]
-        }
-    }
-    return null
+
+class FilterObject {
+  // filter object with every object: type, date, support, author
+  dataType = null;
+  date = null;
+  support = null;
+  author = null;
+
 }
 
-
-
-function removeFilter(curFilter, filterList){
-    // if the filter type is already in the list, we should replace it
-    // if the filter type is not in the list, we should add it
-    // imaging there is a type filter in the list we should check if the value is the same, if not add if so, replace
-    for (let i = 0; i < filterList.length; i++) {
-        if (filterList[i][0] === curFilter[0]) {
-            filterList.splice(i, 1)
-            return filterList
-        }
-    }
-    return filterList
-}
-
-function resetFilter(){
-    return []
-}
-
-
+let filterObject = new FilterObject();
+let filterObjectEmpty = new FilterObject();
 
 
 export default function Filter() {
+    
 
+    const [filterObj, setFilterObj] = useState(filterObject)
 
-
-
-    const [filters, setFilters] = useState([])
-    console.log(setFilters)
-    let typeButton;
-    let dateButton;
-    let authorButton;
-    let supportButton;
-
-    function addFilter(curFilter){
-        // if the filter type is already in the list, we should replace it
-        // if the filter type is not in the list, we should add it
-        // imaging there is a type filter in the list we should check if the value is the same, if not add if so, replace
-        for (let i = 0; i < filters.length; i++) {
-            if (filters[i][0] === curFilter[0]) {
-                filters[i][1] = curFilter[1]
-                setFilters(filters)
-                renderFilterBar()
-                return
-            }
-        }
-
-        filters.push(curFilter)
-        filters.push(["Author", "Omo"])
-        setFilters(filters)
-        console.log("filters is ", filters)
-        renderFilterBar()
-        return
-    }
-
-    function filterinList(fil, filters){
-      for (let i = 0; i < filters.length; i++) {
-          if (filters[i][0] === fil[0]) {
-              return true
+    let typeButton = null;
+    let dateButton = null;
+    let authorButton = null;
+    let supportButton = null;
+    
+    //console.log('we are rendering the filter')
+    function updateFilter(type, value){
+        let newFilters = filterObj;
+        newFilters[type] = value;
+        setFilterObj(newFilters);
+        console.log("Im here in update filter", filterObj);
+ 
+        if(type == "dataType") {
+          console.log("data type is", value)
+          if (filterObj[type] != null){
+            console.log("contains type filter")
+            typeButton = <Button className='border-gray-300 p-2 font-medium rounded-lg text-sm text-gray-300'>
+            type | </Button>;
           }
-      }
-      return false
+          else{
+            typeButton = null;
+          }  
+          console.log("typebutton is ", typeButton)
+        }
+        
     }
+       
 
-    function renderFilterBar(){
-      if(filterinList(["Type", ""], filters)) {
-        let filtVal = filterValue(["Type", ""], filters)
-        console.log("fltval is ", filtVal)
-        typeButton = <Button className='border-gray-300 p-2 font-medium rounded-lg text-sm text-gray-300'>
-         Type | {filtVal} </Button>;
-        console.log("contains type filter")
-     } else {
-        typeButton = <div></div>
-     }
-    }
 
-    renderFilterBar();
+
 
 
     return (
@@ -146,7 +108,7 @@ export default function Filter() {
             </div>
             <div className="py-1">
               
-              <Menu.Item onClick = {() => setFilters('type')} >
+              <Menu.Item onClick = {() => updateFilter("Author", "")} >
                 {({ active }) => (
                   // when active, set the state to the prop
                   <a
@@ -161,7 +123,22 @@ export default function Filter() {
                   </a>
                 )}
               </Menu.Item>
-              <Menu.Item onClick = {() => setFilters('date')}>
+              <Menu.Item onClick = {() => updateFilter("Support", "")} >
+                {({ active }) => (
+                  // when active, set the state to the prop
+                  <a
+                  
+                    href="#"
+                    className={classNames(
+                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      'block px-4 py-2 text-sm'
+                    )}
+                  >
+                    Support
+                  </a>
+                )}
+              </Menu.Item>
+              <Menu.Item onClick = {() => updateFilter("Date", "")}>
                 {({ active }) => (
                   <a
                     href="#"
@@ -174,7 +151,7 @@ export default function Filter() {
                   </a>
                 )}
               </Menu.Item>
-              <Menu.Item onClick = {() => setFilters('date')}>
+              <Menu.Item onClick = {() => updateFilter("dataType", "Image")}>
                 {({ active }) => (
                   <a
                     href="#"
@@ -187,7 +164,7 @@ export default function Filter() {
                   </a>
                 )}
               </Menu.Item>
-              <Menu.Item onClick = {() => setFilters('support')}>
+              <Menu.Item onClick = {() => updateFilter("dataType", "Link")}>
                 {({ active }) => (
                   <a
                     href="#"
@@ -200,7 +177,7 @@ export default function Filter() {
                   </a>
                 )}
               </Menu.Item>
-              <Menu.Item onClick = {() => addFilter(["Type", "Text"], filters)}> 
+              <Menu.Item onClick = {() => updateFilter("dataType", "Text")}> 
                 {({ active }) => (
                   <a
                     href="#"
@@ -216,7 +193,7 @@ export default function Filter() {
             </div>
             <div className="py-1">
               <form method="POST" action="#">
-              <Menu.Item onClick = {() => setFilters([])}>
+              <Menu.Item onClick = {() => setFilterObj((new FilterObject()))}>
                 {({ active }) => (
                   <a
                     href="#"
