@@ -4,6 +4,9 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
 import { filter } from '../filterUtil.js'
 import { Button } from '@chakra-ui/react'
+import { render } from '@testing-library/react'
+import AutosizeInput from  'react-18-input-autosize';
+
  
 
 function classNames(...classes) {
@@ -34,44 +37,109 @@ class FilterObject {
 
 }
 
+
 let filterObject = new FilterObject();
 let filterObjectEmpty = new FilterObject();
-
-
 export default function Filter() {
     
 
-    const [filterObj, setFilterObj] = useState(filterObject)
+
 
     let typeButton = null;
     let dateButton = null;
     let authorButton = null;
     let supportButton = null;
+
+    function RenderTypeButton(filterObj){
+      if (filterObj.dataType != null){
+
+        return <Button className='border-gray-300 p-2 inline-block font-medium rounded-lg text-sm text-gray-400'>
+        Type | {filterObj.dataType}</Button>;
+
+      }
+      else{
+        return null;
+      }  
+    }
+
+    function RenderTypeAuthor(filterObj){
+      if (filterObj.author != null){
+
+        return <div class="border relative inline-block text-left border-gray-300 p-2 font-medium rounded-lg text-sm text-gray-400">
+           <div> Author | {<AutosizeInput class="flex placeholder-gray-400 pl-1 h-auto w-auto max-w-[60px] truncate resize-none font-medium text-gray-400"
+                autocomplete="off"
+                placeholder="Name"
+                name="form-field-name"
+                value={authorValue}
+                onChange={function(event) {
+                  authorInput(event.target.value, updateFilter("author", authorValue)) 
+                }}
+              />} </div>
+        </div>;
+
+      }
+      else{
+        return null;
+      }  
+    }
+
+    function RenderTypeSupport(filterObj){
+      if (filterObj.support != null){
+
+        return <div class="border relative inline-block text-left border-gray-300 p-2 font-medium rounded-lg text-sm text-gray-400">
+           <div> Support {'>'} {<AutosizeInput class="flex placeholder-gray-400 pl-1 h-auto w-auto max-w-[60px] truncate resize-none font-medium text-gray-400"
+                autocomplete="off"
+                placeholder="#"
+                name="form-field-name"
+                value={supportValue}
+                onChange={function(event) {
+                  supportInput(event.target.value, updateFilter("support", supportValue)) 
+                }}
+              />} </div>
+        </div>;
+
+      }
+      else{
+        return null;
+      }  
+    }
+
+    function RenderTypeDate(filterObj){
+      if (filterObj.date != null){
+
+        return <Button className='border-gray-300 p-2 font-medium rounded-lg text-sm text-gray-400'>
+        Date | {filterObj.date}</Button>;
+
+      }
+      else{
+        return null;
+      }  
+    }       
     
     //console.log('we are rendering the filter')
-    function updateFilter(type, value){
-        let newFilters = filterObj;
-        newFilters[type] = value;
-        setFilterObj(newFilters);
-        console.log("Im here in update filter", filterObj);
- 
-        if(type == "dataType") {
-          console.log("data type is", value)
-          if (filterObj[type] != null){
-            console.log("contains type filter")
-            typeButton = <Button className='border-gray-300 p-2 font-medium rounded-lg text-sm text-gray-300'>
-            type | </Button>;
-          }
-          else{
-            typeButton = null;
-          }  
-          console.log("typebutton is ", typeButton)
-        }
-        
+
+
+
+    function updateFilter(type, value) {
+      let newFilters = filterObj;
+      newFilters[type] = value;
+      setFilterObj({...newFilters});
+      console.log("Im here in update filter", filterObj);
+      
     }
-       
 
+    function resetInputs() {
+      authorInput("");
+      supportInput("");
+      setFilterObj((new FilterObject()));
 
+    }
+
+ 
+
+    const [filterObj, setFilterObj] = useState(filterObject);
+    const [authorValue, authorInput] = useState("");
+    const [supportValue, supportInput] = useState("");
 
 
 
@@ -79,12 +147,15 @@ export default function Filter() {
       // Filter List of the varuious filters, and the add filter button
       // so the filter list will be a list of filter in the form of a list
       // for every filter there will be a button that will remove the filter and update the filter
+      <div className="relative pl-2 space-x-1 inline-block max-w-[600px] flex-wrap">
+        <div className="inline-block space-x-1">
+          {RenderTypeButton(filterObj)}
+          {RenderTypeAuthor(filterObj)}
+          {RenderTypeSupport(filterObj)}
+          {RenderTypeDate(filterObj)}
 
-    
-      <div className="relative pl-2 space-x-1 inline-block flex-row">
-        <div className="inline-block">
-          {typeButton}
         </div>
+
         <Menu as="div" className="relative rounded-lg inline-block text-left">
 
         <div>
@@ -108,7 +179,7 @@ export default function Filter() {
             </div>
             <div className="py-1">
               
-              <Menu.Item onClick = {() => updateFilter("Author", "")} >
+              <Menu.Item onClick = {() => updateFilter("author", "")} >
                 {({ active }) => (
                   // when active, set the state to the prop
                   <a
@@ -123,7 +194,7 @@ export default function Filter() {
                   </a>
                 )}
               </Menu.Item>
-              <Menu.Item onClick = {() => updateFilter("Support", "")} >
+              <Menu.Item onClick = {() => updateFilter("support", "")} >
                 {({ active }) => (
                   // when active, set the state to the prop
                   <a
@@ -138,7 +209,7 @@ export default function Filter() {
                   </a>
                 )}
               </Menu.Item>
-              <Menu.Item onClick = {() => updateFilter("Date", "")}>
+              <Menu.Item onClick = {() => updateFilter("date", "")}>
                 {({ active }) => (
                   <a
                     href="#"
@@ -193,7 +264,7 @@ export default function Filter() {
             </div>
             <div className="py-1">
               <form method="POST" action="#">
-              <Menu.Item onClick = {() => setFilterObj((new FilterObject()))}>
+              <Menu.Item onClick = {() => resetInputs()}>
                 {({ active }) => (
                   <a
                     href="#"
