@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Button } from "grommet";
-import {pBlock, channel, equation} from './pBlock.js';
+import {pBlock, channel, pBlockRender, equation} from './pBlock.js';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor,useSensor, useSensors} from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy} from "@dnd-kit/sortable";
 import Example from "./components/sortDrop.jsx";
@@ -9,7 +9,7 @@ import InertiaDrop from "./components/inertiaDrop.jsx";
 import SortableItem from "./SortableContent";
 import AutosizeInput from  'react-18-input-autosize';
 import Collapsible from "react-collapsible";
-import {contentParser} from "./stringParser.js";
+import {contentParser, isValidUrl} from "./stringParser.js";
 const short = require('short-uuid'); 
 
 
@@ -27,38 +27,20 @@ const urlList = [img1, img2];
 
 const editors = ["omoruyi", "neb", "cedric"]
 const channel_data = new channel("0001", editors, short.generate());
+console.log("yoooo momsss")
+let tempUrl = "google.com"
+//console.log("tempUrl is ", isValidUrl(tempUrl))
 console.log("Channel is ", channel_data);
 
 
+const validUrl = require('valid-url');
+
+console.log(contentParser(tempUrl));
+
+// we should add a sub-type to the pBlock class, so that we can have different types of pBlocks
+// and we can render them differently, + we dont have to rerender them..
 
 
-
-
-function pBlockRender(pBlock){
-  // render the pBlock
-  let type = pBlock.type;
-  let content = pBlock.content;
-  let id = pBlock.id;
-  let author = pBlock.author;
-
-
-  // types are: image, link, text, audio(spotify, soundcloud) etc.
-  // content is the content of the pBlock
-  // id is the id of the pBlock
-  // author is the author of the pBlock
-
-  if (type === "image"){
-    return <img src={content} alt="image"  className="object-contain"/>
-  }
-  else if (type === "link"){
-    <div></div>
-  }
-  else if (type === "text"){
-
-  }
-
-
-}
 
 const ChannelComponent = () => {
 
@@ -67,9 +49,6 @@ const ChannelComponent = () => {
   const [items, setItems] = useState(["0", "1"]);
   const [urls, setUrls] = useState(urlList);
   const [inputValue, setInput] = useState("Untitled Channel");
-
-
-  
 
 
 

@@ -17,6 +17,11 @@
 import collect from "collect.js";
 import { filter } from "./filterUtil";
 
+// Used for rendering the link preview
+
+const MicorApiKey = 'MyApiKey';
+
+
 export class equation {
     constructor(filters, oligarchy) {
         // arrays of filters and oligarchy
@@ -66,7 +71,6 @@ export class equation {
     }
 }
 
-
 export class pBlock {
   
     // To Construct a block, we utilize, the author, parent_id, type, and content
@@ -88,9 +92,11 @@ export class pBlock {
     connections = collect([]); //addConnection()
     description = ""; //metadata?
     inertia = 0; //inertia value
+    sub_type = null; //sub type of the block
     
 
     // Set the Respective
+
     
 
     setThumbnail(type) {
@@ -159,7 +165,7 @@ export class pBlock {
         // given a block, add it to the annotation collection
         this.annotations.push(block);
     }
-  }
+}
   
  export class channel {
     constructor(parent_id, editors, unique_id, inertia_equation = null) {
@@ -269,5 +275,43 @@ export class pBlock {
     setDescription(description) {
         this.setUpdatedAt();
         this.description = description;
+    }
+}
+ 
+export function pBlockRender(pBlock){
+    // render the pBlock
+    let type = pBlock.type;
+    let content = pBlock.content;
+    let id = pBlock.id;
+    let author = pBlock.author;
+    // its either rich media or text, just chekc if its not text
+    // types are: image, link, text, audio(spotify, soundcloud) etc.
+    // content is the content of the pBlock
+    // id is the id of the pBlock
+    // author is the author of the pBlock
+  
+    if (type === "image"){
+      return <img src={content} alt="image"  className="object-contain"/> // specify the size of the image
+    }
+    else if (type === "link"){
+      <div></div> // use microlink to render the link
+    }
+    else if(type === "spotify"){
+  
+    }
+    else if (type === "text"){
+  
+    }
+    else if (type === "twitter"){
+  
+    }
+    else if (type === "supported-media"){
+  
+    }
+    else if (type === "instagram"){
+  
+    }
+    else if (type === "link"){
+      // use microlink to render the link as a screenshot...
     }
 }

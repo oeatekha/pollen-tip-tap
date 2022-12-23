@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pollen-media",
+  "private_key_id": "85bd1454c7eb09c43c64ddc35a482ce273d42bc6",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvll9i7UfyXvsW\nGw1LNRYcbik4BTpDLPEsttCG8Y6R+yNmjtgk5GmXsVUIAN6yxfuU+jlGwhWCqBPY\n+4h92+qLsSvFH4iGg8pRUN1uZu4tOcCNIM5D91GBRdxGNKHn7TbTjFOfUJSizlYa\nV1C3eM6RDweJhDOHd3UNM7KhXBaU/CtwyU00/0AnlPBoLouc05DXVrGzektCayWP\n+HJNPjpx7alSX6/QpPr1rIElBRQQdV9UL9T90huviyWmEISUs2c9QlwdDJBGRQWi\nQigS/4SjznowgKcSgajq55wbRzbSzuOrRU/yQ16rJ0rfa8gusG8a+Ndi+UzY5UwB\nzn9bkn+DAgMBAAECggEAEws4JT6fAwaSLP+aHYIQd9zq04ydmROSxMq/KyOf1u1q\nFYGAp9+uJCmzkz6k6LbYZnwNIkOCmb0pCeueDih/886vdJ3K7Ov2UYN3wLWhN36A\nB857EJwOVvsAvQyQUttDiwY5O5o9xLqkVA8MThnoLYt3wc542ER4iYoF4cJfIKFb\nAw6j9blHcHhpPrQjWsOITwu2fc2GrDvsrqsYTZU3EguqGw/uHd676L4doH4zL8Of\n+vmpTLpokcH8iqi3mWUIOz30idkn5ELpsUaBsbQN22icEiFZlDwdr7HS7PKStRjr\nXQaDsU2+2CmOllzHeuEcccH1HhJbSi0HmtSsJF7TwQKBgQDZz52Zl1OyX1YI6BOk\nW53WdVNBkwy3mc9044x0S+KQGjH7fiQ6gDeJx4yiBL4kmS0TO3YqHedWlO8WhL0M\nOK7rJo7obGByQkKIbukimTFMzGrPAPM2khYcedQG9gItD9qfDRSqwwPKsfRZglYB\nHa5t2W5rHMHpxic5jqvbPkn3OwKBgQDOX5ABQLRxoH1dqfpFXhAEVqG1OOsJ3vhv\nCA3P4XcobKr2Vq4XCDimpXrVhiLJgbKf/d7TahWCinRb5HxyYHXypIY5WgeI3ADV\ngSJ1Z7wU/1maYDHTanYj29hHQHGQ549DZTetsNpwwNscAlkh+4VqLLWJzl/2t/ik\nPx5bLlHkWQKBgQCFnSn1zXIHixpRDmT2P0l9BK4VHOsBOjacYvaHZQHQGnGs8H2y\n8XKgb6xiu3wVIW4YTTK4tW1znJtqefUqqR8Mm7Ow+sLTdLgxz6/ujIFEtmWTJOcO\nA+HSiB28Q2+kSwR262RROJ572lymCCFQP+//7REiXhrKmMb5NP9R2E0xfwKBgCnG\nKk42nNALXpUhHSoBeliGeMFIPjuHSN6g0LrttsMWDB1FOoQrA9ynzo9+UXhcqp28\nM+izppsAD8GyJIa6g+WT7B+b276WWgzd0O3XC7lsXuTi5/MVr8hebg8uOk7MsLFB\nwd2E2RLN1wx6ZTR9x2nQlwbIIaC9aLVGmYx3edgxAoGBAL8ZhGqcb9eziY3R8nFS\njh5gqa0fMTGEw2HgybNFd/P66fZK700zFOArCEcp8fc9a6D2lfce0H60nWq9ivSm\nFNMw9IqOBRtfi4LTWwjfccWlriA8QZCvXcoCxbLzMLOt5ZqGMHCEXjo9FT+u/O3J\nJROnDbp5yjdxIZlNqGdNOOmm\n-----END PRIVATE KEY-----\n",
+  "client_email": "pollen-channel@pollen-media.iam.gserviceaccount.com",
+  "client_id": "104557182463642348142",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/pollen-channel%40pollen-media.iam.gserviceaccount.com"
+}
