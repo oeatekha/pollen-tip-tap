@@ -32,6 +32,8 @@ import thumb from "./icons/thumbnail.svg";
 import tippy from "tippy.js";
 
 import { MyModal } from "./suggestion/MyModal";
+import Microlink from '@microlink/react'
+
 
 import { Popover } from "@headlessui/react";
 import { usePopper } from "react-popper";
