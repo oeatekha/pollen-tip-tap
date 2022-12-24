@@ -10,14 +10,17 @@ import SortableItem from "./SortableContent";
 import AutosizeInput from  'react-18-input-autosize';
 import Collapsible from "react-collapsible";
 import {contentParser, isValidUrl} from "./stringParser.js";
+import { initializeApp, } from "firebase/app";
+import {storageIs} from "./firebase.js"
+import firebase from "firebase/app";
+import "firebase/storage";
+import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
+import { upload } from "@testing-library/user-event/dist/upload.js";
+
 const short = require('short-uuid'); 
 
-
-
-
-
 const img1 = "https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0";
-const img2 = "https://d2w9rnfcy7mm78.cloudfront.net/11878907/original_df38a957301648022aaaf97ccb56e553.jpg?1620426154?bc=0";
+const img2 = "https://d2w9rnfcy7mm78.cloudfront.net/19535801/original_9878101e62ec6cfcd5546a0ab3651ffd.jpg?1671726096?bc=0";
 const urlList = [img1, img2];
 
 
@@ -40,16 +43,83 @@ console.log(contentParser(tempUrl));
 // we should add a sub-type to the pBlock class, so that we can have different types of pBlocks
 // and we can render them differently, + we dont have to rerender them..
 
+const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a131f290137f4a6746890094553.jpg?1671757148?bc=0";
+
+
 
 
 const ChannelComponent = () => {
+
+  const [imageUpload, setImageUpload] = useState(null);
+  
+  //not using below...
+  const uploadImage = () => {
+    if (imageUpload == null) {
+      return;
+    }
+    const fileRef = ref(storageIs, `files/${short.generate()}`);
+    uploadBytes(fileRef, imageUpload).then((snapshot) => {
+      alert("Uploaded a blob or file!");
+      getDownloadURL(fileRef).then((url) => {
+        console.log(url);
+        setCurImg(url);
+      });
+    });
+  };
+
+  function uploadFile(file) {
+    // if the file is not there, then dont return
+    if (imageUpload == null) {
+      return;
+    }
+
+    const fileRef = ref(storageIs, `files/${short.generate()}`);
+
+    // Upload the file to Firebase Storage
+    return uploadBytes(fileRef, imageUpload).then(snapshot => {
+      // Wait for the upload to complete
+      alert("Uploaded a file!");
+      getDownloadURL(fileRef).then((url) => {
+        console.log(url);
+        setCurImg(url);
+        return url;
+      });
+    });
+  }
+
+
+  function uploadFromURL(urlName) {
+    // Generate a unique file name for the file
+    const fileIs = ref(storageIs, `files/${short.generate()}`);
+
+    // Fetch the file from the URL
+    return fetch(urlName)
+      .then(response => response.blob())
+      .then(fileBlob => {
+        // Upload the file to Firebase Storage
+        return uploadBytes(fileIs, fileBlob);
+    
+      })
+      .then(snapshot => {
+        // Wait for the upload to complete
+        alert("Uploaded from URL!");
+        console.log(getDownloadURL(fileIs));
+        return getDownloadURL(fileIs).then((url) => {
+          console.log(url);
+          setCurImg(url); //probably dont need this one...
+          return url;
+        });
+      });
+  }
+
+
 
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   const [items, setItems] = useState(["0", "1"]);
   const [urls, setUrls] = useState(urlList);
   const [inputValue, setInput] = useState("Untitled Channel");
-
+  const [curImg, setCurImg] = useState("https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0");
 
 
   const sensors = useSensors(
@@ -77,7 +147,8 @@ const ChannelComponent = () => {
   };
 
   return (
-
+    
+    
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
@@ -85,7 +156,17 @@ const ChannelComponent = () => {
       onDragStart={handleDragStart}
       className="container content-center mx-auto"
     >
-      
+      <input 
+    type="file" 
+    onChange={(event) => { setImageUpload(event.target.files[0]);
+    
+    }}/>
+    <button onClick={uploadFile}>Upload</button>
+    <img src={curImg}></img>
+    <button onClick={() => {uploadFromURL("https://d2w9rnfcy7mm78.cloudfront.net/19367012/original_511588e3c256eeb87ff40774011aa7be.jpg?1670729905?bc=0")}}>Upload from URL</button>
+
+
+
       <Box className="ChannelContainer"
         flex={true}
         wrap={true}

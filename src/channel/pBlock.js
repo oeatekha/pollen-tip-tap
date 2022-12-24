@@ -16,7 +16,12 @@
 
 import collect from "collect.js";
 import { filter } from "./filterUtil";
+import Microlink from '@microlink/react';
+import mql from '@microlink/mql';
 
+
+
+// install https://github.com/Richienb/node-polyfill-webpack-plugin to get micro link to work
 // Used for rendering the link preview
 
 const MicorApiKey = 'MyApiKey';
