@@ -16,8 +16,8 @@
 
 import collect from "collect.js";
 import { filter } from "./filterUtil";
-import Microlink from '@microlink/react';
-import mql from '@microlink/mql';
+import mql from "@microlink/mql";
+
 
 
 
@@ -86,7 +86,8 @@ export class pBlock {
         this.content = content;
         this.unique_id = unique_id;
         this.title = this.unique_id;
-        this.thumbnail = this.setThumbnail(type);
+        this.thumbnail = this.setThumbnail(this.type);
+
     }
   
     created_at = Math.floor(Date.now() / 1000);
@@ -97,20 +98,32 @@ export class pBlock {
     connections = collect([]); //addConnection()
     description = ""; //metadata?
     inertia = 0; //inertia value
-    sub_type = null; //sub type of the block
+    
     
 
     // Set the Respective
 
     
 
-    setThumbnail(type) {
-      if (type === "image" || type === "link") {
-        return this.content;
-      } else {
-        return null;
+    async setThumbnail(type) {
+        if (type === "image") {
+          return Promise.resolve(this.content);
+        } 
+        else if (type === "link") {
+          // use micro link to get the thumbnail
+          return mql(this.content, { screenshot: true })
+            .then((response) => {
+              return response.data.screenshot.url;
+            });
+        }
+        else {
+          return Promise.resolve(null);
+        }
       }
-    }
+      
+           
+            
+         
 
     setUpdatedAt() {
         this.updated_at = Math.floor(Date.now() / 1000);

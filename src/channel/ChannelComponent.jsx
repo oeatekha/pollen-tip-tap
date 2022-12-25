@@ -16,8 +16,15 @@ import firebase from "firebase/app";
 import "firebase/storage";
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
 import { upload } from "@testing-library/user-event/dist/upload.js";
+import { type } from "@testing-library/user-event/dist/type/index.js";
+import Microlink from '@microlink/react';
+import mql from '@microlink/mql';
+
+
 
 const short = require('short-uuid'); 
+const channel_id = short.generate();
+const userIs = "omoruyi";
 
 const img1 = "https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0";
 const img2 = "https://d2w9rnfcy7mm78.cloudfront.net/19535801/original_9878101e62ec6cfcd5546a0ab3651ffd.jpg?1671726096?bc=0";
@@ -51,21 +58,10 @@ const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a13
 const ChannelComponent = () => {
 
   const [imageUpload, setImageUpload] = useState(null);
-  
-  //not using below...
-  const uploadImage = () => {
-    if (imageUpload == null) {
-      return;
-    }
-    const fileRef = ref(storageIs, `files/${short.generate()}`);
-    uploadBytes(fileRef, imageUpload).then((snapshot) => {
-      alert("Uploaded a blob or file!");
-      getDownloadURL(fileRef).then((url) => {
-        console.log(url);
-        setCurImg(url);
-      });
-    });
-  };
+
+  // write out steps of microlink -> get the image url -> upload to firebase -> get the url -> set the url to the pBlock
+  // 1. Get the image url from the microlink if string parser returns "link"
+  // 2. Upload the image to firebase
 
   function uploadFile(file) {
     // if the file is not there, then dont return
@@ -86,7 +82,6 @@ const ChannelComponent = () => {
       });
     });
   }
-
 
   function uploadFromURL(urlName) {
     // Generate a unique file name for the file
@@ -112,8 +107,54 @@ const ChannelComponent = () => {
       });
   }
 
+  function createPblock(str_content, username){
+    const type_str = contentParser(str_content);
+    const blockId = short.generate();
+    const blockIs = new pBlock(userIs, channel_id, type_str.type, type_str.str_input, blockId);
+    //(author, parent_id, type, content, unique_id)
+    console.log("blockIs is ", blockIs);
+    return blockIs;
+  }
 
+  
 
+  function blockContent(blockIs){
+    let type = blockIs.type;
+    let content = blockIs.content;
+    let thumb = null;
+    let id = blockIs.id;
+    let author = blockIs.author;
+    let thumbb = null;
+    
+
+    function handleResult() {
+      blockIs.thumbnail.then((result) => {
+        const tempThumb = result;
+        return tempThumb;
+      })
+      .then((tempThumb) => {
+        console.log(tempThumb);
+        thumbb = tempThumb;
+      });
+    }
+  
+    handleResult();
+    console.log("thumb is ", thumbb);
+
+    if (type == "link"){
+      return (
+          <div className="blockContent">
+            {/* I want a microlink modal but I want to decrease the thickness of the title and button information */}
+
+            <Microlink url={content} media='screenshot' size='large'/>
+            <img src={thumbb} class="w-[350px] h-[350px] contain"></img>
+
+          </div>
+    );
+    }
+  }
+
+  let arenaBlock = createPblock("https://substack.com/inbox/rec/88332069", userIs);
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   const [items, setItems] = useState(["0", "1"]);
@@ -163,8 +204,8 @@ const ChannelComponent = () => {
     }}/>
     <button onClick={uploadFile}>Upload</button>
     <img src={curImg}></img>
-    <button onClick={() => {uploadFromURL("https://d2w9rnfcy7mm78.cloudfront.net/19367012/original_511588e3c256eeb87ff40774011aa7be.jpg?1670729905?bc=0")}}>Upload from URL</button>
-
+    <button onClick={() => {uploadFromURL("https://images.weserv.nl/?url=https%3A%2F%2Fiad.microlink.io%2F5cHGxyT3sh654wjScYN4Km0k4wxjbBeTmcD_1hX1udxs6Ca147uCDwYOYe_4kXeq3OCKIv3pFlONICjI0tPEyg.png&l=9&af&il&n=-1")}}>Upload from URL</button>
+    {blockContent(arenaBlock)}
 
 
       <Box className="ChannelContainer"

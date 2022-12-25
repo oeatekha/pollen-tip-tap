@@ -5,8 +5,8 @@ export function isValidUrl(str) {
 
   // add http if not there
 export function hasHTTP(str) {
-    if(!str.includes("http")){
-        return "http://" + str;
+    if (!/^https?:\/\//i.test(str)) {
+        str = 'https://www.' + str;
     }
     return str;
 }
@@ -46,17 +46,17 @@ export function urlType(str) {
     }
 }
 
-export function contentParser(str){
-    const isUrl = isValidUrl(str);
+export function contentParser(str_input){
+    const isUrl = isValidUrl(str_input);
     let type = null;
     if(isUrl){
-        type = urlType(str);
-        str = hasHTTP(str);
+        type = urlType(str_input);
+        str_input = hasHTTP(str_input);
     }
 
     else{
         type = "text";
     }
 
-    return {type, str};
+    return {type, str_input};
 }
