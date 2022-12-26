@@ -144,7 +144,15 @@ const ChannelComponent = () => {
         <Microlink url={content}  size='large' api-key={MyApiKey} lazy/>
       );
     }
+    // for files no fetch data, just render the link...
+    else if(type == "file") {
+      return (
+        <div className="blockContent">
+          <Microlink url={content} api-key={MyApiKey} fetchData='false' size='large' lazy/>
+        </div>
+      );
   }
+}
   
   let arenaBlock = createPblock("https://styled-components.com/", userIs);
   let [isInput, setisInput] = useState("");
