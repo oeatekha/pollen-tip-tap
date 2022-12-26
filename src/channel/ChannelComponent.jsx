@@ -18,18 +18,18 @@ import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
 import { upload } from "@testing-library/user-event/dist/upload.js";
 import { type } from "@testing-library/user-event/dist/type/index.js";
 import Microlink from '@microlink/react';
-import mql from '@microlink/mql';
+import { Tweet } from "react-twitter-widgets";
 
 
-
+const mql = require('@microlink/mql')
 const short = require('short-uuid'); 
 const channel_id = short.generate();
+const MyApiKey = "lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7";
 const userIs = "omoruyi";
 
 const img1 = "https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0";
 const img2 = "https://d2w9rnfcy7mm78.cloudfront.net/19535801/original_9878101e62ec6cfcd5546a0ab3651ffd.jpg?1671726096?bc=0";
 const urlList = [img1, img2];
-
 
 // Here the goal is to use the pBlock and the channel classes to populate the contents of sortableContent...
 // 2. Use the Render of the channel to populate the sortableContent
@@ -37,15 +37,12 @@ const urlList = [img1, img2];
 
 const editors = ["omoruyi", "neb", "cedric"]
 const channel_data = new channel("0001", editors, short.generate());
-console.log("yoooo momsss")
 let tempUrl = "google.com"
 //console.log("tempUrl is ", isValidUrl(tempUrl))
-console.log("Channel is ", channel_data);
 
 
 const validUrl = require('valid-url');
 
-console.log(contentParser(tempUrl));
 
 // we should add a sub-type to the pBlock class, so that we can have different types of pBlocks
 // and we can render them differently, + we dont have to rerender them..
@@ -118,43 +115,38 @@ const ChannelComponent = () => {
 
   
 
-  function blockContent(blockIs){
+  function blockContent(blockIs) {
     let type = blockIs.type;
     let content = blockIs.content;
-    let thumb = null;
-    let id = blockIs.id;
     let author = blockIs.author;
-    let thumbb = null;
     
-
-    function handleResult() {
-      blockIs.thumbnail.then((result) => {
-        const tempThumb = result;
-        return tempThumb;
-      })
-      .then((tempThumb) => {
-        console.log(tempThumb);
-        thumbb = tempThumb;
-      });
-    }
-  
-    handleResult();
-    console.log("thumb is ", thumbb);
-
-    if (type == "link"){
+    if (type == "link") {
       return (
-          <div className="blockContent">
-            {/* I want a microlink modal but I want to decrease the thickness of the title and button information */}
-
-            <Microlink url={content} media='screenshot' size='large'/>
-            <img src={thumbb} class="w-[350px] h-[350px] contain"></img>
-
-          </div>
-    );
+        <div className="blockContent">
+          <Microlink url={content} media='screenshot' size='large' api-key={MyApiKey} lazy/>
+        </div>
+      );
+    }
+    else if (type == "spotify") {
+      return (
+        <div className="blockContent">
+          <Microlink url={content} api-key={MyApiKey} media='iframe' size='large' lazy/>
+        </div>
+        );
+    }
+    else if(type == "image") {
+      return (
+        <img src={content} loading="lazy" className= "object-cover rounded-xl w-[352px] h-[352px]" alt="image"/> 
+      );
+    }
+    else if(type == "youtube") {
+      return (
+        <Microlink url={content}  size='large' api-key={MyApiKey} lazy/>
+      );
     }
   }
-
-  let arenaBlock = createPblock("https://substack.com/inbox/rec/88332069", userIs);
+  
+  let arenaBlock = createPblock("https://styled-components.com/", userIs);
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   const [items, setItems] = useState(["0", "1"]);
@@ -187,6 +179,7 @@ const ChannelComponent = () => {
     }
   };
 
+
   return (
     
     
@@ -203,9 +196,21 @@ const ChannelComponent = () => {
     
     }}/>
     <button onClick={uploadFile}>Upload</button>
-    <img src={curImg}></img>
-    <button onClick={() => {uploadFromURL("https://images.weserv.nl/?url=https%3A%2F%2Fiad.microlink.io%2F5cHGxyT3sh654wjScYN4Km0k4wxjbBeTmcD_1hX1udxs6Ca147uCDwYOYe_4kXeq3OCKIv3pFlONICjI0tPEyg.png&l=9&af&il&n=-1")}}>Upload from URL</button>
+    
+    <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} api-key={MyApiKey} media='iframe' size='large'/>
+    <div class="h-10"></div>    
+    <img className= "object-cover rounded-xl w-[352px] h-[352px]" src={img2}></img>
+    <div class="h-10"></div>    
     {blockContent(arenaBlock)}
+    <div class="h-10"></div>    
+    <div class="max-h-[352px] max-w-[352px]">
+    {/*}  <Tweet tweetId="1607152081122562049" options={{ height: "200" }} /> */}
+    </div>
+    <Microlink url={"https://www.youtube.com/watch?v=sDRoi4sffkA&ab_channel=AnimeBallsDeep"} api-key={MyApiKey} media='iframe' size='large'/>
+    <div class="h-10"></div>
+
+    <button onClick={() => {uploadFromURL("https://images.weserv.nl/?url=https%3A%2F%2Fiad.microlink.io%2F5cHGxyT3sh654wjScYN4Km0k4wxjbBeTmcD_1hX1udxs6Ca147uCDwYOYe_4kXeq3OCKIv3pFlONICjI0tPEyg.png&l=9&af&il&n=-1")}}>Upload from URL</button>
+
 
 
       <Box className="ChannelContainer"

@@ -17,6 +17,7 @@
 import collect from "collect.js";
 import { filter } from "./filterUtil";
 import mql from "@microlink/mql";
+const MicorApiKey = 'lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7';
 
 
 
@@ -24,7 +25,7 @@ import mql from "@microlink/mql";
 // install https://github.com/Richienb/node-polyfill-webpack-plugin to get micro link to work
 // Used for rendering the link preview
 
-const MicorApiKey = 'MyApiKey';
+
 
 
 export class equation {
@@ -85,9 +86,8 @@ export class pBlock {
         this.type = type;
         this.content = content;
         this.unique_id = unique_id;
-        this.title = this.unique_id;
         this.thumbnail = this.setThumbnail(this.type);
-
+        this.title = this.retrieveTitle(this.type);
     }
   
     created_at = Math.floor(Date.now() / 1000);
@@ -99,31 +99,34 @@ export class pBlock {
     description = ""; //metadata?
     inertia = 0; //inertia value
     
-    
-
-    // Set the Respective
-
-    
 
     async setThumbnail(type) {
         if (type === "image") {
-          return Promise.resolve(this.content);
+          this.thumbnail = this.content;
         } 
-        else if (type === "link") {
-          // use micro link to get the thumbnail
-          return mql(this.content, { screenshot: true })
-            .then((response) => {
-              return response.data.screenshot.url;
-            });
-        }
         else {
-          return Promise.resolve(null);
+          return null;
         }
-      }
-      
+    }
+
+    async retrieveTitle(type) {
+        if (type != "text" && type != "image") {
+            console.log("Set Title");
+            const { data } = await mql(this.content, {'x-api-key': {MicorApiKey}, screenshot: true })
+            this.title = await data.title;
+            this.description = await data.description;
+            this.thumbnail = await data.screenshot.url;
+        }
+    }
            
             
-         
+    async getThumbnail() {
+        if (this.thumbnail == null) {
+            await this.setThumbnail(this.type);
+        }
+        return this.thumbnail;
+    }
+      
 
     setUpdatedAt() {
         this.updated_at = Math.floor(Date.now() / 1000);
