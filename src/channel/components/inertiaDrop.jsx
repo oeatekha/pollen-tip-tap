@@ -26,7 +26,7 @@ export default function InertiaDrop() {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
-        <Menu.Button className="inline-flex italic font-serif w-md justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-style:italic font-medium text-gray-400 shadow-sm hover:bg-gray-200 focus:outline-none focus:text-gray-800 focus:bg-gray-50">
+        <Menu.Button className="inline-flex italic font-serif w-md justify-center rounded-md border border-gray-300 bg-white px-4 py-1 text-sm font-style:italic font-medium text-gray-400 shadow-sm hover:bg-gray-200 focus:outline-none focus:text-gray-800 focus:bg-gray-50">
           I(x)
         </Menu.Button>
         {/* Add input feild to update the cutoff for inertia... */}

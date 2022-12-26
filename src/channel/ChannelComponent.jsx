@@ -15,8 +15,6 @@ import {storageIs} from "./firebase.js"
 import firebase from "firebase/app";
 import "firebase/storage";
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
-import { upload } from "@testing-library/user-event/dist/upload.js";
-import { type } from "@testing-library/user-event/dist/type/index.js";
 import Microlink from '@microlink/react';
 import { Tweet } from "react-twitter-widgets";
 
@@ -26,39 +24,18 @@ const short = require('short-uuid');
 const channel_id = short.generate();
 const MyApiKey = "lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7";
 const userIs = "omoruyi";
+const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a131f290137f4a6746890094553.jpg?1671757148?bc=0";
 
-const img1 = "https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0";
-const img2 = "https://d2w9rnfcy7mm78.cloudfront.net/19535801/original_9878101e62ec6cfcd5546a0ab3651ffd.jpg?1671726096?bc=0";
-const urlList = [img1, img2];
+
 
 // Here the goal is to use the pBlock and the channel classes to populate the contents of sortableContent...
 // 2. Use the Render of the channel to populate the sortableContent
 // 3. Create a Channel That will store all the pBlocks, we will use the contents below to render the channel
 
-const editors = ["omoruyi", "neb", "cedric"]
-const channel_data = new channel("0001", editors, short.generate());
-let tempUrl = "google.com"
-//console.log("tempUrl is ", isValidUrl(tempUrl))
-
-
-const validUrl = require('valid-url');
-
-
-// we should add a sub-type to the pBlock class, so that we can have different types of pBlocks
-// and we can render them differently, + we dont have to rerender them..
-
-const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a131f290137f4a6746890094553.jpg?1671757148?bc=0";
-
-
-
 
 const ChannelComponent = () => {
 
   const [imageUpload, setImageUpload] = useState(null);
-
-  // write out steps of microlink -> get the image url -> upload to firebase -> get the url -> set the url to the pBlock
-  // 1. Get the image url from the microlink if string parser returns "link"
-  // 2. Upload the image to firebase
 
   function uploadFile(file) {
     // if the file is not there, then dont return
@@ -107,13 +84,11 @@ const ChannelComponent = () => {
   function createPblock(str_content, username){
     const type_str = contentParser(str_content);
     const blockId = short.generate();
-    const blockIs = new pBlock(userIs, channel_id, type_str.type, type_str.str_input, blockId);
+    const blockIs = new pBlock(username, channel_id, type_str.type, type_str.str_input, blockId);
     //(author, parent_id, type, content, unique_id)
     console.log("blockIs is ", blockIs);
     return blockIs;
   }
-
-  
 
   function blockContent(blockIs) {
     let type = blockIs.type;
@@ -187,7 +162,6 @@ const ChannelComponent = () => {
     }
   };
 
-
   return (
     
     
@@ -207,7 +181,7 @@ const ChannelComponent = () => {
     
     <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} api-key={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>    
-    <img className= "object-cover rounded-xl w-[352px] h-[352px]" src={img2}></img>
+    <img className= "object-cover rounded-xl w-[352px] h-[352px]" src={imgURL}></img>
     <div class="h-10"></div>    
     {blockContent(arenaBlock)}
     <div class="h-10"></div>    
@@ -225,7 +199,7 @@ const ChannelComponent = () => {
         flex={true}
         wrap={true}
         direction="row"
-        style={{maxWidth: "720px", borderRadius: "5px",}}
+        style={{maxWidth: "720px", borderRadius: "5px"}}
       >
 
         <div class="content-left container items-center flex flex-wrap items-center justify-between w-[664px] mx-2 py-1">
@@ -233,7 +207,7 @@ const ChannelComponent = () => {
         
             <div class="flex space-x-2 pt-2 mx-2">
               <AutosizeInput
-                class="flex space-x-4 pl-1 h-[30px] w-auto max-w-[140px] truncate resize-none font-medium text-gray-400"
+                class="flex space-x-4 pl-1 h-[30px] w-auto max-w-[140px] truncate resize-none font-medium font-size-small text-gray-400"
                 autocomplete="off"
                 name="form-field-name"
                 value={inputValue}
@@ -263,7 +237,7 @@ const ChannelComponent = () => {
         </div>
         
         <Collapsible overflowWhenOpen='visible' transitionTime='100' trigger={<hr class="py-1 mx-4 w-[654px]"></hr>}>
-          <div class="content-left container flex flex-wrap items-center justify-between w-[665px] mx-2 pb-2">
+          <div class="content-left container flex flex-wrap items-center justify-between w-[665px] mx-2 pb-1">
               <div className="FilterBlock">
                 {Example()}
                 {Filter()}
