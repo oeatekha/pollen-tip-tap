@@ -16,8 +16,9 @@
 
 import collect from "collect.js";
 import { filter } from "./filterUtil";
-import mql from "@microlink/mql";
+const mql = require('@microlink/mql')
 const MicorApiKey = 'lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7';
+const MyApiKey = MicorApiKey;
 
 
 
@@ -86,8 +87,8 @@ export class pBlock {
         this.type = type;
         this.content = content;
         this.unique_id = unique_id;
-        this.thumbnail = this.setThumbnail(this.type);
-        this.title = this.retrieveTitle(this.type);
+        this.thumbnail = null;
+        this.title = unique_id;
     }
   
     created_at = Math.floor(Date.now() / 1000);
@@ -100,7 +101,7 @@ export class pBlock {
     inertia = 0; //inertia value
     
 
-    async setThumbnail(type) {
+    setThumbnail(type) {
         if (type === "image") {
           this.thumbnail = this.content;
         } 
@@ -109,25 +110,21 @@ export class pBlock {
         }
     }
 
-    async retrieveTitle(type) {
+    async setMQL(type) {
         if (type != "text" && type != "image") {
-            console.log("Set Title");
-            const { data } = await mql(this.content, {'x-api-key': {MicorApiKey}, screenshot: true })
+            const { data } = await mql(this.content, {apiKey: MicorApiKey, screenshot: true})
             this.title = await data.title;
             this.description = await data.description;
             this.thumbnail = await data.screenshot.url;
         }
     }
-           
-            
-    async getThumbnail() {
-        if (this.thumbnail == null) {
-            await this.setThumbnail(this.type);
-        }
-        return this.thumbnail;
+
+    async printMQL() {
+        // call back function to return the title, description, and thumbnail
+        // gotta wait for the async function to finish
+        console.log({"title": this.title, "description":this.description, "thumbnail":this.thumbnail})
     }
       
-
     setUpdatedAt() {
         this.updated_at = Math.floor(Date.now() / 1000);
       }
@@ -299,40 +296,3 @@ export class pBlock {
     }
 }
  
-export function pBlockRender(pBlock){
-    // render the pBlock
-    let type = pBlock.type;
-    let content = pBlock.content;
-    let id = pBlock.id;
-    let author = pBlock.author;
-    // its either rich media or text, just chekc if its not text
-    // types are: image, link, text, audio(spotify, soundcloud) etc.
-    // content is the content of the pBlock
-    // id is the id of the pBlock
-    // author is the author of the pBlock
-  
-    if (type === "image"){
-      return <img src={content} alt="image"  className="object-contain"/> // specify the size of the image
-    }
-    else if (type === "link"){
-      <div></div> // use microlink to render the link
-    }
-    else if(type === "spotify"){
-  
-    }
-    else if (type === "text"){
-  
-    }
-    else if (type === "twitter"){
-  
-    }
-    else if (type === "supported-media"){
-  
-    }
-    else if (type === "instagram"){
-  
-    }
-    else if (type === "link"){
-      // use microlink to render the link as a screenshot...
-    }
-}

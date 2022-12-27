@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { Suspense, useState, useEffect, useRef } from "react";
 import { Box, Button } from "grommet";
-import {pBlock, channel, pBlockRender, equation} from './pBlock.js';
+import {pBlock, channel, equation} from './pBlock.js';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor,useSensor, useSensors} from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy} from "@dnd-kit/sortable";
 import Example from "./components/sortDrop.jsx";
@@ -17,6 +17,7 @@ import "firebase/storage";
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
 import Microlink from '@microlink/react';
 import { Tweet } from "react-twitter-widgets";
+import { resolve } from "styled-jsx/css";
 
 
 const mql = require('@microlink/mql')
@@ -25,7 +26,7 @@ const channel_id = short.generate();
 const MyApiKey = "lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7";
 const userIs = "omoruyi";
 const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a131f290137f4a6746890094553.jpg?1671757148?bc=0";
-
+const urlList = [imgURL]
 
 
 // Here the goal is to use the pBlock and the channel classes to populate the contents of sortableContent...
@@ -81,61 +82,60 @@ const ChannelComponent = () => {
       });
   }
 
-  function createPblock(str_content, username){
+  async function createPblock(str_content, username){
     const type_str = contentParser(str_content);
     const blockId = short.generate();
     const blockIs = new pBlock(username, channel_id, type_str.type, type_str.str_input, blockId);
-    //(author, parent_id, type, content, unique_id)
-    console.log("blockIs is ", blockIs);
+    await blockIs.setMQL()
     return blockIs;
   }
 
-  function blockContent(blockIs) {
-    let type = blockIs.type;
-    let content = blockIs.content;
-    let author = blockIs.author;
-    
-    if (type == "link") {
-      return (
-        <div className="blockContent">
-          <Microlink url={content} media='screenshot' size='large' api-key={MyApiKey} lazy/>
-        </div>
-      );
-    }
-    else if (type == "spotify") {
-      return (
-        <div className="blockContent">
-          <Microlink url={content} api-key={MyApiKey} media='iframe' size='large' lazy/>
-        </div>
-        );
-    }
-    else if(type == "image") {
-      return (
-        <img src={content} loading="lazy" className= "object-cover rounded-xl w-[352px] h-[352px]" alt="image"/> 
-      );
-    }
-    else if(type == "youtube") {
-      return (
-        <Microlink url={content}  size='large' api-key={MyApiKey} lazy/>
-      );
-    }
-    // for files no fetch data, just render the link...
-    else if(type == "file") {
-      return (
-        <div className="blockContent">
-          <Microlink url={content} api-key={MyApiKey} fetchData='false' size='large' lazy/>
-        </div>
-      );
-  }
-}
+
   
-  let arenaBlock = createPblock("https://styled-components.com/", userIs);
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   const [items, setItems] = useState(["0", "1"]);
   const [urls, setUrls] = useState(urlList);
   const [inputValue, setInput] = useState("Untitled Channel");
   const [curImg, setCurImg] = useState("https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0");
+  
+
+
+  const [curChannel, setCurChannel] = useState([]); 
+
+  function AddToChannel(block) {
+    console.log("addToChannel");
+    const blockRef = useRef(block);
+    const [curBlock, setCurBlock] = useState(null);
+  
+    useEffect(() => {
+      async function fetchBlock() {
+        const blockRequest = await block;
+        setCurBlock(blockRequest);
+        console.log("curBlock: ", curBlock);
+      }
+      fetchBlock();
+    }, []);
+  
+    useEffect(() => {
+      if (curBlock != null) {
+        setCurChannel(curChannel => [...curChannel, curBlock]);
+      }
+    }, [curBlock]);
+  }
+  
+  
+
+  let arenaBlock = createPblock("https://github.com/openai/point-e", userIs);
+  console.log("arenaBlock: ", arenaBlock);
+  AddToChannel(arenaBlock);
+  console.log("curChannel: ", curChannel);
+  AddToChannel(createPblock("https://devtrium.com/posts/async-functions-useeffect", userIs));
+  console.log("curChannel: ", curChannel);
+    
+
+
+
 
 
   const sensors = useSensors(
@@ -179,16 +179,16 @@ const ChannelComponent = () => {
     }}/>
     <button onClick={uploadFile}>Upload</button>
     
-    <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} api-key={MyApiKey} media='iframe' size='large'/>
+    <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>    
     <img className= "object-cover rounded-xl w-[352px] h-[352px]" src={imgURL}></img>
-    <div class="h-10"></div>    
-    {blockContent(arenaBlock)}
+    <div class="h-10"></div>  
+
     <div class="h-10"></div>    
     <div class="max-h-[352px] max-w-[352px]">
     {/*}  <Tweet tweetId="1607152081122562049" options={{ height: "200" }} /> */}
     </div>
-    <Microlink url={"https://www.youtube.com/watch?v=sDRoi4sffkA&ab_channel=AnimeBallsDeep"} api-key={MyApiKey} media='iframe' size='large'/>
+    <Microlink url={"https://www.are.na/block/19574481"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>
 
     <button onClick={() => {uploadFromURL("https://images.weserv.nl/?url=https%3A%2F%2Fiad.microlink.io%2F5cHGxyT3sh654wjScYN4Km0k4wxjbBeTmcD_1hX1udxs6Ca147uCDwYOYe_4kXeq3OCKIv3pFlONICjI0tPEyg.png&l=9&af&il&n=-1")}}>Upload from URL</button>
