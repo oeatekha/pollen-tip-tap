@@ -45,6 +45,7 @@ const SortableContent = (props) => {
           {...attributes}
         >
           {handle()}
+          {props.value.title}
         </button>
         </div>
        

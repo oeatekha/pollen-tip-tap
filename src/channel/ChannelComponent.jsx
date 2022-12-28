@@ -29,11 +29,6 @@ const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a13
 const urlList = [imgURL]
 
 
-// Here the goal is to use the pBlock and the channel classes to populate the contents of sortableContent...
-// 2. Use the Render of the channel to populate the sortableContent
-// 3. Create a Channel That will store all the pBlocks, we will use the contents below to render the channel
-
-
 const ChannelComponent = () => {
 
   const [imageUpload, setImageUpload] = useState(null);
@@ -124,19 +119,26 @@ const ChannelComponent = () => {
     }, [curBlock]);
   }
   
+  function renderChannel(){
+    // look at the curChannel and render the contents
+    console.log("renderChannel");
+    console.log("curChannel: ", curChannel);
+    let channelContents = [];
+    for (let i = 0; i < curChannel.length; i++) {
+      console.log("curChannel[i]: ", curChannel[i]);
+      channelContents.push(curChannel[i].render());
+    }
+  }
   
 
   let arenaBlock = createPblock("https://github.com/openai/point-e", userIs);
-  console.log("arenaBlock: ", arenaBlock);
   AddToChannel(arenaBlock);
   console.log("curChannel: ", curChannel);
   AddToChannel(createPblock("https://devtrium.com/posts/async-functions-useeffect", userIs));
   console.log("curChannel: ", curChannel);
+  AddToChannel(createPblock("https://www.are.na/block/14012125", userIs));
+  console.log("curChannel: ", curChannel);
     
-
-
-
-
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -150,9 +152,9 @@ const ChannelComponent = () => {
   const handleDragEnd = (event) => {
     setActiveId(null);
     const { active, over } = event;
-
+    // to make work with c.hannel
     if (active.id !== over.id) {
-      setItems((items) => {
+      setCurChannel((items) => {
         const oldIndex = items.indexOf(active.id);
         const newIndex = items.indexOf(over.id);
 
@@ -273,10 +275,10 @@ const ChannelComponent = () => {
         </Box>
         
 
-        <SortableContext items={items} strategy={rectSortingStrategy}>
-          {items.map((id) => (
+        <SortableContext items={curChannel} strategy={rectSortingStrategy}>
+          {curChannel.map((id) => (
             <SortableItem
-              key={id}
+              key={id.uniqueId}
               id={id}
               handle={true}
               value={id}
