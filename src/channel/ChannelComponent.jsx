@@ -26,8 +26,8 @@ const channel_id = short.generate();
 const MyApiKey = "lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7";
 const userIs = "omoruyi";
 const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a131f290137f4a6746890094553.jpg?1671757148?bc=0";
-const urlList = [imgURL]
-
+//const mainChannel = new channel(channel_id, editors,"Untitled Channel", userIs, imgURL);
+// create a channel
 
 const ChannelComponent = () => {
 
@@ -90,7 +90,6 @@ const ChannelComponent = () => {
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   const [items, setItems] = useState(["0", "1"]);
-  const [urls, setUrls] = useState(urlList);
   const [inputValue, setInput] = useState("Untitled Channel");
   const [curImg, setCurImg] = useState("https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0");
   
@@ -282,7 +281,6 @@ const ChannelComponent = () => {
               id={id}
               handle={true}
               value={id}
-              urls={urlList}
             />
           ))}
         </SortableContext>
