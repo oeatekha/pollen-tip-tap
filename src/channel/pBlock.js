@@ -22,13 +22,6 @@ const MyApiKey = MicorApiKey;
 
 
 
-
-// install https://github.com/Richienb/node-polyfill-webpack-plugin to get micro link to work
-// Used for rendering the link preview
-
-
-
-
 export class equation {
     constructor(filters, oligarchy) {
         // arrays of filters and oligarchy
@@ -76,6 +69,53 @@ export class equation {
         let totalScore = supportScore + commentScore + connectionScore;
         return totalScore;
     }
+}
+
+
+export class gBlock {
+    constructor(author, parent_id, type, content, unique_id) {
+        this.data = {
+            author: author,
+            parent_id: parent_id,
+            type: type,
+            content: content,
+            unique_id: unique_id,
+            thumbnail: null,
+            title: this.setThumbnail(type),
+            created_at: Math.floor(Date.now() / 1000),
+            updated_at: Math.floor(Date.now() / 1000),
+            comments: [],
+            annotations: [],
+            support: [],
+            connections: [],
+            description: "",
+            inertia: 0
+        };
+    }
+    
+
+    set(docRef) {
+        return docRef.set(this.data);
+    }
+
+    setThumbnail(type) {
+        if (type === "image") {
+          this.thumbnail = this.content;
+        } 
+        else {
+          return null;
+        }
+    }
+
+    async setMQL(type) {
+        if (type != "text" && type != "image") {
+            const { data } = await mql(this.data.content, {apiKey: MicorApiKey, screenshot: true})
+            this.data.title = await data.title;
+            this.data.description = await data.description;
+            this.data.thumbnail = await data.screenshot.url;
+        }
+    }
+    
 }
 
 export class pBlock {
@@ -198,9 +238,10 @@ export class pBlock {
     updated_at = this.created_at; 
     collaborators = collect([this.editors]);  
     connections = collect([]);
-    content = collect([]); 
-    blockCount = this.content.items.length;
+    blocks = collect([]); 
     description = ""; 
+    blockCount = this.blocks.items.length;
+ 
     
 
     // Inertia Parameters
@@ -215,7 +256,7 @@ export class pBlock {
     }
 
     getInertia() {
-        let channel_temp = this.content.items;
+        let channel_temp = this.blocks.items;
         let f_x = this.inertia_equation;
         channel_temp.forEach(function(block, index) {
             this[index].inertia = f_x.computeInertia(block);
@@ -253,8 +294,8 @@ export class pBlock {
     }
   
     addBlock(pBlock) {
-      this.content.push(pBlock);
-      this.blockCount = this.content.items.length;
+      this.blocks.push(pBlock);
+      this.blockCount = this.blocks.items.length;
     }
   
     addEditor(editor) {
@@ -264,10 +305,10 @@ export class pBlock {
     popBlock(block) {
         // given a block, pop it from the comment collection
         // utilize indexCollection() in collection function to return where the block is in the parent collection
-        let index = this.indexCollection(block, this.content);
-        let parent_collection = this.content.items;
+        let index = this.indexCollection(block, this.blocks);
+        let parent_collection = this.blocks.items;
         parent_collection.splice(index, 1);
-        this.content = collect(parent_collection);  
+        this.blocks = collect(parent_collection);  
     }
 
     removeEditor(editor) {

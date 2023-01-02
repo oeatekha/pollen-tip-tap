@@ -1,20 +1,19 @@
-import React, { Suspense, useState, useEffect, useRef } from "react";
+import React, { Suspense, useState, useEffect, useRef, useReducer } from "react";
 import { Box, Button } from "grommet";
-import {pBlock, channel, equation} from './pBlock.js';
+import {pBlock, gBlock, channel, equation} from './pBlock.js';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor,useSensor, useSensors} from "@dnd-kit/core";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, rectSortingStrategy} from "@dnd-kit/sortable";
 import Example from "./components/sortDrop.jsx";
 import Filter from "./components/filterDrop.jsx";
 import InertiaDrop from "./components/inertiaDrop.jsx";
 import SortableItem from "./SortableContent";
+import { sorter } from "./filterUtil.js";
 import AutosizeInput from  'react-18-input-autosize';
 import Collapsible from "react-collapsible";
 import {contentParser, isValidUrl} from "./stringParser.js";
-import { initializeApp, } from "firebase/app";
-import {storageIs} from "./firebase.js"
-import firebase from "firebase/app";
-import "firebase/storage";
+import {database, storageIs} from "./firebase.js"
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
+import { doc, DocumentReference, getDoc, updateDoc } from "firebase/firestore";
 import Microlink from '@microlink/react';
 import { Tweet } from "react-twitter-widgets";
 import { resolve } from "styled-jsx/css";
@@ -22,7 +21,9 @@ import { resolve } from "styled-jsx/css";
 
 const mql = require('@microlink/mql')
 const short = require('short-uuid'); 
+const page_id = short.generate();
 const channel_id = short.generate();
+const doc_id = "5esffd4AhjWGIBFqn19U";
 const MyApiKey = "lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7";
 const userIs = "omoruyi";
 const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a131f290137f4a6746890094553.jpg?1671757148?bc=0";
@@ -30,6 +31,60 @@ const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a13
 // create a channel
 
 const ChannelComponent = () => {
+ 
+  const [channelDoc, setChannelDoc] = useState(null);
+  
+
+  async function getDocInfo() {
+    const docRef = doc(database, "channels", "5esffd4AhjWGIBFqn19U");
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      console.log("Document data:", docSnap.data());
+      setChannelDoc(docSnap.data());
+      //await updateDoc(docRef, {lock: false});
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+  }
+  
+
+  function AddToDoc(block) {
+    const [curBlock, setCurBlock] = useState(null);
+    console.log("add to doc block: ", curBlock);
+  
+    useEffect(() => {
+      async function fetchBlock() {
+        const blockRequest = await block;
+        setCurBlock(blockRequest);
+        console.log("add to doc block 2: ", curBlock);
+
+      }
+      fetchBlock();
+    }, []);
+  
+    useEffect(() => {
+      async function setNewBlock() {
+        if (curBlock != null) {
+          console.log("block is here and we will string it: ", curBlock);
+          const pBlockString = JSON.stringify(curBlock);
+          // Get a reference to the Firestore document
+          const docRef = doc(database, "channels", doc_id);
+      
+          // Retrieve the current data of the document
+          const docSnap = await getDoc(docRef);
+          console.log("docSnap: ", docSnap.data());
+      
+          // Update the document with the new block object
+          await updateDoc(docRef, {
+            blocks: [...docSnap.data().blocks, pBlockString]
+          });
+        }
+      }
+      setNewBlock();
+    }, [curBlock]);
+  }
 
   const [imageUpload, setImageUpload] = useState(null);
 
@@ -87,14 +142,26 @@ const ChannelComponent = () => {
 
 
   
+
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   const [items, setItems] = useState(["0", "1"]);
   const [inputValue, setInput] = useState("Untitled Channel");
   const [curImg, setCurImg] = useState("https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0");
   
+  // Create an empty channel object, then create a channel state
+  const emptyChannel = new channel(page_id, [userIs], channel_id);
+  //const [channelIs, setChannelIs] = useReducer(emptyChannel);
 
+  /*
+    updated_at = this.created_at; 
+    collaborators = collect([this.editors]);  
+    connections = collect([]);
+    content = collect([]); 
+    description = ""; 
+  */
 
+  //getDocInfo();
   const [curChannel, setCurChannel] = useState([]); 
 
   function AddToChannel(block) {
@@ -113,31 +180,35 @@ const ChannelComponent = () => {
   
     useEffect(() => {
       if (curBlock != null) {
-        setCurChannel(curChannel => [...curChannel, curBlock]);
+        setCurChannel(curChannel => [...curChannel, curBlock]); // edit to update the channel object
       }
     }, [curBlock]);
   }
   
-  function renderChannel(){
-    // look at the curChannel and render the contents
-    console.log("renderChannel");
-    console.log("curChannel: ", curChannel);
-    let channelContents = [];
-    for (let i = 0; i < curChannel.length; i++) {
-      console.log("curChannel[i]: ", curChannel[i]);
-      channelContents.push(curChannel[i].render());
-    }
+
+  async function createGblock(str_content, username){
+    const type_str = contentParser(str_content);
+    const blockId = short.generate();
+    const blockIs = new gBlock(username, doc_id, type_str.type, type_str.str_input, blockId);
+    console.log("gblocks content is ", blockIs.data.content)
+    await blockIs.setMQL()
+    return blockIs;
   }
+
+  let tempgBlock = createGblock("https://github.com/openai/point-e", "neb");
+  console.log(tempgBlock)
   
 
-  let arenaBlock = createPblock("https://github.com/openai/point-e", userIs);
-  AddToChannel(arenaBlock);
-  console.log("curChannel: ", curChannel);
-  AddToChannel(createPblock("https://devtrium.com/posts/async-functions-useeffect", userIs));
-  console.log("curChannel: ", curChannel);
-  AddToChannel(createPblock("https://www.are.na/block/14012125", userIs));
-  console.log("curChannel: ", curChannel);
+  // let arenaBlock = createPblock("https://github.com/openai/point-e", "neb");
+  // AddToChannel(arenaBlock);
+  // console.log("curChannel: ", curChannel);
+  // AddToChannel(createPblock("https://devtrium.com/posts/async-functions-useeffect", userIs));
+  // console.log("curChannel: ", curChannel);
+  // AddToChannel(createPblock("https://www.are.na/block/14012125", "zack"));
+  // console.log("curChannel: ", curChannel);
+  // AddToDoc(createPblock("https://www.nytimes.com/explain/2023/01/01/well/happiness-challenge", "zack"));
     
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -274,8 +345,8 @@ const ChannelComponent = () => {
         </Box>
         
 
-        <SortableContext items={curChannel} strategy={rectSortingStrategy}>
-          {curChannel.map((id) => (
+        <SortableContext items={sorter(curChannel, "author", 1)} strategy={rectSortingStrategy}> 
+          {curChannel.map((id) => ( /*.map is passing each item in curChannel along with the key item.id, to then render the content. So it just renders a div and something inside of it.*/
             <SortableItem
               key={id.uniqueId}
               id={id}
