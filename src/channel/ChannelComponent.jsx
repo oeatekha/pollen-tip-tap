@@ -10,12 +10,13 @@ import SortableItem from "./SortableContent";
 import { sorter } from "./filterUtil.js";
 import AutosizeInput from  'react-18-input-autosize';
 import Collapsible from "react-collapsible";
-import {contentParser, isValidUrl} from "./stringParser.js";
+import {contentParser, isValidUrl, urlType} from "./stringParser.js";
 import {database, storageIs} from "./firebase.js"
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
 import { doc, collection, setDoc, addDoc, DocumentReference, getDoc, updateDoc } from "firebase/firestore";
 import Microlink from '@microlink/react';
 import { useDocument, useCollection, useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
+import Dropzone from 'react-dropzone';
 
 import { Tweet } from "react-twitter-widgets";
 import { resolve } from "styled-jsx/css";
@@ -35,15 +36,57 @@ const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a13
 // create a channel
 
 const ChannelComponent = () => {
-  
-  async function createGblock(str_content, username){
+
+  function uploadFile(fileUpload) {
+    // if the file is not there, then dont return
+    if (fileUpload == null) {
+      return;
+    }
+
+    // file ref should be the ref storageIs, files/short.generate() and the original file name
+    console.log("File Nmae is ", fileUpload.name);
+    const fileRef = ref(storageIs, `files/${short.generate()}`);
+    //const fileRef = ref(storageIs, `files/${short.generate()}`);
+
+    // Upload the file to Firebase Storage
+    return uploadBytes(fileRef, fileUpload).then(snapshot => {
+      // Wait for the upload to complete
+      alert("Uploaded a file!");
+      return getDownloadURL(fileRef).then((url) => {
+        console.log(url);
+        return url;
+      });
+    });
+  }
+  function handleFileUpload(file) {
+    setFileUpload(file);
+    async function createBlock() {
+      // maybe do a content parser here and set the type, then create the block
+      const fileType = urlType(file.type);
+      const content = await uploadFile(file);
+      console.log("content is ", content);
+      const blockIs = await createGblock(content, userIs, true); // actually dont need the await but for good p
+
+      blockIs.setTitle(file.name);
+      blockIs.setType(fileType);
+      console.log("block is ", blockIs);
+      // add the block to the channel, then add the block to the channel document
+    }
+    createBlock();
+  }
+  async function createGblock(str_content, username, upload=false){
     const type_str = contentParser(str_content);
     const blockId = short.generate();
     const blockIs = new gBlock(username, doc_id, type_str.type, type_str.str_input, blockId);
     console.log("gblocks content is ", blockIs.data.content)
-    await blockIs.setMQL()
+    
+    // dont run mql if...it is an image or supported-media type then just return, else run mql
+    if(type_str.type != "text" && upload == false){
+      await blockIs.setMQL()
+    }
     return blockIs;
   }
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -89,14 +132,16 @@ const ChannelComponent = () => {
 
 
   const [channelDoc, setChannelDoc] = useState(null);
-  const [imageUpload, setImageUpload] = useState(null);
+  const [fileUpload, setFileUpload] = useState(null);
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
+  
 
   const [inputValue, setInput] = useState("Untitled Channel"); // inherit from channel
   const [chanDoc, chanLoading, chanError, chanSnapshot] = useDocumentData(chanRef); //not even set, switch loading, and error
   const [chanBlocks, blockLoading, blockError, blockSnapshot] = useCollectionData(blocksRef);
 
+  //console.log("Content Parse is ", contentParser("https://firebasestorage.googleapis.com/v0/b/pollen-rich-media.appspot.com/o/files%2F000055700002.jpgdRkoxp61vPh8vRZjKqMJhz?alt=media&token=e357a4a8-bf38-4c19-8643-55d2002997a8"));
   // Set input value to channel name
 
   useEffect(() => {
@@ -192,7 +237,7 @@ const ChannelComponent = () => {
       onDragStart={handleDragStart}
       className="container content-center mx-auto"
     >
-      <input type="file" onChange={(event) => { setImageUpload(event.target.files[0]);}}/>
+      <input type="file" onChange={(event) => { handleFileUpload(event.target.files[0]);}}/>
     
     <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>    
@@ -206,17 +251,22 @@ const ChannelComponent = () => {
     <Microlink url={"https://www.are.na/block/19574481"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>
 
+
+    <input type="file" onChange={(event) => { setFileUpload(event.target.files[0]); }}/>
+    <button onClick={uploadFile}>Upload File</button>
+    <img src={"https://firebasestorage.googleapis.com/v0/b/pollen-rich-media.appspot.com/o/files%2F8Ywy5aTc5UfYEk6Jz9vkLD?alt=media&token=2a2e08de-f8b4-4318-9416-5a510d687ac5"}></img>
+
       <Box className="ChannelContainer"
         flex={true}
         wrap={true}
         direction="row"
-        style={{maxWidth: "720px", borderRadius: "5px"}}
+        style={{maxWidth: "760px", borderRadius: "5px"}}
       >
 
-        <div class="content-left container items-center flex flex-wrap items-center justify-between w-[664px] mx-2 py-1">
+        <div class="content-left container items-center flex flex-wrap items-center justify-between w-[736px]  py-1">
           
         
-            <div class="flex space-x-2 pt-2 mx-2">
+            <div class="flex space-x-2 pt-2 mx-4">
               {/*Take in the value from the channel of the current title
               and update the title of the channel when the user is done typing
               */}
@@ -254,8 +304,8 @@ const ChannelComponent = () => {
 
         </div>
         
-        <Collapsible overflowWhenOpen='visible' transitionTime='100' trigger={<hr class="py-1 mx-4 w-[654px]"></hr>}>
-          <div class="content-left container flex flex-wrap items-center justify-between w-[665px] mx-2 pb-1">
+        <Collapsible overflowWhenOpen='visible' transitionTime='100' trigger={<hr class="mx-[12px] py-1 w-[720px]"></hr>}>
+          <div class="content-left container flex flex-wrap items-center justify-between w-[728px] mx-2 pb-1">
               <div className="FilterBlock">
                 {Example()}
                 {Filter()}
@@ -276,16 +326,22 @@ const ChannelComponent = () => {
               width: "352px",
               height: "352px",
               borderRadius: "3px",
-              backgroundColor: "#f7f7f7",
+              margin: "10px",
+              backgroundColor: "#ECECEC",
               fontSize: "14px",
               alignContent: "center",
             }}
           >
+            
             <textarea value={isInput} placeholder={"Start typing here..."} onChange={(e) => setisInput(e.target.value)} className="BlockInput" id="message" style={{ width: "95%", padding: "10px", height: "95%", margin: "10px", fontSize: '16px' }} ></textarea>
-            <div className="absolute bottom-0 w-[300px] flex justify-between pb-4">
-              <button className="bg-neutral-600 hover:bg-neutral-700 border-none shadow-md text-white font-semibold py-1 px-2 rounded-md">
-                Drop/Upload File
-              </button>
+            <div className="absolute bottom-0 w-[312px] flex justify-between pb-4">
+
+              <label htmlFor="myFile" className="items-center cursor-pointer bg-neutral-600 hover:bg-neutral-700 border-none shadow-md text-white font-bold py-1 px-2 rounded-md text-base m-0.5  flex justify-center">
+                Upload File
+              </label>
+              <input id="myFile" style={{display: 'none'}} type="file" onChange={(event) => { handleFileUpload(event.target.files[0]); }}/>
+              {console.log("fileUpload: ", fileUpload)}
+
               <button className="bg-neutral-400 hover:bg-neutral-500 border-none shadow-md text-white font-semibold py-1 px-2 rounded-md">
                 +Add
               </button>

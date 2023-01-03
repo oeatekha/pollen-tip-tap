@@ -28,7 +28,7 @@ export function urlType(str) {
         }
         return "video";
     }
-    else if(str.includes(".png") || str.includes("jpg") || str.includes("jpeg") || str.includes("gif") || str.includes("svg") || str.includes("bmp") || str.includes("tiff")){
+    else if(str.includes("png") || str.includes("jpg") || str.includes("jpeg") || str.includes("gif") || str.includes("svg") || str.includes("bmp") || str.includes("tiff")){
         return "image";
     }
     else if(str.includes("twitter")){
@@ -37,7 +37,7 @@ export function urlType(str) {
     else if(str.includes("instagram")){
         return "instagram";
     }
-    else if(str.includes("mp3") || str.includes("mp4") || str.includes("mov") || str.includes("pdf")){
+    else if(str.includes("mp3") || str.includes("mp4") || str.includes("mov") || str.includes("mpeg") || str.includes("pdf")){
         return "supported-media";
     }  
     else{

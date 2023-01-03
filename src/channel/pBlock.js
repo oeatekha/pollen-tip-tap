@@ -80,8 +80,8 @@ export class gBlock {
             type: type,
             content: content,
             unique_id: unique_id,
-            thumbnail: null,
-            title: this.setThumbnail(type),
+            thumbnail: this.setThumbnail(type),
+            title: "",
             created_at: Math.floor(Date.now() / 1000),
             updated_at: Math.floor(Date.now() / 1000),
             comments: [],
@@ -96,6 +96,14 @@ export class gBlock {
 
     set(docRef) {
         return docRef.set(this.data);
+    }
+
+    setTitle(title) {
+        this.data.title = title;
+    }
+
+    setType(type) {
+        this.data.type = type;
     }
 
     setThumbnail(type) {

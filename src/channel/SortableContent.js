@@ -15,8 +15,8 @@ const SortableContent = (props) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-    width: "320px",
-    height: "320px",
+    width: "352px",
+    height: "352px",
     borderRadius: "5px",
     backgroundColor: "#transparent",
     margin: "10px",

@@ -182,14 +182,14 @@ button:focus {
 }
 
 .BlockContainer {
-  width: 320px;
-  height: 320px;
-  background-color: #f7f7f7;
+  width: 352px;
+  height: 352px;
+  background-color: #ECECEC;
   border-radius: 3px;
 }
 
 .ChannelDragHandle{
-  left: -140px;
+  left: -155px;
   top: 3px;
 }
 
@@ -208,8 +208,8 @@ button:focus {
 }
 
 .ChannelContainer{
-  padding-left: 15px;
-  padding-top: 15px;
+  padding-left: 10px;
+  padding-top: 10px;
   background-color: transparent;
 
 }
@@ -276,6 +276,9 @@ button:focus {
   font-size: small;
 }
 
+.input#file-upload-button {
+  display: none;
+}
 
 
 input[type="search"]::-webkit-search-cancel-button {
