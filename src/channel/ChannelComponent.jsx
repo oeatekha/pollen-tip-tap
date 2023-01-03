@@ -35,77 +35,6 @@ const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a13
 // create a channel
 
 const ChannelComponent = () => {
- 
-  async function getDocInfo() {
-    const docRef = doc(database, "channels", "5esffd4AhjWGIBFqn19U");
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      setChannelDoc(docSnap.data());
-      //await updateDoc(docRef, {lock: false});
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-  }
-
-  function AddToDoc(block) {
-    const [curBlock, setCurBlock] = useState(null);
-    console.log("add to doc block: ", curBlock);
-  
-    useEffect(() => {
-      async function fetchBlock() {
-        const blockRequest = await block;
-        setCurBlock(blockRequest);
-        console.log("add to doc block 2: ", curBlock);
-
-      }
-      fetchBlock();
-    }, []);
-  
-    useEffect(() => {
-      async function setNewBlock() {
-        if (curBlock != null) {
-          console.log("block is here and we will string it: ", curBlock);
-          const pBlockString = JSON.stringify(curBlock);
-          // Get a reference to the Firestore document
-          const docRef = doc(database, "channels", doc_id);
-      
-          // Retrieve the current data of the document
-          const docSnap = await getDoc(docRef);
-          console.log("docSnap: ", docSnap.data());
-      
-          // Update the document with the new block object
-          await updateDoc(docRef, {
-            blocks: [...docSnap.data().blocks, pBlockString]
-          });
-        }
-      }
-      setNewBlock();
-    }, [curBlock]);
-  }
-
-  function AddToChannel(block) {
-    console.log("addToChannel");
-    const blockRef = useRef(block);
-    const [curBlock, setCurBlock] = useState(null);
-  
-    useEffect(() => {
-      async function fetchBlock() {
-        const blockRequest = await block;
-        setCurBlock(blockRequest);
-        console.log("curBlock: ", curBlock);
-      }
-      fetchBlock();
-    }, []);
-  
-    useEffect(() => {
-      if (curBlock != null) {
-        setCurChannel(curChannel => [...curChannel, curBlock]); // edit to update the channel object
-      }
-    }, [curBlock]);
-  }
   
   async function createGblock(str_content, username){
     const type_str = contentParser(str_content);
@@ -115,58 +44,6 @@ const ChannelComponent = () => {
     await blockIs.setMQL()
     return blockIs;
   }
-
-  function AddToDocCollection(block) {
-    const [curBlock, setCurBlock] = useState(null);
-    console.log("add to doc block to collection: ", curBlock);
-  
-    useEffect(() => {
-      async function fetchBlock() {
-        const blockRequest = await block;
-        setCurBlock(blockRequest);
-      }
-      fetchBlock();
-    }, []);
-  
-    useEffect(() => {
-      async function setNewBlock() {
-        if (curBlock != null) {
-          console.log("block is here and we will add it a subcollec: ", curBlock);
-
-          const docRef1 = doc(database, "channels", doc_id);
-          const docSnap = await getDoc(docRef1);
-
-          if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-            setChannelDoc(docSnap.data());
-            //await updateDoc(docRef, {lock: false});
-          }
-
-
-          // Get a reference to the Firestore document
-          const docRef = doc(database, "channels", doc_id);
-          const subColRef = collection(docRef, "blocks"); 
-          const subBlockRef = doc(subColRef, curBlock.data.unique_id);
-      
-          // Update the document with the new block object
-          // await addDoc(subColRef, curBlock.data);
-          await setDoc(subBlockRef, curBlock.data);
-          // after the doc is added we need to update the channel object with a list of ids of the blocks
-          await updateDoc(docRef, {blocks: [...docSnap.data().blocks, curBlock.data.unique_id]});
-        }
-      }
-      setNewBlock();
-    }, [curBlock]);
-  }
-
-  //let tempgBlock = createGblock("https://github.com/filecoin-project/devgrants/issues/706", "omo");
-  //console.log(tempgBlock)
-  //AddToDocCollection(tempgBlock);
-
-
-  // We need to call the channel data from the database, and then set it to the channel object
-  // We need to call the blocks data from the database, and then set it to the channel objec
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -215,17 +92,28 @@ const ChannelComponent = () => {
   const [imageUpload, setImageUpload] = useState(null);
   let [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
-  const [items, setItems] = useState(["0", "1"]);
-  const [inputValue, setInput] = useState("Untitled Channel");
-  const [curImg, setCurImg] = useState("https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0");
-  const [curChannel, setCurChannel] = useState([]); 
 
+  const [inputValue, setInput] = useState("Untitled Channel"); // inherit from channel
+  const [chanDoc, chanLoading, chanError, chanSnapshot] = useDocumentData(chanRef); //not even set, switch loading, and error
+  const [chanBlocks, blockLoading, blockError, blockSnapshot] = useCollectionData(blocksRef);
 
-  // Use DocumentData Hook to get the channel data from the database
-  
-  const [chanDoc, setChanDoc] = useDocumentData(chanRef); //not even set, switch loading, and error
-  const [chanBlocks, setChanBlocks] = useCollectionData(blocksRef);
-  console.log("at beginning of render, chanDoc is ", chanDoc);
+  // Set input value to channel name
+
+  useEffect(() => {
+    async function fetchChannel() {
+      const channelRequest = await getDoc(chanRef);
+      console.log("channel request is ", channelRequest.data().title)
+      
+      setInput(channelRequest.data().title);
+    }
+    fetchChannel();
+  }, []);
+
+  useEffect(() => {
+    if(inputValue != "Untitled Channel"){
+      updateTitle(inputValue);
+    }
+  }, [inputValue]);
 
   function orderedBlocks() {
     // Use map to get the data of each block, given the id of the block
@@ -238,9 +126,64 @@ const ChannelComponent = () => {
     return blocks;
   }
 
+  function AddToDocCollection(block) {
+    const [curBlock, setCurBlock] = useState(null);
+    console.log("add to doc block to collection: ", curBlock);
+  
+    useEffect(() => {
+      async function fetchBlock() {
+        const blockRequest = await block;
+        setCurBlock(blockRequest);
+      }
+      fetchBlock();
+    }, []);
+  
+    useEffect(() => {
+      async function setNewBlock() {
+        if (curBlock != null) {
+          console.log("block is here and we will add it a subcollec: ", curBlock);
+
+          const docRef1 = doc(database, "channels", doc_id);
+          const docSnap = await getDoc(docRef1);
+
+          if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            setChannelDoc(docSnap.data());
+            //await updateDoc(docRef, {lock: false});
+          }
+
+
+          // Get a reference to the Firestore document
+          const docRef = doc(database, "channels", doc_id);
+          const subColRef = collection(docRef, "blocks"); 
+          const subBlockRef = doc(subColRef, curBlock.data.unique_id);
+      
+          // Update the document with the new block object
+          // await addDoc(subColRef, curBlock.data);
+          await setDoc(subBlockRef, curBlock.data);
+          // after the doc is added we need to update the channel object with a list of ids of the blocks
+          await updateDoc(docRef, {blocks: [...docSnap.data().blocks, curBlock.data.unique_id]});
+        }
+      }
+      setNewBlock();
+    }, [curBlock]);
+  }
+
+  async function updateTitle(newTitle) {
+    try{
+      await updateDoc(chanRef, {title: newTitle});
+    }
+    catch (error) {
+      console.log("error updating channel name: ", error);
+    }
+  }
+
+
+  // let tempgBlock = createGblock("https://www.entropyplus.xyz/image/72901/", "eesha");
+  // console.log(tempgBlock)
+  // AddToDocCollection(tempgBlock);
 
   return (
-    
     
     <DndContext
       sensors={sensors}
@@ -249,11 +192,7 @@ const ChannelComponent = () => {
       onDragStart={handleDragStart}
       className="container content-center mx-auto"
     >
-      <input 
-    type="file" 
-    onChange={(event) => { setImageUpload(event.target.files[0]);
-    
-    }}/>
+      <input type="file" onChange={(event) => { setImageUpload(event.target.files[0]);}}/>
     
     <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>    
@@ -267,13 +206,6 @@ const ChannelComponent = () => {
     <Microlink url={"https://www.are.na/block/19574481"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>
 
-    {console.log("channelDoc: ", chanDoc)}
-    {console.log("channelBlocks: ", chanBlocks)}
-    {console.log(orderedBlocks())}
-
-
-
-
       <Box className="ChannelContainer"
         flex={true}
         wrap={true}
@@ -285,13 +217,20 @@ const ChannelComponent = () => {
           
         
             <div class="flex space-x-2 pt-2 mx-2">
+              {/*Take in the value from the channel of the current title
+              and update the title of the channel when the user is done typing
+              */}
+              
               <AutosizeInput
                 class="flex space-x-4 pl-1 h-[30px] w-auto max-w-[140px] truncate resize-none font-medium font-size-small text-gray-400"
                 autocomplete="off"
+                placeholder="Untitled"
                 name="form-field-name"
                 value={inputValue}
                 onChange={function(event) {
-                  setInput(event.target.value) 
+                  // update the title of the channel
+                  setInput(event.target.value)
+                  updateTitle(event.target.value)
                 }}
               />         
 
@@ -332,22 +271,25 @@ const ChannelComponent = () => {
           {/*Div FlexBox containing the example filter and inertia dropdown menus, the example and filter in a div and the inertia in another div at the end */}
             
           {" "}
-          <div className="AdditionBlock"
+          <div className="AdditionBlock relative flex justify-center"
             style={{
-              width: "320px",
-              height: "320px",
-              //padding:"10px",
-              borderRadius: "5px",
+              width: "352px",
+              height: "352px",
+              borderRadius: "3px",
               backgroundColor: "#f7f7f7",
-              margin: "10px",
-              padding: "0px",
+              fontSize: "14px",
+              alignContent: "center",
             }}
           >
-            <textarea value={isInput} onChange={(e) => setisInput(e.target.value)} className="BlockInput" id="message" style={{ width: "90%", margin: "10px" }} ></textarea>
-            <p></p>
-            <Button style={{ fontWeight:"500", left: "50px",  textAlign: "center", fontSize: "14px" }}>
-              +Add Block
-            </Button>
+            <textarea value={isInput} placeholder={"Start typing here..."} onChange={(e) => setisInput(e.target.value)} className="BlockInput" id="message" style={{ width: "95%", padding: "10px", height: "95%", margin: "10px", fontSize: '16px' }} ></textarea>
+            <div className="absolute bottom-0 w-[300px] flex justify-between pb-4">
+              <button className="bg-neutral-600 hover:bg-neutral-700 border-none shadow-md text-white font-semibold py-1 px-2 rounded-md">
+                Drop/Upload File
+              </button>
+              <button className="bg-neutral-400 hover:bg-neutral-500 border-none shadow-md text-white font-semibold py-1 px-2 rounded-md">
+                +Add
+              </button>
+            </div>
           </div>
         </Box>
         
@@ -356,7 +298,7 @@ const ChannelComponent = () => {
           <SortableContext items={orderedBlocks()} strategy={rectSortingStrategy}> 
             {orderedBlocks().map((id) => (
               <SortableItem
-                key={id.uniqueId}
+                key={id.unique_id}
                 id={id}
                 handle={true}
                 value={id}
