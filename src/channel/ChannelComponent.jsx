@@ -181,13 +181,32 @@ const ChannelComponent = () => {
     const { active, over } = event;
     // to make work with c.hannel
     if (active.id !== over.id) {
-      setCurChannel((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
+      console.log("active id: ", active.id.unique_id);
+      console.log("over id: ", over.id.unique_id);
 
-        console.log(items);
-        return arrayMove(items, oldIndex, newIndex);
-      });
+      const swap_item1 = active.id.unique_id; // = "fewf232321"
+      const swap_item2 = over.id.unique_id; // = "fqr3io23nr"
+      
+      // We need to swap the blocks in the channel document
+      async function swapBlocks() {
+        // Get a reference to the Firestore document
+        const docRef = doc(database, "channels", doc_id);
+        const docSnap = await getDoc(docRef);
+        const blocks = docSnap.data().blocks;
+
+        // Get the index of the blocks
+        let active_index = blocks.indexOf(swap_item1);
+        let over_index = blocks.indexOf(swap_item2);
+
+
+        let swapped = arrayMove(blocks, active_index, over_index);
+        console.log("original order: ", blocks);
+        console.log("swapped: ", swapped);
+
+        await updateDoc(docRef, {blocks: swapped});
+      }
+
+      swapBlocks();
     }
   };
 
@@ -204,8 +223,9 @@ const ChannelComponent = () => {
 
   // Use DocumentData Hook to get the channel data from the database
   
-  const [chanDoc, setChanDoc] = useDocumentData(chanRef);
+  const [chanDoc, setChanDoc] = useDocumentData(chanRef); //not even set, switch loading, and error
   const [chanBlocks, setChanBlocks] = useCollectionData(blocksRef);
+  console.log("at beginning of render, chanDoc is ", chanDoc);
 
   function orderedBlocks() {
     // Use map to get the data of each block, given the id of the block
@@ -332,16 +352,18 @@ const ChannelComponent = () => {
         </Box>
         
         {/* chanDoc.blocks */}
-        <SortableContext items={sorter(curChannel, "author", 1)} strategy={rectSortingStrategy}> 
-          {curChannel.map((id) => ( /*.map is passing each item in curChannel along with the key item.id, to then render the content. So it just renders a div and something inside of it.*/
-            <SortableItem
-              key={id.uniqueId}
-              id={id}
-              handle={true}
-              value={id}
-            />
-          ))}
-        </SortableContext>
+        {chanBlocks !== undefined ? (
+          <SortableContext items={orderedBlocks()} strategy={rectSortingStrategy}> 
+            {orderedBlocks().map((id) => (
+              <SortableItem
+                key={id.uniqueId}
+                id={id}
+                handle={true}
+                value={id}
+              />
+            ))}
+          </SortableContext>) : (<div>Loading</div>
+        )}
       </Box>
     </DndContext>
   );
