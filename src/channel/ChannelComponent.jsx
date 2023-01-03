@@ -13,8 +13,10 @@ import Collapsible from "react-collapsible";
 import {contentParser, isValidUrl} from "./stringParser.js";
 import {database, storageIs} from "./firebase.js"
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
-import { doc, DocumentReference, getDoc, updateDoc } from "firebase/firestore";
+import { doc, collection, setDoc, addDoc, DocumentReference, getDoc, updateDoc } from "firebase/firestore";
 import Microlink from '@microlink/react';
+import { useDocument, useCollection, useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
+
 import { Tweet } from "react-twitter-widgets";
 import { resolve } from "styled-jsx/css";
 
@@ -24,6 +26,8 @@ const short = require('short-uuid');
 const page_id = short.generate();
 const channel_id = short.generate();
 const doc_id = "5esffd4AhjWGIBFqn19U";
+const chanRef = doc(database, "channels", doc_id);
+const blocksRef = collection(chanRef, "blocks"); 
 const MyApiKey = "lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7";
 const userIs = "omoruyi";
 const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a131f290137f4a6746890094553.jpg?1671757148?bc=0";
@@ -32,9 +36,6 @@ const imgURL = "https://d2w9rnfcy7mm78.cloudfront.net/19541850/original_ad3f7a13
 
 const ChannelComponent = () => {
  
-  const [channelDoc, setChannelDoc] = useState(null);
-  
-
   async function getDocInfo() {
     const docRef = doc(database, "channels", "5esffd4AhjWGIBFqn19U");
     const docSnap = await getDoc(docRef);
@@ -48,7 +49,6 @@ const ChannelComponent = () => {
       console.log("No such document!");
     }
   }
-  
 
   function AddToDoc(block) {
     const [curBlock, setCurBlock] = useState(null);
@@ -86,84 +86,6 @@ const ChannelComponent = () => {
     }, [curBlock]);
   }
 
-  const [imageUpload, setImageUpload] = useState(null);
-
-  function uploadFile(file) {
-    // if the file is not there, then dont return
-    if (imageUpload == null) {
-      return;
-    }
-
-    const fileRef = ref(storageIs, `files/${short.generate()}`);
-
-    // Upload the file to Firebase Storage
-    return uploadBytes(fileRef, imageUpload).then(snapshot => {
-      // Wait for the upload to complete
-      alert("Uploaded a file!");
-      getDownloadURL(fileRef).then((url) => {
-        console.log(url);
-        setCurImg(url);
-        return url;
-      });
-    });
-  }
-
-  function uploadFromURL(urlName) {
-    // Generate a unique file name for the file
-    const fileIs = ref(storageIs, `files/${short.generate()}`);
-
-    // Fetch the file from the URL
-    return fetch(urlName)
-      .then(response => response.blob())
-      .then(fileBlob => {
-        // Upload the file to Firebase Storage
-        return uploadBytes(fileIs, fileBlob);
-    
-      })
-      .then(snapshot => {
-        // Wait for the upload to complete
-        alert("Uploaded from URL!");
-        console.log(getDownloadURL(fileIs));
-        return getDownloadURL(fileIs).then((url) => {
-          console.log(url);
-          setCurImg(url); //probably dont need this one...
-          return url;
-        });
-      });
-  }
-
-  async function createPblock(str_content, username){
-    const type_str = contentParser(str_content);
-    const blockId = short.generate();
-    const blockIs = new pBlock(username, channel_id, type_str.type, type_str.str_input, blockId);
-    await blockIs.setMQL()
-    return blockIs;
-  }
-
-
-  
-
-  let [isInput, setisInput] = useState("");
-  const [activeId, setActiveId] = useState(null);
-  const [items, setItems] = useState(["0", "1"]);
-  const [inputValue, setInput] = useState("Untitled Channel");
-  const [curImg, setCurImg] = useState("https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0");
-  
-  // Create an empty channel object, then create a channel state
-  const emptyChannel = new channel(page_id, [userIs], channel_id);
-  //const [channelIs, setChannelIs] = useReducer(emptyChannel);
-
-  /*
-    updated_at = this.created_at; 
-    collaborators = collect([this.editors]);  
-    connections = collect([]);
-    content = collect([]); 
-    description = ""; 
-  */
-
-  //getDocInfo();
-  const [curChannel, setCurChannel] = useState([]); 
-
   function AddToChannel(block) {
     console.log("addToChannel");
     const blockRef = useRef(block);
@@ -185,7 +107,6 @@ const ChannelComponent = () => {
     }, [curBlock]);
   }
   
-
   async function createGblock(str_content, username){
     const type_str = contentParser(str_content);
     const blockId = short.generate();
@@ -195,20 +116,56 @@ const ChannelComponent = () => {
     return blockIs;
   }
 
-  let tempgBlock = createGblock("https://github.com/openai/point-e", "neb");
-  console.log(tempgBlock)
+  function AddToDocCollection(block) {
+    const [curBlock, setCurBlock] = useState(null);
+    console.log("add to doc block to collection: ", curBlock);
   
+    useEffect(() => {
+      async function fetchBlock() {
+        const blockRequest = await block;
+        setCurBlock(blockRequest);
+      }
+      fetchBlock();
+    }, []);
+  
+    useEffect(() => {
+      async function setNewBlock() {
+        if (curBlock != null) {
+          console.log("block is here and we will add it a subcollec: ", curBlock);
 
-  // let arenaBlock = createPblock("https://github.com/openai/point-e", "neb");
-  // AddToChannel(arenaBlock);
-  // console.log("curChannel: ", curChannel);
-  // AddToChannel(createPblock("https://devtrium.com/posts/async-functions-useeffect", userIs));
-  // console.log("curChannel: ", curChannel);
-  // AddToChannel(createPblock("https://www.are.na/block/14012125", "zack"));
-  // console.log("curChannel: ", curChannel);
-  // AddToDoc(createPblock("https://www.nytimes.com/explain/2023/01/01/well/happiness-challenge", "zack"));
-    
+          const docRef1 = doc(database, "channels", doc_id);
+          const docSnap = await getDoc(docRef1);
 
+          if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+            setChannelDoc(docSnap.data());
+            //await updateDoc(docRef, {lock: false});
+          }
+
+
+          // Get a reference to the Firestore document
+          const docRef = doc(database, "channels", doc_id);
+          const subColRef = collection(docRef, "blocks"); 
+          const subBlockRef = doc(subColRef, curBlock.data.unique_id);
+      
+          // Update the document with the new block object
+          // await addDoc(subColRef, curBlock.data);
+          await setDoc(subBlockRef, curBlock.data);
+          // after the doc is added we need to update the channel object with a list of ids of the blocks
+          await updateDoc(docRef, {blocks: [...docSnap.data().blocks, curBlock.data.unique_id]});
+        }
+      }
+      setNewBlock();
+    }, [curBlock]);
+  }
+
+  //let tempgBlock = createGblock("https://github.com/filecoin-project/devgrants/issues/706", "omo");
+  //console.log(tempgBlock)
+  //AddToDocCollection(tempgBlock);
+
+
+  // We need to call the channel data from the database, and then set it to the channel object
+  // We need to call the blocks data from the database, and then set it to the channel objec
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -234,6 +191,34 @@ const ChannelComponent = () => {
     }
   };
 
+
+  const [channelDoc, setChannelDoc] = useState(null);
+  const [imageUpload, setImageUpload] = useState(null);
+  let [isInput, setisInput] = useState("");
+  const [activeId, setActiveId] = useState(null);
+  const [items, setItems] = useState(["0", "1"]);
+  const [inputValue, setInput] = useState("Untitled Channel");
+  const [curImg, setCurImg] = useState("https://d2w9rnfcy7mm78.cloudfront.net/16282437/original_dcabb93a23b54b11f7a09ee29fad2bb1.jpg?1651354853?bc=0");
+  const [curChannel, setCurChannel] = useState([]); 
+
+
+  // Use DocumentData Hook to get the channel data from the database
+  
+  const [chanDoc, setChanDoc] = useDocumentData(chanRef);
+  const [chanBlocks, setChanBlocks] = useCollectionData(blocksRef);
+
+  function orderedBlocks() {
+    // Use map to get the data of each block, given the id of the block
+    if (chanDoc == null || chanBlocks == null) {
+      return;
+    }
+
+    const blocks = chanDoc.blocks.map(id => chanBlocks.find(block => block.unique_id === id));
+    console.log("sorted blocks are ", blocks);
+    return blocks;
+  }
+
+
   return (
     
     
@@ -249,7 +234,6 @@ const ChannelComponent = () => {
     onChange={(event) => { setImageUpload(event.target.files[0]);
     
     }}/>
-    <button onClick={uploadFile}>Upload</button>
     
     <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>    
@@ -263,7 +247,10 @@ const ChannelComponent = () => {
     <Microlink url={"https://www.are.na/block/19574481"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>
 
-    <button onClick={() => {uploadFromURL("https://images.weserv.nl/?url=https%3A%2F%2Fiad.microlink.io%2F5cHGxyT3sh654wjScYN4Km0k4wxjbBeTmcD_1hX1udxs6Ca147uCDwYOYe_4kXeq3OCKIv3pFlONICjI0tPEyg.png&l=9&af&il&n=-1")}}>Upload from URL</button>
+    {console.log("channelDoc: ", chanDoc)}
+    {console.log("channelBlocks: ", chanBlocks)}
+    {console.log(orderedBlocks())}
+
 
 
 
@@ -344,7 +331,7 @@ const ChannelComponent = () => {
           </div>
         </Box>
         
-
+        {/* chanDoc.blocks */}
         <SortableContext items={sorter(curChannel, "author", 1)} strategy={rectSortingStrategy}> 
           {curChannel.map((id) => ( /*.map is passing each item in curChannel along with the key item.id, to then render the content. So it just renders a div and something inside of it.*/
             <SortableItem
