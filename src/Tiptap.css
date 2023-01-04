@@ -197,8 +197,9 @@ button:focus {
   background-color: #ffffff;
   font-size: small;
   padding: 10px;
-  border-radius: 3px;
-  height: 80%;
+  height: 332px;
+  width: 332px;
+  border-radius: 5px;
   resize: none;
 }
 

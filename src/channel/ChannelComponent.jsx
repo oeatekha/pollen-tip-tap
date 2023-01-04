@@ -16,7 +16,8 @@ import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
 import { doc, collection, setDoc, addDoc, DocumentReference, getDoc, updateDoc } from "firebase/firestore";
 import Microlink from '@microlink/react';
 import { useDocument, useCollection, useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
-import Dropzone from 'react-dropzone';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 import { Tweet } from "react-twitter-widgets";
 import { resolve } from "styled-jsx/css";
@@ -51,29 +52,79 @@ const ChannelComponent = () => {
     // Upload the file to Firebase Storage
     return uploadBytes(fileRef, fileUpload).then(snapshot => {
       // Wait for the upload to complete
-      alert("Uploaded a file!");
+      // alert("Uploaded a file!");
       return getDownloadURL(fileRef).then((url) => {
         console.log(url);
         return url;
       });
     });
   }
+
+  // Function using toast to display the loading process of the file
+
+  function handleTextUpload(text) {
+    async function createBlock() {
+      const load = toast.loading('Loading...');
+      const blockIs = await createGblock(text, userIs);
+      
+      toast.dismiss(load);
+      toast.success('Successfully Uploaded!');
+
+      // Update the document with the new block parameters
+      blockIs.setTitle("untitled");
+      blockIs.setType("text");
+      console.log("block is ", blockIs);
+
+      // Add the block to the channel, then add the block to the channel document      
+      const docRef = doc(database, "channels", doc_id);
+      const subColRef = collection(docRef, "blocks"); 
+      const subBlockRef = doc(subColRef, blockIs.data.unique_id);
+      let adding = toast.loading('Adding Block...');
+      const docSnap = await getDoc(docRef);
+
+      await setDoc(subBlockRef, blockIs.data);
+      await updateDoc(docRef, {blocks: [...docSnap.data().blocks, blockIs.data.unique_id]});
+      toast.dismiss(adding);
+      toast.success('Block added!');
+      setisInput("");
+    }
+
+    createBlock();
+  }
+
   function handleFileUpload(file) {
     setFileUpload(file);
     async function createBlock() {
-      // maybe do a content parser here and set the type, then create the block
-      const fileType = urlType(file.type);
-      const content = await uploadFile(file);
-      console.log("content is ", content);
-      const blockIs = await createGblock(content, userIs, true); // actually dont need the await but for good p
 
+      // Upload content to firebase storage
+      const fileType = urlType(file.type);
+      const load = toast.loading('Loading...');
+      const content = await uploadFile(file);
+      const blockIs = await createGblock(content, userIs, true); // actually dont need the await but for good p
+      toast.dismiss(load);
+      toast.success('Successfully Uploaded!');
+
+      // Update the document with the new block parameters
       blockIs.setTitle(file.name);
       blockIs.setType(fileType);
       console.log("block is ", blockIs);
-      // add the block to the channel, then add the block to the channel document
+
+      // Add the block to the channel, then add the block to the channel document      
+      const docRef = doc(database, "channels", doc_id);
+      const subColRef = collection(docRef, "blocks"); 
+      const subBlockRef = doc(subColRef, blockIs.data.unique_id);
+      let adding = toast.loading('Adding Block...');
+      const docSnap = await getDoc(docRef);
+
+      await setDoc(subBlockRef, blockIs.data);
+      await updateDoc(docRef, {blocks: [...docSnap.data().blocks, blockIs.data.unique_id]});
+      toast.dismiss(adding);
+      toast.success('Block added!');
     }
+
     createBlock();
   }
+  
   async function createGblock(str_content, username, upload=false){
     const type_str = contentParser(str_content);
     const blockId = short.generate();
@@ -133,7 +184,7 @@ const ChannelComponent = () => {
 
   const [channelDoc, setChannelDoc] = useState(null);
   const [fileUpload, setFileUpload] = useState(null);
-  let [isInput, setisInput] = useState("");
+  const [isInput, setisInput] = useState("");
   const [activeId, setActiveId] = useState(null);
   
 
@@ -171,7 +222,7 @@ const ChannelComponent = () => {
     return blocks;
   }
 
-  function AddToDocCollection(block) {
+  const AddToDocCollection = (block) => {
     const [curBlock, setCurBlock] = useState(null);
     console.log("add to doc block to collection: ", curBlock);
   
@@ -205,14 +256,19 @@ const ChannelComponent = () => {
       
           // Update the document with the new block object
           // await addDoc(subColRef, curBlock.data);
+          const load = toast.loading('Loading...');
           await setDoc(subBlockRef, curBlock.data);
           // after the doc is added we need to update the channel object with a list of ids of the blocks
           await updateDoc(docRef, {blocks: [...docSnap.data().blocks, curBlock.data.unique_id]});
+          toast.dismiss(load);
+          toast.success('Block added!');
         }
       }
       setNewBlock();
     }, [curBlock]);
   }
+
+  // AddToDocCollection(createGblock("https://github.com/fullstackreact/google-maps-react/issues/426", "eesha"));
 
   async function updateTitle(newTitle) {
     try{
@@ -222,6 +278,8 @@ const ChannelComponent = () => {
       console.log("error updating channel name: ", error);
     }
   }
+
+
 
 
   // let tempgBlock = createGblock("https://www.entropyplus.xyz/image/72901/", "eesha");
@@ -237,25 +295,14 @@ const ChannelComponent = () => {
       onDragStart={handleDragStart}
       className="container content-center mx-auto"
     >
-      <input type="file" onChange={(event) => { handleFileUpload(event.target.files[0]);}}/>
     
     <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} apiKey={MyApiKey} media='iframe' size='large'/>
-    <div class="h-10"></div>    
-    <img className= "object-cover rounded-xl w-[352px] h-[352px]" src={imgURL}></img>
-    <div class="h-10"></div>  
-
     <div class="h-10"></div>    
     <div class="max-h-[352px] max-w-[352px]">
     {/*}  <Tweet tweetId="1607152081122562049" options={{ height: "200" }} /> */}
     </div>
     <Microlink url={"https://www.are.na/block/19574481"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>
-
-
-    <input type="file" onChange={(event) => { setFileUpload(event.target.files[0]); }}/>
-    <button onClick={uploadFile}>Upload File</button>
-    <img src={"https://firebasestorage.googleapis.com/v0/b/pollen-rich-media.appspot.com/o/files%2F8Ywy5aTc5UfYEk6Jz9vkLD?alt=media&token=2a2e08de-f8b4-4318-9416-5a510d687ac5"}></img>
-
       <Box className="ChannelContainer"
         flex={true}
         wrap={true}
@@ -263,6 +310,7 @@ const ChannelComponent = () => {
         style={{maxWidth: "760px", borderRadius: "5px"}}
       >
 
+        <Toaster containerStyle={{position: 'relative', left: '50%', top: 20 }} reverseOrder={false} toastOptions={{className: "toast"}}/>
         <div class="content-left container items-center flex flex-wrap items-center justify-between w-[736px]  py-1">
           
         
@@ -325,7 +373,7 @@ const ChannelComponent = () => {
             style={{
               width: "352px",
               height: "352px",
-              borderRadius: "3px",
+              borderRadius: "5px",
               margin: "10px",
               backgroundColor: "#ECECEC",
               fontSize: "14px",
@@ -333,16 +381,16 @@ const ChannelComponent = () => {
             }}
           >
             
-            <textarea value={isInput} placeholder={"Start typing here..."} onChange={(e) => setisInput(e.target.value)} className="BlockInput" id="message" style={{ width: "95%", padding: "10px", height: "95%", margin: "10px", fontSize: '16px' }} ></textarea>
-            <div className="absolute bottom-0 w-[312px] flex justify-between pb-4">
+            <textarea value={isInput} placeholder={"Start typing here or paste link..."} onChange={(e) => setisInput(e.target.value)} onKeyDown={(e) => {if (e.key === 'Enter' && !e.shiftKey) handleTextUpload(isInput)}} className="BlockInput" id="message" style={{ width: "95%", padding: "12px", height: "95%", margin: "8.5px", fontSize: '16px', borderRadius: "3px" }} ></textarea>            {console.log("isInput: ", isInput)}
+            <div className="absolute bottom-0 w-[312px] flex justify-between pb-5">
 
-              <label htmlFor="myFile" className="items-center cursor-pointer bg-neutral-600 hover:bg-neutral-700 border-none shadow-md text-white font-bold py-1 px-2 rounded-md text-base m-0.5  flex justify-center">
+              <label htmlFor="myFile" className="items-center cursor-pointer bg-neutral-600 hover:bg-neutral-700 border-none shadow-md text-white font-medium py-1 px-2 rounded-md text-base m-0.5  flex justify-center">
                 Upload File
               </label>
               <input id="myFile" style={{display: 'none'}} type="file" onChange={(event) => { handleFileUpload(event.target.files[0]); }}/>
               {console.log("fileUpload: ", fileUpload)}
 
-              <button className="bg-neutral-400 hover:bg-neutral-500 border-none shadow-md text-white font-semibold py-1 px-2 rounded-md">
+              <button onClick={() => handleTextUpload(isInput)} className="bg-neutral-400 hover:bg-neutral-500 border-none shadow-md text-white font-medium py-1 px-2 rounded-md">
                 +Add
               </button>
             </div>
