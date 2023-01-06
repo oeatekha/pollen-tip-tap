@@ -13,7 +13,7 @@ import Collapsible from "react-collapsible";
 import {contentParser, isValidUrl, urlType} from "./stringParser.js";
 import {database, storageIs} from "./firebase.js"
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
-import { doc, collection, setDoc, addDoc, DocumentReference, getDoc, updateDoc } from "firebase/firestore";
+import { doc, collection, setDoc, addDoc, DocumentReference, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 import Microlink from '@microlink/react';
 import { useDocument, useCollection, useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
 import toast, { Toaster } from 'react-hot-toast';
@@ -71,8 +71,13 @@ const ChannelComponent = () => {
       toast.success('Successfully Uploaded!');
 
       // Update the document with the new block parameters
-      blockIs.setTitle("untitled");
-      blockIs.setType("text");
+      
+      // if just text not a url, then set the type to text
+      if (isValidUrl(text).type == "text") {
+        blockIs.setTitle("");
+        blockIs.setType("text");
+      }
+
       console.log("block is ", blockIs);
 
       // Add the block to the channel, then add the block to the channel document      
@@ -191,6 +196,7 @@ const ChannelComponent = () => {
   const [inputValue, setInput] = useState("Untitled Channel"); // inherit from channel
   const [chanDoc, chanLoading, chanError, chanSnapshot] = useDocumentData(chanRef); //not even set, switch loading, and error
   const [chanBlocks, blockLoading, blockError, blockSnapshot] = useCollectionData(blocksRef);
+  const [editorList, setEditorList] = useState([]);
 
   //console.log("Content Parse is ", contentParser("https://firebasestorage.googleapis.com/v0/b/pollen-rich-media.appspot.com/o/files%2F000055700002.jpgdRkoxp61vPh8vRZjKqMJhz?alt=media&token=e357a4a8-bf38-4c19-8643-55d2002997a8"));
   // Set input value to channel name
@@ -199,6 +205,7 @@ const ChannelComponent = () => {
     async function fetchChannel() {
       const channelRequest = await getDoc(chanRef);
       console.log("channel request is ", channelRequest.data().title)
+      setEditorList(channelRequest.data().editors);
       
       setInput(channelRequest.data().title);
     }
@@ -221,6 +228,67 @@ const ChannelComponent = () => {
     console.log("sorted blocks are ", blocks);
     return blocks;
   }
+
+  // Add support to block in channel document
+  // given a username and a block, if the block is not already supported, add the username to the block's support array
+  // given a username and a block, if the block is already supported, remove the username from the block's support array
+  async function SupportBlock(user, unique_id){
+    const blockRef = doc(database, "channels", doc_id);
+    const subColRef = collection(blockRef, "blocks"); 
+    const subBlockRef = doc(subColRef, unique_id);
+    const blockSnap = await getDoc(subBlockRef);
+
+    console.log(blockSnap);
+    const blockData = blockSnap.data();
+    // Fix from here dont use block snap.. just do whatever you did above with adding a block to a channel...
+    console.log("Ran support block with user: ", user, " and block: ", blockData)
+
+    if(blockData.support.includes(user)){
+      // remove user from support array
+      console.log("user is already in support array, removing user from support array");
+      let supporters = blockData.support;
+      const newSupport = supporters.filter(e => e !== user);
+      await updateDoc(subBlockRef, {support: newSupport});
+    } else {
+      // add user to support array
+      console.log("user is not in support array, adding user to support array");
+      await updateDoc(subBlockRef, {support: [...blockData.support, user]});
+    }
+  }
+
+  async function deleteBlock(unique_id){
+    // Delete the block from the blocks collection
+    // should it just be the author that can delete the block? or should it be the channel owner?
+
+
+    const blockRef = doc(database, "channels", doc_id);
+    const subColRef = collection(blockRef, "blocks"); 
+    const subBlockRef = doc(subColRef, unique_id);
+    const blockSnap = await getDoc(subBlockRef);
+
+    console.log(blockSnap);
+    const blockData = blockSnap.data();
+    console.log("Ran delete block with block: ", blockData)
+
+    // Delete the block from the channel document
+    const docRef = doc(database, "channels", doc_id);
+    const docSnap = await getDoc(docRef);
+    const blocks = docSnap.data().blocks;
+    
+    // Remove the block from the array
+    let newBlocks = blocks.filter(e => e !== unique_id);
+    console.log("new blocks are ", newBlocks);
+
+    // Update the channel document
+    await updateDoc(docRef, {blocks: newBlocks});
+
+    // Delete the block document
+    toast.success("Block Deleted");
+    await deleteDoc(subBlockRef);    
+    
+  }
+
+  
 
   const AddToDocCollection = (block) => {
     const [curBlock, setCurBlock] = useState(null);
@@ -270,6 +338,8 @@ const ChannelComponent = () => {
 
   // AddToDocCollection(createGblock("https://github.com/fullstackreact/google-maps-react/issues/426", "eesha"));
 
+  console.log(createGblock("https://open.spotify.com/track/1oERlssLrpssCAY6Yqqs6c?si=3c4dd83f983b4ad8", "eesha"));
+
   async function updateTitle(newTitle) {
     try{
       await updateDoc(chanRef, {title: newTitle});
@@ -296,18 +366,20 @@ const ChannelComponent = () => {
       className="container content-center mx-auto"
     >
     
-    <Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} apiKey={MyApiKey} media='iframe' size='large'/>
+    {/*<Microlink url={"https://open.spotify.com/track/0BSPhsCKfwENstErymcD80?si=f6d0f0e3484c44c0"} apiKey={MyApiKey} media='iframe' size='large'/>
     <div class="h-10"></div>    
     <div class="max-h-[352px] max-w-[352px]">
-    {/*}  <Tweet tweetId="1607152081122562049" options={{ height: "200" }} /> */}
+    {/*}  <Tweet tweetId="1607152081122562049" options={{ height: "200" }} /> *
     </div>
     <Microlink url={"https://www.are.na/block/19574481"} apiKey={MyApiKey} media='iframe' size='large'/>
-    <div class="h-10"></div>
+  */}
+    
       <Box className="ChannelContainer"
         flex={true}
         wrap={true}
         direction="row"
-        style={{maxWidth: "760px", borderRadius: "5px"}}
+        margin="auto"
+        style={{maxWidth: "760px", borderRadius: "13px"}}
       >
 
         <Toaster containerStyle={{position: 'relative', left: '50%', top: 20 }} reverseOrder={false} toastOptions={{className: "toast"}}/>
@@ -399,13 +471,20 @@ const ChannelComponent = () => {
         
         {/* chanDoc.blocks */}
         {chanBlocks !== undefined ? (
+          // I want to pass in the userID and the channelID to the sortable context
+
           <SortableContext items={orderedBlocks()} strategy={rectSortingStrategy}> 
             {orderedBlocks().map((id) => (
               <SortableItem
                 key={id.unique_id}
                 id={id}
+                userIs={userIs}
+                channelIs={doc_id}
                 handle={true}
+                editorList={editorList}
                 value={id}
+                SupportBlock={SupportBlock}
+                deleteBlock={deleteBlock}
               />
             ))}
           </SortableContext>) : (<div>Loading</div>

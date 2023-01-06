@@ -120,7 +120,10 @@ export class gBlock {
             const { data } = await mql(this.data.content, {apiKey: MicorApiKey, screenshot: true})
             this.data.title = await data.title;
             this.data.description = await data.description;
-            this.data.thumbnail = await data.screenshot.url;
+            // add types here that don't have a thumbnail
+            if (type != "spotify" || type != "youtube" || type != "soundcloud" || type != "supported-media"){
+                this.data.thumbnail = await data.screenshot.url;
+            }
         }
     }
     

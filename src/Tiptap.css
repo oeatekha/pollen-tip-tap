@@ -15,6 +15,10 @@
   /* padding-bottom: 400px; */
 }
 
+.custom-toast {
+  background-color: rgb(178, 107, 0);
+}
+
 .rc-input-number-input {
   width: 30px;
   font-size: 14px;
@@ -184,13 +188,18 @@ button:focus {
 .BlockContainer {
   width: 352px;
   height: 352px;
-  background-color: #ECECEC;
-  border-radius: 3px;
+  background-color: #fbfbfb;
+  border-radius: 13px;
+
+}
+
+.hidden {
+  visibility: collapse;
 }
 
 .ChannelDragHandle{
-  left: -155px;
-  top: 3px;
+  background-color: rgba(0, 0, 0, 0.05);
+
 }
 
 .BlockInput{
