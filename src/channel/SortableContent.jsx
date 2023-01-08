@@ -7,6 +7,9 @@ import blockHandle from './blockHandle.svg'
 import blockDrop from "./components/blockDrop";
 import { auto } from "@popperjs/core";
 import Microlink from '@microlink/react'
+import { useModal } from "@ebay/nice-modal-react";
+import NiceModal from "@ebay/nice-modal-react";
+import blockModal from "./blockModal";
 
 const mql = require('@microlink/mql')
 const MicorApiKey = 'lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7';
@@ -65,6 +68,11 @@ const SortableContent = (props) => {
   const [hasSupported, setHasSupported] = useState(null);
   const [canEdit, setCanEdit] = useState(false);
 
+  const showBlockModal = () => {
+    // Show a modal with arguments passed to the component as props
+    NiceModal.show(blockModal, { data: props.value })
+  };
+
   function blockContent(type, content) {
 
     if (type == "link") {
@@ -76,9 +84,9 @@ const SortableContent = (props) => {
     }
     else if (type == "spotify") {
       return (
-        <div className="blockContent">
+        
           <Microlink url={content} apiKey={MyApiKey} media='iframe' size='large' lazy className="-z-50"/>
-        </div>
+        
         );
     }
     else if(type == "image") {
@@ -181,7 +189,7 @@ const SortableContent = (props) => {
             justifyContent: "center",
             alignItems: "center",
             fontWeight: "600",
-            zIndex: "100",
+            zIndex: "10",
             left: "50%",
             transform: "translate(-50%, 0%)",
             top: "275px",
@@ -210,7 +218,11 @@ const SortableContent = (props) => {
     <div ref={setNodeRef} style={style}>
       <Box>
       
+      
+
         <div className="BlockContainer flex-col justify-start relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+        <button className="modalButton absolute z-10" onClick={showBlockModal}>Block Modal</button>
+
           <div className="blockContent  -z-1 absolute">
             {blockContent(props.value.type, props.value.content)}
           </div>
@@ -239,10 +251,10 @@ const SortableContent = (props) => {
                 {...attributes}
               >
                 {handle()}
-              </button>
+              </button> 
           </div>
-          
           {showTitle()}
+
         </div>
       </Box>
       

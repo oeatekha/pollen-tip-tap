@@ -6,6 +6,7 @@
     "@chakra-ui/react": "^2.3.2",
     "@dnd-kit/core": "^6.0.6",
     "@dnd-kit/sortable": "^7.0.1",
+    "@ebay/nice-modal-react": "^1.2.8",
     "@firebase/storage": "^0.10.0",
     "@google-cloud/storage": "^6.8.0",
     "@headlessui/react": "^1.7.2",

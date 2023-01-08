@@ -14,9 +14,12 @@ import {contentParser, isValidUrl, urlType} from "./stringParser.js";
 import {database, storageIs} from "./firebase.js"
 import {ref, uploadBytes, getStorage, getDownloadURL} from "firebase/storage";
 import { doc, collection, setDoc, addDoc, DocumentReference, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
-import Microlink from '@microlink/react';
 import { useDocument, useCollection, useDocumentData, useCollectionData } from 'react-firebase-hooks/firestore';
 import toast, { Toaster } from 'react-hot-toast';
+import blockModal from "./blockModal.jsx";
+import NiceModal from '@ebay/nice-modal-react';
+import Microlink from '@microlink/react'
+
 
 
 import { Tweet } from "react-twitter-widgets";
@@ -351,6 +354,10 @@ const ChannelComponent = () => {
 
 
 
+  const showBlockModal = () => {
+    // Show a modal with arguments passed to the component as props
+    NiceModal.show(blockModal, { data: 'Omoruyi' })
+  };
 
   // let tempgBlock = createGblock("https://www.entropyplus.xyz/image/72901/", "eesha");
   // console.log(tempgBlock)
@@ -373,13 +380,13 @@ const ChannelComponent = () => {
     </div>
     <Microlink url={"https://www.are.na/block/19574481"} apiKey={MyApiKey} media='iframe' size='large'/>
   */}
-    
+
       <Box className="ChannelContainer"
         flex={true}
         wrap={true}
         direction="row"
         margin="auto"
-        style={{maxWidth: "760px", borderRadius: "13px"}}
+        style={{maxWidth: "754px", borderRadius: "13px"}}
       >
 
         <Toaster containerStyle={{position: 'relative', left: '50%', top: 20 }} reverseOrder={false} toastOptions={{className: "toast"}}/>
