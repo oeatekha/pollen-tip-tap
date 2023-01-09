@@ -68,7 +68,8 @@ export default NiceModal.create(({ data }) => {
     }
     else if (type == "spotify") {
         return (
-            <Microlink url={content} apiKey={MyApiKey} media='iframe' size='large' />
+
+            <div className='h-[352px]' dangerouslySetInnerHTML={{ __html: data.iframe}} />
           );
       }
     else if(type == "image") {
@@ -78,12 +79,12 @@ export default NiceModal.create(({ data }) => {
     }
     else if(type == "video") {
       return (
-        <Microlink url={content}  size='large' apiKey={MyApiKey} />
+        <Microlink url={content}  size='large' apiKey={MyApiKey} lazy/>
       );
     }
     else if(type == "text") {
       return (
-        <div className="ModalMedia p-8 pt-14 ">
+        <div className="ModalMedia pt-14 ">
           <p className="text-sm max-h-[240px] text-left text-ellipsis overflow-hidden ... ">{content}</p>
         </div>
       );
@@ -91,7 +92,7 @@ export default NiceModal.create(({ data }) => {
     // for files no fetch data, just render the link...
     else if(type == "supported-media") {
       return (
-          <Microlink url={content} apiKey={MyApiKey} fetchData='false' size='large' />
+          <Microlink url={content} apiKey={MyApiKey} fetchData='false' size='large' className='top-[50%]' />
       );
   }
 }
@@ -144,6 +145,7 @@ export default NiceModal.create(({ data }) => {
                                   {blockContent(data.type, data.content)}
                                 </div>
                                 
+                                
 
                                 <div className="BlockInfo">
                                     <div className='titleIs static'>
@@ -172,9 +174,6 @@ export default NiceModal.create(({ data }) => {
                                         </div>
                                     }
                                 </div>
-
-                            
-                            
 
                             
                             </div>

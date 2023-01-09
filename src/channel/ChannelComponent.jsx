@@ -339,9 +339,6 @@ const ChannelComponent = () => {
     }, [curBlock]);
   }
 
-  // AddToDocCollection(createGblock("https://github.com/fullstackreact/google-maps-react/issues/426", "eesha"));
-
-  console.log(createGblock("https://open.spotify.com/track/1oERlssLrpssCAY6Yqqs6c?si=3c4dd83f983b4ad8", "eesha"));
 
   async function updateTitle(newTitle) {
     try{
@@ -352,16 +349,11 @@ const ChannelComponent = () => {
     }
   }
 
-
-
   const showBlockModal = () => {
     // Show a modal with arguments passed to the component as props
     NiceModal.show(blockModal, { data: 'Omoruyi' })
   };
 
-  // let tempgBlock = createGblock("https://www.entropyplus.xyz/image/72901/", "eesha");
-  // console.log(tempgBlock)
-  // AddToDocCollection(tempgBlock);
 
   return (
     
@@ -409,7 +401,7 @@ const ChannelComponent = () => {
                   setInput(event.target.value)
                   updateTitle(event.target.value)
                 }}
-              />         
+              />   
 
               <div class="pt-1.5">
                 <label class="inline-flex relative items-center cursor-pointer">

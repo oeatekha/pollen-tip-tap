@@ -10,6 +10,7 @@ import Microlink from '@microlink/react'
 import { useModal } from "@ebay/nice-modal-react";
 import NiceModal from "@ebay/nice-modal-react";
 import blockModal from "./blockModal";
+import { data } from "autoprefixer";
 
 const mql = require('@microlink/mql')
 const MicorApiKey = 'lZkGxZYQxa4dswvVNDHE5aBgKMEiaKXia4coSoT7';
@@ -77,7 +78,7 @@ const SortableContent = (props) => {
 
     if (type == "link") {
       return (
-        <div className="blockContent">
+        <div className="blockContent h-[352px]">
           <Microlink url={content} media='screenshot' size='large' apiKey={MyApiKey} lazy/>
         </div>
       );
@@ -109,9 +110,11 @@ const SortableContent = (props) => {
     // for files no fetch data, just render the link...
     else if(type == "supported-media") {
       return (
-        <div className="blockContent -z-50">
-          <Microlink url={content} apiKey={MyApiKey} fetchData='false' size='large' lazy/>
-        </div>
+        
+          <audio controls className="relative m-auto top-[40%]">
+            <source src={content} type="audio/mpeg"/>
+          </audio>
+        
       );
   }
 }
@@ -170,13 +173,14 @@ const SortableContent = (props) => {
 
   function showTitle() {
     if (props.value.title.length > 0) {
-      if (props.value.type != "text" && props.value.type != "video" && props.value.type != "spotify") {
+      if (props.value.type != "text" && props.value.type != "video" && props.value.type != "spotify" ) {
         return (
           <div 
           className="BlockName"
           style={{
             position: "relative",
-            backgroundColor: "rgba(255, 255, 255, 0.9)",
+            backgroundColor: "rgba(255, 255, 255, 0.93)",
+            border: "1px solid #AFAFAF",
             // marginBottom: "10px", change later 
             color: "#AFAFAF",
             fontSize: "12px",
@@ -195,7 +199,7 @@ const SortableContent = (props) => {
             top: "275px",
             
           }}>
-              <p style={{maxWidth: "250px",overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis"}}>{props.value.title.substr(0,25)}</p>
+              <p style={{maxWidth: "250px",overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis", color: "dimgray"}}>{props.value.title.substr(0,25)}</p>
           </div>
         );
       }
@@ -221,17 +225,20 @@ const SortableContent = (props) => {
       
 
         <div className="BlockContainer flex-col justify-start relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-        <button className="modalButton absolute z-10" onClick={showBlockModal}>Block Modal</button>
+        
 
           <div className="blockContent  -z-1 absolute">
             {blockContent(props.value.type, props.value.content)}
           </div>
           <div className="flex-row items-center justify-center gap-4  bg-transparent max-w-[200px]">
-              <div className="BlockQuickMenu relative top-2 left-[207px] flex-row items-center gap-4 space-x-1 bg-transparent">
+              <div className="BlockQuickMenu relative top-2 left-[177px] flex-row items-center gap-4 space-x-1 bg-transparent">
                 {/*<button class="flex-row justify-center items-center px-2 py-0.5 bg-gray-100/80 font-medium border-transparent text-md	text-neutral-400 rounded-md" className={`${isHovered ? "" : "invisible"}`}>🔗</button>*/}
                 {/*If already in list set SupportBlock background to darker gray */}
+                <button onClick={showBlockModal} class={`flex-row ${isHovered ? "" : "invisible"} justify-center items-center px-2 py-0.5 bg-neutral-100 font-medium border-transparent text-md text-neutral-400 rounded-md hover:bg-neutral-200 active:bg-blue-700 focus:bg-blue-700/80 focus:outline-none focus:ring focus:ring-blue-300`}>[ ]</button>
                 <button onClick={() => props.SupportBlock(props.userIs, props.value.unique_id)} class={`flex-row justify-center items-center px-2 py-0.5 bg-neutral-${hasSupported ? "100" : "900"} font-medium border-transparent text-md text-neutral-400 rounded-md hover:bg-neutral-200 active:bg-blue-700 focus:bg-blue-700/80 focus:outline-none focus:ring focus:ring-blue-300`}>+ {props.value.support.length}</button>
                 {blockDrop(props.deleteBlock, props.value.unique_id, canEdit)}
+
+                
               </div>
               <button
                 className={`ChannelDragHandle ${isHovered ? "" : "invisible"}`}

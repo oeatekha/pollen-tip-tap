@@ -10,7 +10,7 @@ function App() {
   return (
     <NiceModal.Provider>
       <div className="App">
-        <ChannelComponent />
+        <Tiptap />
       </div>
     </NiceModal.Provider> 
   );

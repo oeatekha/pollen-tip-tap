@@ -247,7 +247,7 @@ const Tiptap = () => {
             <br></br>
             <hr></hr>
             <EditorContent editor={editor}/> 
-            
+            <ChannelComponent></ChannelComponent>
           </div>
           
         </div>

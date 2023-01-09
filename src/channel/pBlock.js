@@ -89,7 +89,8 @@ export class gBlock {
             support: [],
             connections: [],
             description: "",
-            inertia: 0
+            inertia: 0,
+            iframe: null,
         };
     }
     
@@ -117,12 +118,14 @@ export class gBlock {
 
     async setMQL(type) {
         if (type != "text" && type != "image") {
-            const { data } = await mql(this.data.content, {apiKey: MicorApiKey, screenshot: true})
+            const { data } = await mql(this.data.content, {apiKey: MicorApiKey, screenshot: true,  iframe: true })
             this.data.title = await data.title;
             this.data.description = await data.description;
+            console.log("data: ", data)
             // add types here that don't have a thumbnail
             if (type != "spotify" || type != "youtube" || type != "soundcloud" || type != "supported-media"){
                 this.data.thumbnail = await data.screenshot.url;
+                this.data.iframe = await data.iframe.html;
             }
         }
     }
